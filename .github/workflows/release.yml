@@ -29,7 +29,7 @@ jobs:
       - name: Auto bump chart version (patch)
         id: bump_version
         run: |
-          CHART_FILE=charts/neohoods-space/Chart.yaml
+          CHART_FILE=charts/neohoods-portal/Chart.yaml
           CURRENT=$(yq e '.version' $CHART_FILE)
           echo "Current chart version: $CURRENT"
 
@@ -47,7 +47,7 @@ jobs:
 
           # Commit & push
           git add $CHART_FILE
-          git commit -m "chore(chart): bump neohoods-space-chart to $NEW_VERSION"
+          git commit -m "chore(chart): bump neohoods-portal-chart to $NEW_VERSION"
           git push
 
           # Set output for later steps
@@ -70,7 +70,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
           repository: git@github.com:neohoods/neohoods-saas.git
-          file-path: space-dev/Chart.yaml
+          file-path: portal-dev/Chart.yaml
 
           yaml-paths: "dependencies[0].version"
 
