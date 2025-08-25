@@ -16,7 +16,7 @@ spec:
         pathType: ImplementationSpecific
         backend:
           service:
-            name: frontend
+            name: {{ .Release.Name }}-frontend
             port:
               number: 80
       {{- end }}
@@ -25,7 +25,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: backend
+            name: {{ .Release.Name }}-backend
             port:
               number: 80
       {{- end }}
@@ -33,4 +33,4 @@ spec:
   tls:
     - hosts:
         - {{ .Values.ingress.host }}
-      secretName: {{ .Values.ingress.secretName }}
+      secretName: {{ .Values.ingress.secretName | default (printf "%s-letsencrypt-platform" .Release.Name) }}

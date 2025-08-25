@@ -18,7 +18,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: backend
+            name: {{ .Release.Name }}-backend
             port:
               number: 5005  # Port HTTP du backend
   # Remove the TLS section for debugging

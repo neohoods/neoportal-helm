@@ -7,16 +7,16 @@ spec:
   replicas: {{ .Values.frontend.replicaCount }}
   selector:
     matchLabels:
-      app: frontend
+      app: {{ .Release.Name }}-frontend
   template:
     metadata:
       labels:
-        app: frontend
+        app: {{ .Release.Name }}-frontend
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-        - name: frontend
+        - name: {{ .Release.Name }}-frontend
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
           env:
             - name: API_BASE_PATH
@@ -49,5 +49,5 @@ spec:
       volumes:
         - name: custom-theme
           configMap:
-            name: {{ .Values.frontend.theme.configMapName | default "frontend-theme" }}
+            name: {{ .Values.frontend.theme.configMapName | default (printf "%s-frontend-theme" .Release.Name) }}
 {{- end }}

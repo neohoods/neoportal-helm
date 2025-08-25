@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: frontend-theme
+  name: {{ .Release.Name }}-frontend-theme
 data:
   custom-theme.scss: |
     :root {

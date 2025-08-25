@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: neohoods-portal-flyway
+  name: {{ .Release.Name }}-flyway
   annotations:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "1"
@@ -10,7 +10,7 @@ spec:
   template:
     spec:
       containers:
-        - name: flyway
+        - name: {{ .Release.Name }}-flyway
           image: "{{ .Values.flyway.image.repository }}:{{ .Values.flyway.image.tag }}"
           args: ["clean", "-connectRetries=60", "migrate", "-locations=filesystem:/flyway/sql,filesystem:/flyway/sql-part2,filesystem:/flyway/sql-part3"]
           env:
@@ -40,5 +40,5 @@ spec:
       volumes:
         - name: sql
           configMap:
-            name: neohoods-portal-flyway-sql-part1
+            name: {{ .Release.Name }}-flyway-sql-part1
       restartPolicy: Never

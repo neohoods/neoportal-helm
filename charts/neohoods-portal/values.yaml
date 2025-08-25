@@ -51,8 +51,6 @@ frontend:
     repository: ghcr.io/neohoods/portal-platform-ui
     tag: latest
   replicaCount: 1
-  theme:
-    configMapName: frontend-theme
   service:
     type: NodePort
     port: 80
