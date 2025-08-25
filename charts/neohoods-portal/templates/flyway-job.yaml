@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: neohoods-portal-flyway
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    spec:
+      containers:
+        - name: flyway
+          image: "{{ .Values.flyway.image.repository }}:{{ .Values.flyway.image.tag }}"
+          args: ["clean", "-connectRetries=60", "migrate", "-locations=filesystem:/flyway/sql,filesystem:/flyway/sql-part2,filesystem:/flyway/sql-part3"]
+          env:
+            - name: FLYWAY_USER
+              value: {{ .Values.postgresql.auth.username }}
+            - name: FLYWAY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgresql.auth.existingSecret }}
+                  key:
+                    {{ .Values.postgresql.auth.secretKeys.userPasswordKey }}
+            - name: FLYWAY_URL
+              value: {{ .Values.flyway.url }}
+            - name: FLYWAY_BASELINE_ON_MIGRATE
+              value: "true"
+            - name: FLYWAY_CLEAN_DISABLED
+              value: "false"
+          volumeMounts:
+            - name: sql
+              mountPath: /flyway/sql
+            {{- if .Values.flyway.fakeData }}
+            - name: sql-part2
+              mountPath: /flyway/sql-part2
+            - name: sql-part3
+              mountPath: /flyway/sql-part3
+            {{- end }}
+      volumes:
+        - name: sql
+          configMap:
+            name: neohoods-portal-flyway-sql-part1
+      restartPolicy: Never

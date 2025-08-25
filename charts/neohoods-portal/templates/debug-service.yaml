@@ -1,0 +1,19 @@
+{{- if and .Values.backend.enabled .Values.backend.debug.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-debug
+  annotations:
+    nginx.ingress.kubernetes.io/service-upstream: "true"
+spec:
+  type: {{ .Values.backend.service.type }}
+  selector:
+    app: backend
+  ports:
+    - name: debug
+      protocol: TCP
+      port: 5005
+      targetPort: debug
+      nodePort: {{ .Values.backend.service.nodePortForDebug }}
+
+{{- end }} 

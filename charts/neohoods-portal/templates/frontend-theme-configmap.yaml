@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-theme
+data:
+  custom-theme.scss: |
+    :root {
+      --tos-background-base: #FFF;
+      --tos-background-accent-1: #FF0000;
+    }

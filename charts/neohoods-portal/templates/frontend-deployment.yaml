@@ -1,0 +1,53 @@
+{{- if .Values.frontend.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-frontend
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: frontend
+          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+          env:
+            - name: API_BASE_PATH
+              value: "https://{{ .Values.ingress.host }}/api"
+            - name: USE_MOCK_API
+              value: "{{ .Values.frontend.env.USE_MOCK_API }}"
+            - name: DEMO_MODE
+              value: "{{ .Values.frontend.env.DEMO_MODE }}"
+            - name: DEFAULT_LOCALE
+              value: "{{ .Values.frontend.env.DEFAULT_LOCALE }}"
+          ports:
+            - name: http-server
+              containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 300
+            periodSeconds: 5
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            httpGet:
+              path: /
+              port: 80
+          volumeMounts:
+            - name: custom-theme
+              mountPath: /usr/share/nginx/html/assets/theme/custom-theme.scss
+              subPath: custom-theme.scss
+      volumes:
+        - name: custom-theme
+          configMap:
+            name: {{ .Values.frontend.theme.configMapName | default "frontend-theme" }}
+{{- end }}

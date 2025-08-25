@@ -1,0 +1,5 @@
+# Ignore Helm-related files
+*.swp
+*.bak
+*.tmp
+.DS_Store

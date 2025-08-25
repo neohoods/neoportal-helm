@@ -1,0 +1,72 @@
+{{- if .Values.backend.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-backend
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.backend.env.SPRING_PROFILES_ACTIVE }}
+            - name: JAVA_TOOL_OPTIONS
+              value: "-XX:MaxRAMPercentage=70 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./heapdump"
+            - name: SERVER_PORT
+              value: "{{ .Values.backend.env.SERVER_PORT }}"
+            - name: SERVER_SERVLET_CONTEXT_PATH
+              value: "/api"
+            - name: SPRING_DATASOURCE_URL
+              value: "{{ .Values.backend.env.SPRING_DATASOURCE_URL }}"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "{{ .Values.backend.env.SPRING_DATASOURCE_USERNAME }}"
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-secret
+                  key: postgresql-password
+            - name: NEOHOODS_PORTAL_BASE_URL
+              value: "https://{{ .Values.ingress.host }}"
+            - name: NEOHOODS_PORTAL_EMAIL_VERIFICATION_URL
+              value: "https://{{ .Values.ingress.host }}/email-confirmation"
+            - name: SENDGRID_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.sendgrid.apiKey.secretKeyRef.name }}
+                  key: {{ .Values.sendgrid.apiKey.secretKeyRef.key }}
+            - name: SENDGRID_FROM_EMAIL
+              value: "{{ .Values.sendgrid.from.email }}"
+            - name: SENDGRID_FROM_NAME
+              value: "{{ .Values.sendgrid.from.name }}"
+            - name: MANAGEMENT_ENDPOINTS_WEB_BASE_PATH
+              value: "/api/actuator"
+          ports:
+            - name: http-server
+              containerPort: {{ .Values.backend.env.SERVER_PORT }}
+            - name: debug
+              containerPort: 5005
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/actuator/health
+              port: {{ .Values.backend.env.SERVER_PORT }}
+            initialDelaySeconds: 300
+            periodSeconds: 5
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            httpGet:
+              path: /api/actuator/health
+              port: {{ .Values.backend.env.SERVER_PORT }}
+{{- end }}

@@ -1,0 +1,86 @@
+# PostgreSQL settings
+postgresql:
+  enabled: true
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi# Or use a secret reference
+  auth:
+    database: neohoods_portal
+    username: neohoods_portal_user
+    existingSecret: neohoods-portal-demo-postgresql
+    secretKeys:
+      adminPasswordKey: postgresql-password
+      userPasswordKey: postgresql-password
+      replicationPasswordKey: postgresql-password
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi
+
+# Backend settings
+backend:
+  enabled: true
+  debug:
+    enabled: false  # Set to true in dev environment
+  image:
+    repository: ghcr.io/neohoods/portal-platform-api
+    tag: latest
+  replicaCount: 2
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30096
+    nodePortForDebug: 30197
+  env:
+    # Spring properties
+    SERVER_PORT: 8486
+    SPRING_PROFILES_ACTIVE: dev
+    SPRING_DATASOURCE_USERNAME: neohoods_portal_user
+    SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql.platform.svc.cluster.local:5432/neohoods_portal
+
+ingress:
+  host: portal.neohoods.com
+  certManagerClusterIssuer: letsencrypt-prod
+  secretName: letsencrypt-platform
+
+# Frontend settings
+frontend:
+  enabled: true
+  image:
+    repository: ghcr.io/neohoods/portal-platform-ui
+    tag: latest
+  replicaCount: 1
+  theme:
+    configMapName: frontend-theme
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30095
+  env:
+    API_BASE_PATH: "https://portal.neohoods.com"  # Will be templated with ingress.host
+    USE_MOCK_API: "false"
+    DEMO_MODE: "false"
+    DEFAULT_LOCALE: "fr"
+
+sendgrid:
+  enabled: true
+  apiKey:
+    secretKeyRef:
+      name: sendgrid-secret
+      key: sendgrid-api-key
+  from:
+    email: notifications@neohoods.com
+    name: NeoHoods
+
+flyway:
+  enabled: true
+  url: jdbc:postgresql://postgresql.platform.svc.cluster.local:5432/neohoods-portal
+  fakeData: true
+  image:
+    repository: flyway/flyway
+    tag: latest
+    pullPolicy: IfNotPresent
+  config:
+    schemas: public
+    locations: "filesystem:/flyway/sql"
