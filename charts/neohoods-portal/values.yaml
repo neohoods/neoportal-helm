@@ -17,15 +17,14 @@ postgresql:
     persistence:
       enabled: true
       size: 10Gi
-
 # Backend settings
 backend:
   enabled: true
   debug:
-    enabled: false  # Set to true in dev environment
+    enabled: false # Set to true in dev environment
   image:
     repository: ghcr.io/neohoods/portal-platform-api
-    tag: latest
+    tag: 0.0.155
   replicaCount: 2
   service:
     type: NodePort
@@ -38,29 +37,26 @@ backend:
     SPRING_PROFILES_ACTIVE: dev
     SPRING_DATASOURCE_USERNAME: neohoods_portal_user
     SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql.platform.svc.cluster.local:5432/neohoods_portal
-
 ingress:
   host: portal.neohoods.com
   certManagerClusterIssuer: letsencrypt-prod
   secretName: letsencrypt-platform
-
 # Frontend settings
 frontend:
   enabled: true
   image:
     repository: ghcr.io/neohoods/portal-platform-ui
-    tag: latest
+    tag: 0.0.155
   replicaCount: 1
   service:
     type: NodePort
     port: 80
     nodePort: 30095
   env:
-    API_BASE_PATH: "https://portal.neohoods.com"  # Will be templated with ingress.host
+    API_BASE_PATH: "https://portal.neohoods.com" # Will be templated with ingress.host
     USE_MOCK_API: "false"
     DEMO_MODE: "false"
     DEFAULT_LOCALE: "fr"
-
 sendgrid:
   enabled: true
   apiKey:
@@ -70,7 +66,6 @@ sendgrid:
   from:
     email: notifications@neohoods.com
     name: NeoHoods
-
 flyway:
   enabled: true
   url: jdbc:postgresql://postgresql.platform.svc.cluster.local:5432/neohoods-portal
