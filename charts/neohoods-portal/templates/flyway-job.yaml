@@ -34,8 +34,6 @@ spec:
             {{- if .Values.flyway.fakeData }}
             - name: sql-part2
               mountPath: /flyway/sql-part2
-            - name: sql-part3
-              mountPath: /flyway/sql-part3
             {{- end }}
       volumes:
         - name: sql
