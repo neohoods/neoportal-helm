@@ -1,0 +1,24 @@
+{{- if .Values.flyway.customInitData.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.flyway.customInitData.configMapName }}
+  labels:
+    app: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+{{- if .Values.flyway.customInitData.files }}
+{{- range .Values.flyway.customInitData.files }}
+  {{ .name }}: |-
+{{ .content | indent 4 }}
+{{- end }}
+{{- end }}
+{{- if .Values.flyway.customInitData.sqlFiles }}
+{{- range .Values.flyway.customInitData.sqlFiles }}
+  {{ . }}: |-
+{{ .Files.Get (printf "sql/%s" .) | indent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}
