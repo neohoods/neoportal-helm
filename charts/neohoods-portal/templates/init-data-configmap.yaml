@@ -15,10 +15,4 @@ data:
 {{ .content | indent 4 }}
 {{- end }}
 {{- end }}
-{{- if .Values.flyway.customInitData.sqlFiles }}
-{{- range .Values.flyway.customInitData.sqlFiles }}
-  {{ . }}: |-
-{{ .Files.Get (printf "sql/%s" .) | indent 4 }}
-{{- end }}
-{{- end }}
 {{- end }}
