@@ -81,7 +81,7 @@ mailersend:
 flyway:
   enabled: true
   url: jdbc:postgresql://postgresql.platform.svc.cluster.local:5432/neohoods-portal
-  fakeData: true
+  fakeData: false
   image:
     repository: flyway/flyway
     tag: latest
