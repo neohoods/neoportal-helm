@@ -37,6 +37,18 @@ backend:
     SPRING_PROFILES_ACTIVE: dev
     SPRING_DATASOURCE_USERNAME: neohoods_portal_user
     SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql.platform.svc.cluster.local:5432/neohoods_portal
+    # Auth0 properties
+    AUTH0_DOMAIN: terresdelaya.eu.auth0.com
+    AUTH0_CLIENT_ID:
+      secretKeyRef:
+        name: auth0-secret
+        key: auth0-client-id
+    AUTH0_CLIENT_SECRET:
+      secretKeyRef:
+        name: auth0-secret
+        key: auth0-client-secret
+    AUTH0_AUDIENCE: https://terresdelaya.eu.auth0.com/api/v2/
+    AUTH0_CONNECTION: Username-Password-Authentication
 ingress:
   host: portal.neohoods.com
   certManagerClusterIssuer: letsencrypt-prod
