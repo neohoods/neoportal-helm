@@ -69,12 +69,12 @@ frontend:
     USE_MOCK_API: "false"
     DEMO_MODE: "false"
     DEFAULT_LOCALE: "fr"
-sendgrid:
+mailersend:
   enabled: true
   apiKey:
     secretKeyRef:
-      name: sendgrid-secret
-      key: sendgrid-api-key
+      name: mailersend-secret
+      key: mailersend-api-key
   from:
     email: notifications@neohoods.com
     name: NeoHoods
