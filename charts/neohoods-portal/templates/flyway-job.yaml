@@ -39,4 +39,7 @@ spec:
         - name: sql
           configMap:
             name: {{ .Release.Name }}-flyway-sql-part1
+        - name: sql-part2
+          configMap:
+            name: {{ .Release.Name }}-flyway-sql-part2
       restartPolicy: Never
