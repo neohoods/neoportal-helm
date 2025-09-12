@@ -38,6 +38,8 @@ spec:
                   key: postgresql-password
             - name: NEOHOODS_PORTAL_BASE_URL
               value: "https://{{ .Values.ingress.host }}"
+            - name: NEOHOODS_PORTAL_FRONTEND_URL
+              value: "https://{{ .Values.ingress.host }}"
             - name: NEOHOODS_PORTAL_EMAIL_VERIFICATION_URL
               value: "https://{{ .Values.ingress.host }}/email-confirmation"
             - name: SENDGRID_API_KEY
