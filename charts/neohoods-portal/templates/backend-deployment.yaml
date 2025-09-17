@@ -76,12 +76,12 @@ spec:
               value: "{{ .Values.backend.env.MANAGEMENT_OTLP_TRACING_ENABLED }}"
             - name: MANAGEMENT_METRICS_EXPORT_OTLP_ENABLED
               value: "{{ .Values.backend.env.MANAGEMENT_METRICS_EXPORT_OTLP_ENABLED }}"
-            - name: MANAGEMENT_OTLP_METRICS_URL
-              value: "{{ .Values.backend.env.MANAGEMENT_OTLP_METRICS_URL }}"
-            - name: MANAGEMENT_OTLP_TRACING_URL
-              value: "{{ .Values.backend.env.MANAGEMENT_OTLP_TRACING_URL }}"
-            - name: MANAGEMENT_METRICS_EXPORT_OTLP_URL
-              value: "{{ .Values.backend.env.MANAGEMENT_METRICS_EXPORT_OTLP_URL }}"
+            - name: MANAGEMENT_TRACING_OTLP_ENDPOINT
+              value: http://tempo.observability.svc.cluster.local:4317
+            - name: MANAGEMENT_OTLP_METRICS_EXPORT_URL
+              value: http://grafana-k8s-monitoring-alloy-receiver.monitoring.svc.cluster.local:4318/v1/metrics
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: service.name=portal-platform-api
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}
