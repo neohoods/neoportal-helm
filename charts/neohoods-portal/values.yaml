@@ -37,6 +37,13 @@ backend:
     SPRING_PROFILES_ACTIVE: dev
     SPRING_DATASOURCE_USERNAME: neohoods_portal_user
     SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql.platform.svc.cluster.local:5432/neohoods_portal
+    # OpenTelemetry configuration - using existing Tempo/Loki/Prometheus stack
+    MANAGEMENT_OTLP_METRICS_ENABLED: "true"
+    MANAGEMENT_OTLP_TRACING_ENABLED: "true"
+    MANAGEMENT_METRICS_EXPORT_OTLP_ENABLED: "true"
+    MANAGEMENT_OTLP_METRICS_URL: "http://tempo.observability.svc.cluster.local:4317/v1/metrics"
+    MANAGEMENT_OTLP_TRACING_URL: "http://tempo.observability.svc.cluster.local:4317/v1/traces"
+    MANAGEMENT_METRICS_EXPORT_OTLP_URL: "http://tempo.observability.svc.cluster.local:4317/v1/metrics"
     # Auth0 properties
     AUTH0_DOMAIN: terresdelaya.eu.auth0.com
     AUTH0_CLIENT_ID:

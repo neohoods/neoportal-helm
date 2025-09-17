@@ -69,6 +69,19 @@ spec:
               value: "{{ .Values.backend.env.AUTH0_AUDIENCE }}"
             - name: AUTH0_CONNECTION
               value: "{{ .Values.backend.env.AUTH0_CONNECTION }}"
+            # OpenTelemetry configuration
+            - name: MANAGEMENT_OTLP_METRICS_ENABLED
+              value: "{{ .Values.backend.env.MANAGEMENT_OTLP_METRICS_ENABLED }}"
+            - name: MANAGEMENT_OTLP_TRACING_ENABLED
+              value: "{{ .Values.backend.env.MANAGEMENT_OTLP_TRACING_ENABLED }}"
+            - name: MANAGEMENT_METRICS_EXPORT_OTLP_ENABLED
+              value: "{{ .Values.backend.env.MANAGEMENT_METRICS_EXPORT_OTLP_ENABLED }}"
+            - name: MANAGEMENT_OTLP_METRICS_URL
+              value: "{{ .Values.backend.env.MANAGEMENT_OTLP_METRICS_URL }}"
+            - name: MANAGEMENT_OTLP_TRACING_URL
+              value: "{{ .Values.backend.env.MANAGEMENT_OTLP_TRACING_URL }}"
+            - name: MANAGEMENT_METRICS_EXPORT_OTLP_URL
+              value: "{{ .Values.backend.env.MANAGEMENT_METRICS_EXPORT_OTLP_URL }}"
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}
