@@ -34,7 +34,7 @@ backend:
   env:
     # Spring properties
     SERVER_PORT: 8486
-    SPRING_PROFILES_ACTIVE: dev
+    SPRING_PROFILES_ACTIVE: production
     SPRING_DATASOURCE_USERNAME: neohoods_portal_user
     SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql.platform.svc.cluster.local:5432/neohoods_portal
     # OpenTelemetry configuration - using existing Tempo/Loki/Prometheus stack
