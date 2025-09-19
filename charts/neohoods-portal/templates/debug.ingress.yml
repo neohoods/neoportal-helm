@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: portal.{{ .Release.Name }}-debug-ingress
+  name: portal-{{ .Release.Name }}-debug-ingress
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"  # Disable SSL redirect for debug
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
@@ -18,7 +18,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: portal.{{ .Release.Name }}-backend
+            name: portal-{{ .Release.Name }}-backend
             port:
               number: 5005  # Port HTTP du backend
   # Remove the TLS section for debugging

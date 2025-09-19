@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: portal.{{ .Release.Name }}-flyway-sql-part1
+  name: portal-{{ .Release.Name }}-flyway-sql-part1
 data:
   V1__init.sql: |-
 {{ .Files.Get "sql/V1__init.sql" | indent 4 }}
@@ -9,7 +9,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: portal.{{ .Release.Name }}-flyway-sql-part2
+  name: portal-{{ .Release.Name }}-flyway-sql-part2
 data:
   V2__data-part1.sql: |-
 {{ .Files.Get "sql/V2__data_part1.sql" | indent 4 }}
