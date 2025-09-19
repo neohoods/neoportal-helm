@@ -2,21 +2,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-backend
+  name: portal.{{ .Release.Name }}-backend
 spec:
   replicas: {{ .Values.backend.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-backend
+      app: portal.{{ .Release.Name }}-backend
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-backend
+        app: portal.{{ .Release.Name }}-backend
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-        - name: {{ .Release.Name }}-backend
+        - name: portal.{{ .Release.Name }}-backend
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
           env:
             - name: SPRING_PROFILES_ACTIVE

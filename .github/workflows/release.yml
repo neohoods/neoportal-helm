@@ -70,13 +70,13 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
           repository: git@github.com:neohoods/neohoods-saas.git
-          file-path: portal-dev/Chart.yaml
+          file-path: neohoods-dev/Chart.yaml
 
           yaml-paths: "dependencies[0].version"
 
           # Use bumped version directly
           tag: ${{ steps.bump_version.outputs.bumped_version }}
-          
+
           gpg-enabled: true
           gpg-key-id: ${{ secrets.GPG_KEY_ID }}
           gpg-key: ${{ secrets.GPG_KEY }}

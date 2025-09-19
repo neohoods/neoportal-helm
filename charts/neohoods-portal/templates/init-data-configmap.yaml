@@ -4,9 +4,9 @@ kind: ConfigMap
 metadata:
   name: {{ .Values.flyway.customInitData.configMapName }}
   labels:
-    app: {{ .Release.Name }}
+    app: portal.{{ .Release.Name }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    release: {{ .Release.Name }}
+    release: portal.{{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
 {{- if .Values.flyway.customInitData.files }}
