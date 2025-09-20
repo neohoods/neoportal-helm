@@ -20,8 +20,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.postgresql.auth.existingSecret }}
-                  key:
-                    {{ .Values.postgresql.auth.secretKeys.userPasswordKey }}
+                  key: {{ .Values.postgresql.auth.secretKeys.userPasswordKey }}
             - name: FLYWAY_URL
               value: {{ .Values.flyway.url }}
             - name: FLYWAY_BASELINE_ON_MIGRATE
