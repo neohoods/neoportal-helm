@@ -64,7 +64,7 @@ backend:
     AUTH0_AUDIENCE: https://terresdelaya.eu.auth0.com/api/v2/
     AUTH0_CONNECTION: Username-Password-Authentication
 ingress:
-  host: "{{ .Values.global.domain }}"
+  host: {{ .Values.global.domain }}
   certManagerClusterIssuer: letsencrypt-prod
   secretName: letsencrypt-platform
 # Frontend settings
@@ -79,7 +79,7 @@ frontend:
     port: 80
     nodePort: 30095
   env:
-    API_BASE_PATH: "https://{{ .Values.global.domain }}" # Will be templated with ingress.host
+    API_BASE_PATH: https://{{ .Values.global.domain }}
     USE_MOCK_API: "false"
     DEMO_MODE: "false"
     DEFAULT_LOCALE: "fr"
