@@ -28,7 +28,7 @@ spec:
             - name: SERVER_SERVLET_CONTEXT_PATH
               value: "/api"
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:postgresql://{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local:5432/{{ .Values.global.portalDbName }}"
+              value: "jdbc:postgresql://{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local:5432/{{ .Values.postgresql.auth.database }}"
             - name: SPRING_DATASOURCE_USERNAME
               value: "{{ .Values.backend.env.SPRING_DATASOURCE_USERNAME }}"
             - name: SPRING_DATASOURCE_PASSWORD

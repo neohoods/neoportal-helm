@@ -3,7 +3,6 @@ global:
   namespace: platform
   domain: portal.neohoods.com
   chatName: neohoods
-  portalDbName: neohoods_portal
 
 # PostgreSQL settings
 postgresql:
@@ -13,9 +12,9 @@ postgresql:
       enabled: true
       size: 10Gi# Or use a secret reference
   auth:
-    database: "{{ .Values.global.portalDbName }}"
+    database: neohoods_portal
     username: neohoods_portal_user
-    existingSecret: "{{ .Values.global.chatName }}-postgresql"
+    existingSecret: neohoods-postgresql
     secretKeys:
       adminPasswordKey: postgresql-password
       userPasswordKey: postgresql-password

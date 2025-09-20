@@ -22,7 +22,7 @@ spec:
                   name: "{{ .Values.postgresql.auth.existingSecret }}"
                   key: "{{ .Values.postgresql.auth.secretKeys.userPasswordKey }}"
             - name: FLYWAY_URL
-              value: "jdbc:postgresql://{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local:5432/{{ .Values.global.portalDbName }}"
+              value: "jdbc:postgresql://{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local:5432/{{ .Values.postgresql.auth.database }}"
             - name: FLYWAY_BASELINE_ON_MIGRATE
               value: "true"
             - name: FLYWAY_CLEAN_DISABLED
