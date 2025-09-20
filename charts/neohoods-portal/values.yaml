@@ -43,7 +43,7 @@ backend:
     SERVER_PORT: 8486
     SPRING_PROFILES_ACTIVE: production
     SPRING_DATASOURCE_USERNAME: neohoods_portal_user
-    SPRING_DATASOURCE_URL: jdbc:postgresql://{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local:5432/{{ .Values.global.portalDbName }}
+    SPRING_DATASOURCE_URL: jdbc:postgresql://neohoods-postgresql.platform.svc.cluster.local:5432/neohoods_portal
     # OpenTelemetry configuration - using existing Tempo/Loki/Prometheus stack
     MANAGEMENT_OTLP_METRICS_ENABLED: "true"
     MANAGEMENT_OTLP_TRACING_ENABLED: "true"
@@ -64,7 +64,7 @@ backend:
     AUTH0_AUDIENCE: https://terresdelaya.eu.auth0.com/api/v2/
     AUTH0_CONNECTION: Username-Password-Authentication
 ingress:
-  host: {{ .Values.global.domain }}
+  host: "portal.neohoods.com"
   certManagerClusterIssuer: letsencrypt-prod
   secretName: letsencrypt-platform
 # Frontend settings
@@ -79,7 +79,7 @@ frontend:
     port: 80
     nodePort: 30095
   env:
-    API_BASE_PATH: https://{{ .Values.global.domain }}
+    API_BASE_PATH: https://portal.neohoods.com
     USE_MOCK_API: "false"
     DEMO_MODE: "false"
     DEFAULT_LOCALE: "fr"
@@ -96,7 +96,7 @@ mailersend:
     name: NeoHoods
 flyway:
   enabled: true
-  url: jdbc:postgresql://{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local:5432/{{ .Values.global.portalDbName }}
+  url: jdbc:postgresql://neohoods-postgresql.platform.svc.cluster.local:5432/neohoods_portal
   fakeData: false
   image:
     repository: flyway/flyway

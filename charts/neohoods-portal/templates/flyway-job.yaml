@@ -19,10 +19,10 @@ spec:
             - name: FLYWAY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Values.postgresql.auth.existingSecret }}"
+                  name: "{{ .Values.global.chatName }}-postgresql"
                   key: "{{ .Values.postgresql.auth.secretKeys.userPasswordKey }}"
             - name: FLYWAY_URL
-              value: "{{ .Values.flyway.url }}"
+              value: "jdbc:postgresql://{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local:5432/{{ .Values.global.portalDbName }}"
             - name: FLYWAY_BASELINE_ON_MIGRATE
               value: "true"
             - name: FLYWAY_CLEAN_DISABLED

@@ -20,7 +20,7 @@ spec:
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
           env:
             - name: API_BASE_PATH
-              value: "https://{{ .Values.ingress.host }}/api"
+              value: "https://{{ .Values.global.domain }}/api"
             - name: USE_MOCK_API
               value: "{{ .Values.frontend.env.USE_MOCK_API }}"
             - name: DEMO_MODE
