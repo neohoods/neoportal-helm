@@ -34,8 +34,8 @@ spec:
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgresql-secret
-                  key: postgresql-password
+                  name: "{{ .Values.postgresql.auth.existingSecret }}"
+                  key: "{{ .Values.postgresql.auth.secretKeys.userPasswordKey }}"
             - name: NEOHOODS_PORTAL_BASE_URL
               value: "https://{{ .Values.ingress.host }}"
             - name: NEOHOODS_PORTAL_FRONTEND_URL

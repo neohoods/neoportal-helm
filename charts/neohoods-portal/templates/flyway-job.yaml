@@ -19,7 +19,7 @@ spec:
             - name: FLYWAY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: "{{ .Values.global.chatName }}-postgresql"
+                  name: "{{ .Values.postgresql.auth.existingSecret }}"
                   key: "{{ .Values.postgresql.auth.secretKeys.userPasswordKey }}"
             - name: FLYWAY_URL
               value: "jdbc:postgresql://{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local:5432/{{ .Values.global.portalDbName }}"
