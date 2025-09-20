@@ -1,3 +1,10 @@
+# Global variables for templating
+global:
+  namespace: platform
+  domain: portal.neohoods.com
+  chatName: neohoods
+  portalDbName: neohoods_portal
+
 # PostgreSQL settings
 postgresql:
   enabled: true
@@ -6,9 +13,9 @@ postgresql:
       enabled: true
       size: 10Gi# Or use a secret reference
   auth:
-    database: neohoods_portal
+    database: "{{ .Values.global.portalDbName }}"
     username: neohoods_portal_user
-    existingSecret: neohoods-portal-demo-postgresql
+    existingSecret: "{{ .Values.global.chatName }}-postgresql"
     secretKeys:
       adminPasswordKey: postgresql-password
       userPasswordKey: postgresql-password
@@ -36,7 +43,7 @@ backend:
     SERVER_PORT: 8486
     SPRING_PROFILES_ACTIVE: production
     SPRING_DATASOURCE_USERNAME: neohoods_portal_user
-    SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql.platform.svc.cluster.local:5432/neohoods_portal
+    SPRING_DATASOURCE_URL: jdbc:postgresql://{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local:5432/{{ .Values.global.portalDbName }}
     # OpenTelemetry configuration - using existing Tempo/Loki/Prometheus stack
     MANAGEMENT_OTLP_METRICS_ENABLED: "true"
     MANAGEMENT_OTLP_TRACING_ENABLED: "true"
@@ -57,7 +64,7 @@ backend:
     AUTH0_AUDIENCE: https://terresdelaya.eu.auth0.com/api/v2/
     AUTH0_CONNECTION: Username-Password-Authentication
 ingress:
-  host: portal.neohoods.com
+  host: "{{ .Values.global.domain }}"
   certManagerClusterIssuer: letsencrypt-prod
   secretName: letsencrypt-platform
 # Frontend settings
@@ -72,10 +79,12 @@ frontend:
     port: 80
     nodePort: 30095
   env:
-    API_BASE_PATH: "https://portal.neohoods.com" # Will be templated with ingress.host
+    API_BASE_PATH: "https://{{ .Values.global.domain }}" # Will be templated with ingress.host
     USE_MOCK_API: "false"
     DEMO_MODE: "false"
     DEFAULT_LOCALE: "fr"
+  theme:
+    configMapName: my-custom-theme
 mailersend:
   enabled: true
   apiKey:
@@ -87,7 +96,7 @@ mailersend:
     name: NeoHoods
 flyway:
   enabled: true
-  url: jdbc:postgresql://postgresql.platform.svc.cluster.local:5432/neohoods-portal
+  url: jdbc:postgresql://{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local:5432/{{ .Values.global.portalDbName }}
   fakeData: false
   image:
     repository: flyway/flyway
