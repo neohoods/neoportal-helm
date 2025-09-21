@@ -69,6 +69,10 @@ spec:
               value: "{{ .Values.backend.env.AUTH0_AUDIENCE }}"
             - name: AUTH0_CONNECTION
               value: "{{ .Values.backend.env.AUTH0_CONNECTION }}"
+            - name: NEOHOODS_PORTAL_EMAIL_TEMPLATE_LOGO_URL
+              value: "{{ .Values.global.emailTemplate.logoUrl }}"
+            - name: NEOHOODS_PORTAL_EMAIL_TEMPLATE_APP_NAME
+              value: "{{ .Values.global.emailTemplate.appName }}"
             # OpenTelemetry configuration
             - name: MANAGEMENT_OTLP_METRICS_ENABLED
               value: "{{ .Values.backend.env.MANAGEMENT_OTLP_METRICS_ENABLED }}"

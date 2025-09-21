@@ -3,7 +3,11 @@ global:
   namespace: platform
   domain: portal.neohoods.com
   chatName: neohoods
-# PostgreSQL settings
+
+  emailTemplate:
+    logoUrl: "https://portal.neohoods.com/logo-bright.png"
+    appName: "NeoHoods"
+
 postgresql:
   enabled: true
   primary:
