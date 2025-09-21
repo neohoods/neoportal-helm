@@ -64,7 +64,6 @@ backend:
     AUTH0_AUDIENCE: https://terresdelaya.eu.auth0.com/api/v2/
     AUTH0_CONNECTION: Username-Password-Authentication
 ingress:
-  host: "portal.neohoods.com"
   certManagerClusterIssuer: letsencrypt-prod
   secretName: letsencrypt-platform
 # Frontend settings

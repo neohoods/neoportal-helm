@@ -37,11 +37,11 @@ spec:
                   name: "{{ .Values.postgresql.auth.existingSecret }}"
                   key: "{{ .Values.postgresql.auth.secretKeys.userPasswordKey }}"
             - name: NEOHOODS_PORTAL_BASE_URL
-              value: "https://{{ .Values.ingress.host }}"
+              value: "https://{{ .Values.global.domain }}"
             - name: NEOHOODS_PORTAL_FRONTEND_URL
-              value: "https://{{ .Values.ingress.host }}"
+              value: "https://{{ .Values.global.domain }}"
             - name: NEOHOODS_PORTAL_EMAIL_VERIFICATION_URL
-              value: "https://{{ .Values.ingress.host }}/email-confirmation"
+              value: "https://{{ .Values.global.domain }}/email-confirmation"
             - name: MAILERSEND_API_KEY
               valueFrom:
                 secretKeyRef:
