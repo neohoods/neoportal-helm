@@ -96,7 +96,7 @@ mailersend:
       name: mailersend-secret
       key: mailersend-api-key
   from:
-    email: notifications@neohoods.com
+    email: notifications@mail.neohoods.com
     name: NeoHoods
 flyway:
   enabled: true
