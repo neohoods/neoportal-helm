@@ -82,6 +82,11 @@ frontend:
     USE_MOCK_API: "false"
     DEMO_MODE: "false"
     DEFAULT_LOCALE: "fr"
+    # Branding configuration
+    BRAND_NAME: "NeoHoods"
+    BRAND_DISPLAY_NAME: "Portal NeoHoods"
+    BRAND_COPYRIGHT: "2025 Portal NeoHoods"
+    BRAND_LOGO: "/logo-bright.png"
   theme:
     configMapName: my-custom-theme
 mailersend:

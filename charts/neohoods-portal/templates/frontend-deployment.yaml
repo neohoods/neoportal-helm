@@ -27,6 +27,15 @@ spec:
               value: "{{ .Values.frontend.env.DEMO_MODE }}"
             - name: DEFAULT_LOCALE
               value: "{{ .Values.frontend.env.DEFAULT_LOCALE }}"
+            # Branding configuration
+            - name: BRAND_NAME
+              value: "{{ .Values.frontend.env.BRAND_NAME }}"
+            - name: BRAND_DISPLAY_NAME
+              value: "{{ .Values.frontend.env.BRAND_DISPLAY_NAME }}"
+            - name: BRAND_COPYRIGHT
+              value: "{{ .Values.frontend.env.BRAND_COPYRIGHT }}"
+            - name: BRAND_LOGO
+              value: "{{ .Values.frontend.env.BRAND_LOGO }}"
           ports:
             - name: http-server
               containerPort: 80
