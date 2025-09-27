@@ -112,7 +112,7 @@ flyway:
   # Custom initialization data
   customInitData:
     enabled: false
-    configMapName: "" # Name of the ConfigMap containing custom init data
+    configMapName: "portal-custom-init-data" # Name of the ConfigMap containing custom init data
     mountPath: "/flyway/sql-custom" # Mount path for custom data
     files: [] # List of SQL files with inline content
     sqlFiles: [] # List of SQL files to load from sql/ directory
