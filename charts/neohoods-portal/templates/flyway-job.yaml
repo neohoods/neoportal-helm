@@ -52,6 +52,9 @@ spec:
         - name: sql-part3
           configMap:
             name: portal-{{ .Release.Name }}-flyway-sql-part3
+        - name: sql-part4
+          configMap:
+            name: portal-{{ .Release.Name }}-flyway-sql-part4
         {{- if .Values.flyway.customInitData.enabled }}
         - name: custom-init-data
           configMap:

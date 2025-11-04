@@ -30,6 +30,6 @@ kind: ConfigMap
 metadata:
   name: portal-{{ .Release.Name }}-flyway-sql-part4
 data:
-  V15__add_stripe_columns.sql: |-
-{{ .Files.Get "sql/V15__add_stripe_columns.sql" | indent 4 }}
+  V15__space_init.sql: |-
+{{ .Files.Get "sql/V15__space_init.sql" | indent 4 }}
 
