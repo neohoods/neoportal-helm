@@ -20,7 +20,6 @@ postgresql:
       adminPasswordKey: postgresql-password
       userPasswordKey: postgresql-password
       replicationPasswordKey: postgresql-password
-
 # Backend settings
 backend:
   enabled: true
@@ -28,7 +27,7 @@ backend:
     enabled: false # Set to true in dev environment
   image:
     repository: ghcr.io/neohoods/portal-platform-api
-    tag: 0.0.207
+    tag: 0.0.208
   replicaCount: 2
   service:
     type: NodePort
@@ -68,7 +67,7 @@ backend:
     STRIPE_PUBLISHABLE_KEY:
       secretKeyRef:
         name: stripe-secret
-        key: stripe-publishable-key 
+        key: stripe-publishable-key
     STRIPE_WEBHOOK_SECRET:
       secretKeyRef:
         name: stripe-secret
@@ -81,7 +80,7 @@ frontend:
   enabled: true
   image:
     repository: ghcr.io/neohoods/portal-platform-ui
-    tag: 0.0.207
+    tag: 0.0.208
   replicaCount: 1
   service:
     type: NodePort
