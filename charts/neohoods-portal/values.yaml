@@ -20,10 +20,7 @@ postgresql:
       adminPasswordKey: postgresql-password
       userPasswordKey: postgresql-password
       replicationPasswordKey: postgresql-password
-  primary:
-    persistence:
-      enabled: true
-      size: 10Gi
+
 # Backend settings
 backend:
   enabled: true
@@ -63,6 +60,19 @@ backend:
         key: auth0-client-secret
     AUTH0_AUDIENCE: https://terresdelaya.eu.auth0.com/api/v2/
     AUTH0_CONNECTION: Username-Password-Authentication
+    # Stripe properties
+    STRIPE_SECRET_KEY:
+      secretKeyRef:
+        name: stripe-secret
+        key: stripe-secret-key
+    STRIPE_PUBLISHABLE_KEY:
+      secretKeyRef:
+        name: stripe-secret
+        key: stripe-publishable-key 
+    STRIPE_WEBHOOK_SECRET:
+      secretKeyRef:
+        name: stripe-secret
+        key: stripe-webhook-secret
 ingress:
   certManagerClusterIssuer: letsencrypt-prod
   secretName: letsencrypt-platform
