@@ -36,6 +36,8 @@ spec:
             {{- end }}
             - name: sql-part3
               mountPath: /flyway/sql-part3
+            - name: sql-part4
+              mountPath: /flyway/sql-part4
             {{- if .Values.flyway.customInitData.enabled }}
             - name: custom-init-data
               mountPath: {{ .Values.flyway.customInitData.mountPath }}
