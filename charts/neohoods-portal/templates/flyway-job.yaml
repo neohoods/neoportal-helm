@@ -12,7 +12,7 @@ spec:
       containers:
         - name: portal-{{ .Release.Name }}-flyway
           image: "{{ .Values.flyway.image.repository }}:{{ .Values.flyway.image.tag }}"
-          args: ["-connectRetries=60", "migrate", "-locations=filesystem:/flyway/sql{{- if .Values.flyway.fakeData }},filesystem:/flyway/sql-part2{{- end }},filesystem:/flyway/sql-part3{{- if .Values.flyway.customInitData.enabled }},filesystem:{{ .Values.flyway.customInitData.mountPath }}{{- end }}"]
+          args: ["-connectRetries=60", "migrate", "-locations=filesystem:/flyway/sql{{- if .Values.flyway.fakeData }},filesystem:/flyway/sql-part2{{- end }},filesystem:/flyway/sql-part3,filesystem:/flyway/sql-part4{{- if .Values.flyway.customInitData.enabled }},filesystem:{{ .Values.flyway.customInitData.mountPath }}{{- end }}"]
           env:
             - name: FLYWAY_USER
               value: "{{ .Values.postgresql.auth.username }}"
