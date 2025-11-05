@@ -12,7 +12,9 @@ data:
 {{- if .Values.flyway.customInitData.files }}
 {{- range .Values.flyway.customInitData.files }}
   {{ .name }}: |-
-{{ .content | indent 4 }}
+{{- if .content }}
+{{ .content | nindent 4 }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
