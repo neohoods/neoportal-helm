@@ -12,7 +12,7 @@ spec:
       containers:
         - name: portal-{{ .Release.Name }}-flyway
           image: "{{ .Values.flyway.image.repository }}:{{ .Values.flyway.image.tag }}"
-          args: ["-connectRetries=60", "migrate", "-locations=filesystem:/flyway/sql{{- if .Values.flyway.fakeData }},filesystem:/flyway/sql-part2{{- end }},filesystem:/flyway/sql-part3,filesystem:/flyway/sql-part4{{- if .Values.flyway.customInitData.enabled }},filesystem:{{ .Values.flyway.customInitData.mountPath }}{{- end }}"]
+          args: ["-connectRetries=60", "migrate", "-locations=filesystem:/flyway/sql-part1{{- if .Values.flyway.fakeData }},filesystem:/flyway/sql-part2{{- end }},filesystem:/flyway/sql-part3,filesystem:/flyway/sql-part4{{- if .Values.flyway.customInitData.enabled }},filesystem:{{ .Values.flyway.customInitData.mountPath }}{{- end }}"]
           env:
             - name: FLYWAY_USER
               value: "{{ .Values.postgresql.auth.username }}"
@@ -28,8 +28,8 @@ spec:
             - name: FLYWAY_CLEAN_DISABLED
               value: "true"
           volumeMounts:
-            - name: sql
-              mountPath: /flyway/sql
+            - name: sql-part1
+              mountPath: /flyway/sql-part1
             {{- if .Values.flyway.fakeData }}
             - name: sql-part2
               mountPath: /flyway/sql-part2
@@ -43,7 +43,7 @@ spec:
               mountPath: {{ .Values.flyway.customInitData.mountPath }}
             {{- end }}
       volumes:
-        - name: sql
+        - name: sql-part1
           configMap:
             name: portal-{{ .Release.Name }}-flyway-sql-part1
         {{- if .Values.flyway.fakeData }}
