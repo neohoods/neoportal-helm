@@ -86,6 +86,21 @@ spec:
               value: http://grafana-k8s-monitoring-alloy-receiver.monitoring.svc.cluster.local:4318/v1/metrics
             - name: OTEL_RESOURCE_ATTRIBUTES
               value: service.name=portal-platform-api
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.STRIPE_SECRET_KEY.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.STRIPE_SECRET_KEY.secretKeyRef.key }}
+            - name: STRIPE_PUBLISHABLE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.STRIPE_PUBLISHABLE_KEY.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.STRIPE_PUBLISHABLE_KEY.secretKeyRef.key }}
+            - name: STRIPE_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.STRIPE_WEBHOOK_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.STRIPE_WEBHOOK_SECRET.secretKeyRef.key }}
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}
