@@ -101,6 +101,11 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.backend.env.STRIPE_WEBHOOK_SECRET.secretKeyRef.name }}
                   key: {{ .Values.backend.env.STRIPE_WEBHOOK_SECRET.secretKeyRef.key }}
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.JWT_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.JWT_SECRET.secretKeyRef.key }}
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}

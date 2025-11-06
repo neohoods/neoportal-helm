@@ -72,6 +72,10 @@ backend:
       secretKeyRef:
         name: stripe-secret
         key: stripe-webhook-secret
+    JWT_SECRET:
+      secretKeyRef:
+        name: portal-secret
+        key: jwt-secret
 ingress:
   certManagerClusterIssuer: letsencrypt-prod
   secretName: letsencrypt-platform

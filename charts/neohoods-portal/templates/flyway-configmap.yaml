@@ -35,3 +35,12 @@ data:
   V15__space_init.sql: |-
 {{ .Files.Get "sql/V15__space_init.sql" | indent 4 }}
 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: portal-{{ .Release.Name }}-flyway-sql-part5
+data:
+  V16__add_cleaning_settings_to_spaces.sql: |-
+{{ .Files.Get "sql/V16__add_cleaning_settings_to_spaces.sql" | indent 4 }}
+
