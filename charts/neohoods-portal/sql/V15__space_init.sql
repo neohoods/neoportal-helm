@@ -69,6 +69,12 @@ CREATE TABLE spaces (
     digital_lock_id UUID REFERENCES digital_locks(id) ON DELETE SET NULL,
     access_code_enabled BOOLEAN NOT NULL DEFAULT FALSE,
     enable_notifications BOOLEAN NOT NULL DEFAULT TRUE,
+    cleaning_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+    cleaning_email VARCHAR(255),
+    cleaning_notifications_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+    cleaning_calendar_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+    cleaning_days_after_checkout INTEGER NOT NULL DEFAULT 0,
+    cleaning_hour VARCHAR(5) DEFAULT '10:00',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -130,11 +136,62 @@ CREATE TABLE space_cleaning_days (
 
 CREATE INDEX idx_space_cleaning_days_space_id ON space_cleaning_days(space_id);
 
+-- Units table (must be created before reservations as reservations references units)
+CREATE TABLE units (
+    id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    name varchar(255) NOT NULL,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Unit members table
+CREATE TABLE unit_members (
+    id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    unit_id uuid REFERENCES units(id) ON DELETE CASCADE NOT NULL,
+    user_id uuid REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    role varchar(50) NOT NULL CHECK (role IN ('ADMIN', 'MEMBER')),
+    joined_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(unit_id, user_id)
+);
+CREATE INDEX idx_unit_members_unit_id ON unit_members(unit_id);
+CREATE INDEX idx_unit_members_user_id ON unit_members(user_id);
+
+-- Unit invitations table
+CREATE TABLE unit_invitations (
+    id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    unit_id uuid REFERENCES units(id) ON DELETE CASCADE NOT NULL,
+    invited_user_id uuid REFERENCES users(id) ON DELETE SET NULL,
+    invited_email varchar(255),
+    invited_by uuid REFERENCES users(id) NOT NULL,
+    status varchar(50) NOT NULL CHECK (status IN ('PENDING', 'ACCEPTED', 'REJECTED')),
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    responded_at timestamp
+);
+CREATE INDEX idx_unit_invitations_unit_id ON unit_invitations(unit_id);
+CREATE INDEX idx_unit_invitations_invited_user_id ON unit_invitations(invited_user_id);
+CREATE INDEX idx_unit_invitations_status ON unit_invitations(status);
+
+-- Unit join requests table (requests from users to join a unit)
+CREATE TABLE unit_join_requests (
+    id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    unit_id uuid REFERENCES units(id) ON DELETE CASCADE NOT NULL,
+    requested_by uuid REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    status varchar(50) NOT NULL CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED')),
+    message text,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    responded_at timestamp,
+    responded_by uuid REFERENCES users(id) ON DELETE SET NULL
+);
+CREATE INDEX idx_unit_join_requests_unit_id ON unit_join_requests(unit_id);
+CREATE INDEX idx_unit_join_requests_requested_by ON unit_join_requests(requested_by);
+CREATE INDEX idx_unit_join_requests_status ON unit_join_requests(status);
+
 -- Reservations (migrated from V2__Create_reservations_tables.sql)
 CREATE TABLE reservations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     space_id UUID NOT NULL REFERENCES spaces(id) ON DELETE CASCADE,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    unit_id UUID REFERENCES units(id) ON DELETE SET NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'PENDING_PAYMENT' CHECK (status IN ('PENDING_PAYMENT', 'PAYMENT_FAILED', 'EXPIRED', 'CONFIRMED', 'ACTIVE', 'COMPLETED', 'CANCELLED', 'REFUNDED')),
@@ -152,6 +209,7 @@ CREATE TABLE reservations (
 
 CREATE INDEX idx_reservations_user_id ON reservations(user_id);
 CREATE INDEX idx_reservations_space_id ON reservations(space_id);
+CREATE INDEX idx_reservations_unit_id ON reservations(unit_id);
 CREATE INDEX idx_reservations_status ON reservations(status);
 CREATE INDEX idx_reservations_payment_status ON reservations(payment_status);
 CREATE INDEX idx_reservations_dates ON reservations(start_date, end_date);

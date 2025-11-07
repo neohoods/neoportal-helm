@@ -1,9 +1,0 @@
--- Add cleaning settings columns to spaces table
-ALTER TABLE spaces
-ADD COLUMN IF NOT EXISTS cleaning_enabled BOOLEAN NOT NULL DEFAULT FALSE,
-ADD COLUMN IF NOT EXISTS cleaning_email VARCHAR(255),
-ADD COLUMN IF NOT EXISTS cleaning_notifications_enabled BOOLEAN NOT NULL DEFAULT FALSE,
-ADD COLUMN IF NOT EXISTS cleaning_calendar_enabled BOOLEAN NOT NULL DEFAULT FALSE,
-ADD COLUMN IF NOT EXISTS cleaning_days_after_checkout INTEGER NOT NULL DEFAULT 0,
-ADD COLUMN IF NOT EXISTS cleaning_hour VARCHAR(5) DEFAULT '10:00';
-
