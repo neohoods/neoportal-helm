@@ -333,3 +333,7 @@ CREATE TABLE reservation_audit_log (
 CREATE INDEX idx_reservation_audit_log_reservation_id ON reservation_audit_log(reservation_id);
 CREATE INDEX idx_reservation_audit_log_created_at ON reservation_audit_log(created_at);
 CREATE INDEX idx_reservation_audit_log_event_type ON reservation_audit_log(event_type);
+
+-- Add primary_unit_id column to users table (for explicit primary unit management)
+ALTER TABLE users ADD COLUMN IF NOT EXISTS primary_unit_id UUID REFERENCES units(id) ON DELETE SET NULL;
+CREATE INDEX IF NOT EXISTS idx_users_primary_unit_id ON users(primary_unit_id);
