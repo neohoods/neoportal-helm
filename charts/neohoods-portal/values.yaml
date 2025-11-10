@@ -76,6 +76,21 @@ backend:
       secretKeyRef:
         name: portal-secret
         key: jwt-secret
+    NEOHOODS_PORTAL_MAIL_SILENT_MODE: "false"
+    NEOHOODS_PORTAL_MAIL_WHITELIST: "quentincastel86@gmail.com"
+    # SSO configuration
+    NEOHOODS_PORTAL_SSO_ENABLED: "false"
+    NEOHOODS_PORTAL_SSO_CLIENT_ID:
+      secretKeyRef:
+        name: portal-secret
+        key: sso-client-id
+    NEOHOODS_PORTAL_SSO_CLIENT_SECRET:
+      secretKeyRef:
+        name: portal-secret
+        key: sso-client-secret
+    NEOHOODS_PORTAL_SSO_TOKEN_ENDPOINT: ""
+    NEOHOODS_PORTAL_SSO_AUTHORIZATION_ENDPOINT: ""
+    NEOHOODS_PORTAL_SSO_SCOPE: "openid profile email"
 ingress:
   certManagerClusterIssuer: letsencrypt-prod
   secretName: letsencrypt-platform

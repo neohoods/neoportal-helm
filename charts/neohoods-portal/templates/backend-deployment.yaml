@@ -69,6 +69,25 @@ spec:
               value: "{{ .Values.backend.env.AUTH0_AUDIENCE }}"
             - name: AUTH0_CONNECTION
               value: "{{ .Values.backend.env.AUTH0_CONNECTION }}"
+            # SSO configuration
+            - name: NEOHOODS_PORTAL_SSO_ENABLED
+              value: "{{ .Values.backend.env.NEOHOODS_PORTAL_SSO_ENABLED }}"
+            - name: NEOHOODS_PORTAL_SSO_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_SSO_CLIENT_ID.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_SSO_CLIENT_ID.secretKeyRef.key }}
+            - name: NEOHOODS_PORTAL_SSO_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_SSO_CLIENT_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_SSO_CLIENT_SECRET.secretKeyRef.key }}
+            - name: NEOHOODS_PORTAL_SSO_TOKEN_ENDPOINT
+              value: "{{ .Values.backend.env.NEOHOODS_PORTAL_SSO_TOKEN_ENDPOINT }}"
+            - name: NEOHOODS_PORTAL_SSO_AUTHORIZATION_ENDPOINT
+              value: "{{ .Values.backend.env.NEOHOODS_PORTAL_SSO_AUTHORIZATION_ENDPOINT }}"
+            - name: NEOHOODS_PORTAL_SSO_SCOPE
+              value: "{{ .Values.backend.env.NEOHOODS_PORTAL_SSO_SCOPE }}"
             - name: NEOHOODS_PORTAL_EMAIL_TEMPLATE_LOGO_URL
               value: "{{ .Values.global.emailTemplate.logoUrl }}"
             - name: NEOHOODS_PORTAL_EMAIL_TEMPLATE_APP_NAME
@@ -106,6 +125,10 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.backend.env.JWT_SECRET.secretKeyRef.name }}
                   key: {{ .Values.backend.env.JWT_SECRET.secretKeyRef.key }}
+            - name: NEOHOODS_PORTAL_MAIL_SILENT_MODE
+              value: "{{ .Values.backend.env.NEOHOODS_PORTAL_MAIL_SILENT_MODE }}"
+            - name: NEOHOODS_PORTAL_MAIL_WHITELIST
+              value: "{{ .Values.backend.env.NEOHOODS_PORTAL_MAIL_WHITELIST }}"
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}
