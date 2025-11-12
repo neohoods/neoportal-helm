@@ -115,6 +115,7 @@ frontend:
     BRAND_DISPLAY_NAME: "Portal NeoHoods"
     BRAND_COPYRIGHT: "2025 Portal NeoHoods"
     BRAND_LOGO: "/logo-bright.png"
+    STRIPE_DEMO_MODE: "false"
   theme:
     configMapName: my-custom-theme
 mailersend:

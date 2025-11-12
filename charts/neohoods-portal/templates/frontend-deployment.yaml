@@ -25,6 +25,8 @@ spec:
               value: "{{ .Values.frontend.env.USE_MOCK_API }}"
             - name: DEMO_MODE
               value: "{{ .Values.frontend.env.DEMO_MODE }}"
+            - name: STRIPE_DEMO_MODE
+              value: "{{ .Values.frontend.env.STRIPE_DEMO_MODE }}"
             - name: DEFAULT_LOCALE
               value: "{{ .Values.frontend.env.DEFAULT_LOCALE }}"
             # Branding configuration
