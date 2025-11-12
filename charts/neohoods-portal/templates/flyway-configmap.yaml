@@ -16,4 +16,14 @@ data:
   V1.2__fake_data.sql: |-
 {{ .Files.Get "sql/V1.2__fake_data.sql" | indent 4 }}
 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: portal-{{ .Release.Name }}-flyway-sql-v2
+data:
+  V2__remove_requires_apartment_access_add_capacity.sql: |-
+{{ .Files.Get "sql/V2__remove_requires_apartment_access_add_capacity.sql" | indent 4 }}
+
+
 
