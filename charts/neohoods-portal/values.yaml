@@ -91,6 +91,69 @@ backend:
     NEOHOODS_PORTAL_SSO_TOKEN_ENDPOINT: ""
     NEOHOODS_PORTAL_SSO_AUTHORIZATION_ENDPOINT: ""
     NEOHOODS_PORTAL_SSO_SCOPE: "openid profile email"
+    # Matrix configuration
+    MATRIX_BOT_ENABLED: "true"
+    MATRIX_BOT_DISABLED: "false"
+    MATRIX_HOMESERVER_URL: "matrix.neohoods.com"
+    MATRIX_SERVER_NAME: "chat.neohoods.com"
+    MATRIX_SPACE_ID: "!YenniyNVsUoBCLHtZS:chat.neohoods.com"
+    MATRIX_INITIALIZATION_ENABLED: "true"
+    MATRIX_MAS_URL: "https://mas.chat.neohoods.com"
+    MATRIX_ROOMS_CONFIG_FILE: "file:/app/matrix-default-rooms.yaml"
+    MATRIX_INITIALIZATION_ADMIN_USERS: "@quentincastel86:chat.neohoods.com,@quentin.castel.neohoods:chat.neohoods.com"
+    MATRIX_OAUTH2_CLIENT_ID:
+      secretKeyRef:
+        name: matrix-secret
+        key: oauth2-client-id
+    MATRIX_OAUTH2_CLIENT_SECRET:
+      secretKeyRef:
+        name: matrix-secret
+        key: oauth2-client-secret
+    MATRIX_OAUTH2_REDIRECT_URI: "https://portal.neohoods.com/api/admin/matrix-bot/oauth2/callback"
+    MATRIX_OAUTH2_SCOPE: "urn:matrix:client:api:* urn:synapse:admin:* urn:matrix:client:device:BOT-PERMANENT-TOKEN"
+    MATRIX_OAUTH2_AUTHORIZATION_ENDPOINT: "https://matrix.neohoods.com/_matrix/client/v3/oauth2/authorize"
+    MATRIX_OAUTH2_TOKEN_ENDPOINT: "https://matrix.neohoods.com/_matrix/client/v3/oauth2/token"
+    MATRIX_OAUTH2_DEVICE_AUTHORIZATION_ENDPOINT: "https://mas.chat.neohoods.com/oauth2/device"
+    MATRIX_LOCAL_BOT_ENABLED: "true"
+    MATRIX_LOCAL_BOT_USER_ID: "@bot:chat.neohoods.com"
+    MATRIX_LOCAL_BOT_PERMANENT_TOKEN:
+      secretKeyRef:
+        name: matrix-secret
+        key: local-bot-permanent-token
+    MATRIX_LOCAL_BOT_AVATAR_URL: "https://neohoods.com/assets/chat/bot-avatar.jpeg"
+    # Cleaning Calendar configuration
+    CLEANING_CALENDAR_JWT_SECRET:
+      secretKeyRef:
+        name: portal-secret
+        key: cleaning-calendar-jwt-secret
+    # Bot JWT configuration
+    NEOHOODS_PORTAL_BOT_JWT_SECRET:
+      secretKeyRef:
+        name: portal-secret
+        key: bot-jwt-secret
+    NEOHOODS_PORTAL_BOT_JWT_ISSUER: "matrix-sync-bot"
+    NEOHOODS_PORTAL_BOT_JWT_AUDIENCE: "neohoods-portal"
+    # Spaces platform fees configuration
+    NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FEE_PERCENTAGE: "2.00"
+    NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FIXED_FEE: "0.25"
+    # TTLock configuration
+    TTLOCK_API_URL: "https://api.ttlock.com"
+    TTLOCK_API_KEY:
+      secretKeyRef:
+        name: ttlock-secret
+        key: api-key
+    TTLOCK_DEVICE_ID: ""
+    # Nuki configuration
+    NUKI_API_URL: "https://api.nuki.io"
+    NUKI_TOKEN:
+      secretKeyRef:
+        name: nuki-secret
+        key: token
+  matrixRooms:
+    enabled: true
+    configMapName: "" # Default: {{ .Release.Name }}-matrix-rooms
+    inline: "" # YAML content inline (optional)
+    existingConfigMap: "" # Reference to existing ConfigMap (optional)
 ingress:
   certManagerClusterIssuer: letsencrypt-prod
   secretName: letsencrypt-platform

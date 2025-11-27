@@ -1,0 +1,23 @@
+{{- if .Values.backend.matrixRooms.enabled }}
+{{- if not .Values.backend.matrixRooms.existingConfigMap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.backend.matrixRooms.configMapName | default (printf "%s-matrix-rooms" .Release.Name) }}
+  labels:
+    app: portal-{{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  matrix-default-rooms.yaml: |-
+{{- if .Values.backend.matrixRooms.inline }}
+{{ .Values.backend.matrixRooms.inline | indent 4 }}
+{{- else }}
+{{ .Files.Get "matrix-default-rooms.yaml" | indent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+
+

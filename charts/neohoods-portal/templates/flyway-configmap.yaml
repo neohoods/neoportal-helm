@@ -25,5 +25,14 @@ data:
   V2__remove_requires_apartment_access_add_capacity.sql: |-
 {{ .Files.Get "sql/V2__remove_requires_apartment_access_add_capacity.sql" | indent 4 }}
 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: portal-{{ .Release.Name }}-flyway-sql-v3
+data:
+  V3__add_matrix_bot_tables.sql: |-
+{{ .Files.Get "sql/V3__add_matrix_bot_tables.sql" | indent 4 }}
+
 
 

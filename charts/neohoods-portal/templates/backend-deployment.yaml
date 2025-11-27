@@ -129,6 +129,95 @@ spec:
               value: "{{ .Values.backend.env.NEOHOODS_PORTAL_MAIL_SILENT_MODE }}"
             - name: NEOHOODS_PORTAL_MAIL_WHITELIST
               value: "{{ .Values.backend.env.NEOHOODS_PORTAL_MAIL_WHITELIST }}"
+            # Matrix configuration
+            - name: MATRIX_BOT_ENABLED
+              value: "{{ .Values.backend.env.MATRIX_BOT_ENABLED }}"
+            - name: MATRIX_BOT_DISABLED
+              value: "{{ .Values.backend.env.MATRIX_BOT_DISABLED }}"
+            - name: MATRIX_HOMESERVER_URL
+              value: "{{ .Values.backend.env.MATRIX_HOMESERVER_URL }}"
+            - name: MATRIX_SERVER_NAME
+              value: "{{ .Values.backend.env.MATRIX_SERVER_NAME }}"
+            - name: MATRIX_SPACE_ID
+              value: "{{ .Values.backend.env.MATRIX_SPACE_ID }}"
+            - name: MATRIX_INITIALIZATION_ENABLED
+              value: "{{ .Values.backend.env.MATRIX_INITIALIZATION_ENABLED }}"
+            - name: MATRIX_MAS_URL
+              value: "{{ .Values.backend.env.MATRIX_MAS_URL }}"
+            - name: MATRIX_ROOMS_CONFIG_FILE
+              value: "{{ .Values.backend.env.MATRIX_ROOMS_CONFIG_FILE }}"
+            - name: MATRIX_INITIALIZATION_ADMIN_USERS
+              value: "{{ .Values.backend.env.MATRIX_INITIALIZATION_ADMIN_USERS }}"
+            - name: MATRIX_OAUTH2_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.MATRIX_OAUTH2_CLIENT_ID.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.MATRIX_OAUTH2_CLIENT_ID.secretKeyRef.key }}
+            - name: MATRIX_OAUTH2_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.MATRIX_OAUTH2_CLIENT_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.MATRIX_OAUTH2_CLIENT_SECRET.secretKeyRef.key }}
+            - name: MATRIX_OAUTH2_REDIRECT_URI
+              value: "{{ .Values.backend.env.MATRIX_OAUTH2_REDIRECT_URI }}"
+            - name: MATRIX_OAUTH2_SCOPE
+              value: "{{ .Values.backend.env.MATRIX_OAUTH2_SCOPE }}"
+            - name: MATRIX_OAUTH2_AUTHORIZATION_ENDPOINT
+              value: "{{ .Values.backend.env.MATRIX_OAUTH2_AUTHORIZATION_ENDPOINT }}"
+            - name: MATRIX_OAUTH2_TOKEN_ENDPOINT
+              value: "{{ .Values.backend.env.MATRIX_OAUTH2_TOKEN_ENDPOINT }}"
+            - name: MATRIX_OAUTH2_DEVICE_AUTHORIZATION_ENDPOINT
+              value: "{{ .Values.backend.env.MATRIX_OAUTH2_DEVICE_AUTHORIZATION_ENDPOINT }}"
+            - name: MATRIX_LOCAL_BOT_ENABLED
+              value: "{{ .Values.backend.env.MATRIX_LOCAL_BOT_ENABLED }}"
+            - name: MATRIX_LOCAL_BOT_USER_ID
+              value: "{{ .Values.backend.env.MATRIX_LOCAL_BOT_USER_ID }}"
+            - name: MATRIX_LOCAL_BOT_PERMANENT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.MATRIX_LOCAL_BOT_PERMANENT_TOKEN.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.MATRIX_LOCAL_BOT_PERMANENT_TOKEN.secretKeyRef.key }}
+            - name: MATRIX_LOCAL_BOT_AVATAR_URL
+              value: "{{ .Values.backend.env.MATRIX_LOCAL_BOT_AVATAR_URL }}"
+            # Cleaning Calendar configuration
+            - name: CLEANING_CALENDAR_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.CLEANING_CALENDAR_JWT_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.CLEANING_CALENDAR_JWT_SECRET.secretKeyRef.key }}
+            # Bot JWT configuration
+            - name: NEOHOODS_PORTAL_BOT_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_BOT_JWT_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_BOT_JWT_SECRET.secretKeyRef.key }}
+            - name: NEOHOODS_PORTAL_BOT_JWT_ISSUER
+              value: "{{ .Values.backend.env.NEOHOODS_PORTAL_BOT_JWT_ISSUER }}"
+            - name: NEOHOODS_PORTAL_BOT_JWT_AUDIENCE
+              value: "{{ .Values.backend.env.NEOHOODS_PORTAL_BOT_JWT_AUDIENCE }}"
+            # Spaces platform fees configuration
+            - name: NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FEE_PERCENTAGE
+              value: "{{ .Values.backend.env.NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FEE_PERCENTAGE }}"
+            - name: NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FIXED_FEE
+              value: "{{ .Values.backend.env.NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FIXED_FEE }}"
+            # TTLock configuration
+            - name: TTLOCK_API_URL
+              value: "{{ .Values.backend.env.TTLOCK_API_URL }}"
+            - name: TTLOCK_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.TTLOCK_API_KEY.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.TTLOCK_API_KEY.secretKeyRef.key }}
+            - name: TTLOCK_DEVICE_ID
+              value: "{{ .Values.backend.env.TTLOCK_DEVICE_ID }}"
+            # Nuki configuration
+            - name: NUKI_API_URL
+              value: "{{ .Values.backend.env.NUKI_API_URL }}"
+            - name: NUKI_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NUKI_TOKEN.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NUKI_TOKEN.secretKeyRef.key }}
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}
@@ -147,4 +236,16 @@ spec:
             httpGet:
               path: /api/actuator/health
               port: {{ .Values.backend.env.SERVER_PORT }}
+          volumeMounts:
+            {{- if .Values.backend.matrixRooms.enabled }}
+            - name: matrix-rooms-config
+              mountPath: /app/matrix-default-rooms.yaml
+              subPath: matrix-default-rooms.yaml
+            {{- end }}
+      volumes:
+        {{- if .Values.backend.matrixRooms.enabled }}
+        - name: matrix-rooms-config
+          configMap:
+            name: {{ if .Values.backend.matrixRooms.existingConfigMap }}{{ .Values.backend.matrixRooms.existingConfigMap }}{{ else }}{{ .Values.backend.matrixRooms.configMapName | default (printf "%s-matrix-rooms" .Release.Name) }}{{ end }}
+        {{- end }}
 {{- end }}
