@@ -136,19 +136,6 @@ backend:
     # Spaces platform fees configuration
     NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FEE_PERCENTAGE: "2.00"
     NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FIXED_FEE: "0.25"
-    # TTLock configuration
-    TTLOCK_API_URL: "https://api.ttlock.com"
-    TTLOCK_API_KEY:
-      secretKeyRef:
-        name: ttlock-secret
-        key: api-key
-    TTLOCK_DEVICE_ID: ""
-    # Nuki configuration
-    NUKI_API_URL: "https://api.nuki.io"
-    NUKI_TOKEN:
-      secretKeyRef:
-        name: nuki-secret
-        key: token
   matrixRooms:
     enabled: true
     configMapName: "" # Default: {{ .Release.Name }}-matrix-rooms

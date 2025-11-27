@@ -200,24 +200,6 @@ spec:
               value: "{{ .Values.backend.env.NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FEE_PERCENTAGE }}"
             - name: NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FIXED_FEE
               value: "{{ .Values.backend.env.NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FIXED_FEE }}"
-            # TTLock configuration
-            - name: TTLOCK_API_URL
-              value: "{{ .Values.backend.env.TTLOCK_API_URL }}"
-            - name: TTLOCK_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.backend.env.TTLOCK_API_KEY.secretKeyRef.name }}
-                  key: {{ .Values.backend.env.TTLOCK_API_KEY.secretKeyRef.key }}
-            - name: TTLOCK_DEVICE_ID
-              value: "{{ .Values.backend.env.TTLOCK_DEVICE_ID }}"
-            # Nuki configuration
-            - name: NUKI_API_URL
-              value: "{{ .Values.backend.env.NUKI_API_URL }}"
-            - name: NUKI_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.backend.env.NUKI_TOKEN.secretKeyRef.name }}
-                  key: {{ .Values.backend.env.NUKI_TOKEN.secretKeyRef.key }}
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}
