@@ -168,18 +168,7 @@ spec:
               value: "{{ .Values.backend.env.MATRIX_OAUTH2_TOKEN_ENDPOINT }}"
             - name: MATRIX_OAUTH2_DEVICE_AUTHORIZATION_ENDPOINT
               value: "{{ .Values.backend.env.MATRIX_OAUTH2_DEVICE_AUTHORIZATION_ENDPOINT }}"
-            - name: MATRIX_LOCAL_BOT_ENABLED
-              value: "{{ .Values.backend.env.MATRIX_LOCAL_BOT_ENABLED }}"
-            - name: MATRIX_LOCAL_BOT_USER_ID
-              value: "{{ .Values.backend.env.MATRIX_LOCAL_BOT_USER_ID }}"
-            - name: MATRIX_LOCAL_BOT_PERMANENT_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.backend.env.MATRIX_LOCAL_BOT_PERMANENT_TOKEN.secretKeyRef.name }}
-                  key: {{ .Values.backend.env.MATRIX_LOCAL_BOT_PERMANENT_TOKEN.secretKeyRef.key }}
-            - name: MATRIX_LOCAL_BOT_AVATAR_URL
-              value: "{{ .Values.backend.env.MATRIX_LOCAL_BOT_AVATAR_URL }}"
-            # Matrix Local Assistant configuration
+            # Matrix Local Assistant configuration (Alfred)
             - name: MATRIX_LOCAL_ASSISTANT_ENABLED
               value: "{{ .Values.backend.env.MATRIX_LOCAL_ASSISTANT_ENABLED }}"
             - name: MATRIX_LOCAL_ASSISTANT_USER_ID
