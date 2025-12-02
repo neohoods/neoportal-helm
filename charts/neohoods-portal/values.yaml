@@ -121,6 +121,35 @@ backend:
         name: matrix-secret
         key: local-bot-permanent-token
     MATRIX_LOCAL_BOT_AVATAR_URL: "https://neohoods.com/assets/chat/bot-avatar.jpeg"
+    # Matrix Local Assistant configuration
+    MATRIX_LOCAL_ASSISTANT_ENABLED: "true"
+    MATRIX_LOCAL_ASSISTANT_USER_ID: "@alfred:chat.neohoods.com"
+    MATRIX_LOCAL_ASSISTANT_PERMANENT_TOKEN:
+      secretKeyRef:
+        name: matrix-secret
+        key: local-assistant-permanent-token
+    MATRIX_LOCAL_ASSISTANT_AVATAR_URL: "https://neohoods.com/assets/chat/alfred-avatar.jpeg"
+    MATRIX_LOCAL_ASSISTANT_DISPLAY_NAME: "Alfred"
+    # Matrix Assistant AI configuration
+    MATRIX_ASSISTANT_AI_ENABLED: "true"
+    MATRIX_ASSISTANT_AI_PROVIDER: "mistral"
+    MISTRAL_AI_TOKEN:
+      secretKeyRef:
+        name: matrix-secret
+        key: mistral-ai-token
+    MATRIX_ASSISTANT_AI_MODEL: "mistral-small"
+    # Matrix Assistant RAG configuration
+    MATRIX_ASSISTANT_RAG_ENABLED: "true"
+    # Matrix Assistant MCP configuration
+    MATRIX_ASSISTANT_MCP_ENABLED: "true"
+    MATRIX_ASSISTANT_MCP_BASE_URL: "http://localhost:8080/mcp"
+    # Matrix Assistant Reminders configuration
+    MATRIX_ASSISTANT_REMINDERS_ENABLED: "false"
+    MATRIX_ASSISTANT_REMINDERS_BEFORE_HOURS: "24"
+    MATRIX_ASSISTANT_REMINDERS_CHECKOUT_HOURS: "9"
+    MATRIX_ASSISTANT_REMINDERS_FEEDBACK_DAYS: "1"
+    # Matrix Assistant Notifications configuration
+    MATRIX_ASSISTANT_NOTIFICATIONS_ENABLED: "false"
     # Cleaning Calendar configuration
     CLEANING_CALENDAR_JWT_SECRET:
       secretKeyRef:
