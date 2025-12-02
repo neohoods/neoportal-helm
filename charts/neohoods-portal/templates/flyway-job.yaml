@@ -13,6 +13,19 @@ spec:
         - name: portal-{{ .Release.Name }}-flyway
           image: "{{ .Values.flyway.image.repository }}:{{ .Values.flyway.image.tag }}"
           args: ["-connectRetries=60", "migrate", "-locations=filesystem:/flyway/sql-init,filesystem:/flyway/sql-v2,filesystem:/flyway/sql-v3{{- if .Values.flyway.fakeData }},filesystem:/flyway/sql-fake-data{{- end }}{{- if .Values.flyway.customInitData.enabled }},filesystem:{{ .Values.flyway.customInitData.mountPath }}{{- end }}"]
+          resources:
+            {{- if .Values.flyway.resources }}
+            {{- toYaml .Values.flyway.resources | nindent 12 }}
+            {{- else }}
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+              ephemeral-storage: "500Mi"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+              ephemeral-storage: "2Gi"
+            {{- end }}
           env:
             - name: FLYWAY_USER
               value: "{{ .Values.postgresql.auth.username }}"

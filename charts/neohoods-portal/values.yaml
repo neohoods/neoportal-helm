@@ -210,6 +210,17 @@ flyway:
   config:
     schemas: public
     locations: "filesystem:/flyway/sql"
+  # Resource limits to prevent ephemeral-storage issues
+  # Override these if you have large customInitData ConfigMaps
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+      ephemeral-storage: "500Mi"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+      ephemeral-storage: "2Gi"
   # Custom initialization data
   customInitData:
     enabled: false
