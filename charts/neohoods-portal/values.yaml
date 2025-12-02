@@ -100,7 +100,7 @@ backend:
     MATRIX_INITIALIZATION_ENABLED: "true"
     MATRIX_MAS_URL: "https://mas.chat.neohoods.com"
     MATRIX_ROOMS_CONFIG_FILE: "file:/app/matrix-default-rooms.yaml"
-    MATRIX_INITIALIZATION_ADMIN_USERS: "@quentincastel86:chat.neohoods.com,@quentin.castel.neohoods:chat.neohoods.com"
+    MATRIX_INITIALIZATION_ADMIN_USERS: "@quentincastel86:chat.neohoods.com"
     MATRIX_OAUTH2_CLIENT_ID:
       secretKeyRef:
         name: matrix-secret

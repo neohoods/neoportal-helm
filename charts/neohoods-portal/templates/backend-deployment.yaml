@@ -147,7 +147,7 @@ spec:
             - name: MATRIX_ROOMS_CONFIG_FILE
               value: "{{ .Values.backend.env.MATRIX_ROOMS_CONFIG_FILE }}"
             - name: MATRIX_INITIALIZATION_ADMIN_USERS
-              value: "{{ .Values.backend.env.MATRIX_INITIALIZATION_ADMIN_USERS }}"
+              value: {{ .Values.backend.env.MATRIX_INITIALIZATION_ADMIN_USERS | quote }}
             - name: MATRIX_OAUTH2_CLIENT_ID
               valueFrom:
                 secretKeyRef:
