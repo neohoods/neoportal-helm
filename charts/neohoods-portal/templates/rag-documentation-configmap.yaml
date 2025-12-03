@@ -1,0 +1,21 @@
+{{- if .Values.backend.ragDocumentation.enabled }}
+{{- if not .Values.backend.ragDocumentation.existingConfigMap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.backend.ragDocumentation.configMapName | default (printf "%s-rag-documentation" .Release.Name) }}
+  labels:
+    app: portal-{{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  rag-custom-documentation.md: |-
+{{- if .Values.backend.ragDocumentation.inline }}
+{{ .Values.backend.ragDocumentation.inline | indent 4 }}
+{{- else }}
+{{ .Files.Get "rag-custom-documentation.md" | indent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}
+

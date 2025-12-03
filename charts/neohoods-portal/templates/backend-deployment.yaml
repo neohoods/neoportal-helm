@@ -197,6 +197,8 @@ spec:
             # Matrix Assistant RAG configuration
             - name: MATRIX_ASSISTANT_RAG_ENABLED
               value: "{{ .Values.backend.env.MATRIX_ASSISTANT_RAG_ENABLED }}"
+            - name: MATRIX_ASSISTANT_RAG_CUSTOM_DOC_FILE
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_RAG_CUSTOM_DOC_FILE }}"
             # Matrix Assistant MCP configuration
             - name: MATRIX_ASSISTANT_MCP_ENABLED
               value: "{{ .Values.backend.env.MATRIX_ASSISTANT_MCP_ENABLED }}"
@@ -259,10 +261,20 @@ spec:
               mountPath: /app/matrix-default-rooms.yaml
               subPath: matrix-default-rooms.yaml
             {{- end }}
+            {{- if .Values.backend.ragDocumentation.enabled }}
+            - name: rag-documentation-config
+              mountPath: /app/rag-custom-documentation.md
+              subPath: rag-custom-documentation.md
+            {{- end }}
       volumes:
         {{- if .Values.backend.matrixRooms.enabled }}
         - name: matrix-rooms-config
           configMap:
             name: {{ if .Values.backend.matrixRooms.existingConfigMap }}{{ .Values.backend.matrixRooms.existingConfigMap }}{{ else }}{{ .Values.backend.matrixRooms.configMapName | default (printf "%s-matrix-rooms" .Release.Name) }}{{ end }}
+        {{- end }}
+        {{- if .Values.backend.ragDocumentation.enabled }}
+        - name: rag-documentation-config
+          configMap:
+            name: {{ if .Values.backend.ragDocumentation.existingConfigMap }}{{ .Values.backend.ragDocumentation.existingConfigMap }}{{ else }}{{ .Values.backend.ragDocumentation.configMapName | default (printf "%s-rag-documentation" .Release.Name) }}{{ end }}
         {{- end }}
 {{- end }}

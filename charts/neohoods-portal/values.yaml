@@ -133,6 +133,7 @@ backend:
     MATRIX_ASSISTANT_AI_MODEL: "mistral-small"
     # Matrix Assistant RAG configuration
     MATRIX_ASSISTANT_RAG_ENABLED: "true"
+    MATRIX_ASSISTANT_RAG_CUSTOM_DOC_FILE: "file:/app/rag-custom-documentation.md"
     # Matrix Assistant MCP configuration
     MATRIX_ASSISTANT_MCP_ENABLED: "true"
     MATRIX_ASSISTANT_MCP_BASE_URL: "http://localhost:8080/mcp"
@@ -163,6 +164,19 @@ backend:
     configMapName: "" # Default: {{ .Release.Name }}-matrix-rooms
     inline: "" # YAML content inline (optional)
     existingConfigMap: "" # Reference to existing ConfigMap (optional)
+  ragDocumentation:
+    enabled: false
+    configMapName: "" # Default: {{ .Release.Name }}-rag-documentation
+    inline: "" # Markdown content inline (optional). Use sections separated by "---" for multiple topics.
+    existingConfigMap: "" # Reference to existing ConfigMap (optional). If set, uses this ConfigMap instead of creating one.
+    # Example inline content:
+    # inline: |
+    #   ---
+    #   Structure des bâtiments
+    #   
+    #   La copropriété a 3 bâtiments : A, B, C.
+    #   Format : [Bâtiment][Étage][Numéro] (ex: A701, C302)
+    #   ---
 ingress:
   certManagerClusterIssuer: letsencrypt-prod
   secretName: letsencrypt-platform
