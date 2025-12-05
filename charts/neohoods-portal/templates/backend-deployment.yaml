@@ -182,6 +182,8 @@ spec:
               value: "{{ .Values.backend.env.MATRIX_LOCAL_ASSISTANT_AVATAR_URL }}"
             - name: MATRIX_LOCAL_ASSISTANT_DISPLAY_NAME
               value: "{{ .Values.backend.env.MATRIX_LOCAL_ASSISTANT_DISPLAY_NAME }}"
+            - name: MATRIX_LOCAL_ASSISTANT_SPACE_ID
+              value: "{{ .Values.backend.env.MATRIX_LOCAL_ASSISTANT_SPACE_ID }}"
             # Matrix Assistant AI configuration
             - name: MATRIX_ASSISTANT_AI_ENABLED
               value: "{{ .Values.backend.env.MATRIX_ASSISTANT_AI_ENABLED }}"
