@@ -9,6 +9,8 @@ data:
 {{ .Files.Get "sql/V1.1__init.sql" | indent 4 }}
   V1.3__add_qr_code_url_to_contact_numbers.sql: |-
 {{ .Files.Get "sql/V1.3__add_qr_code_url_to_contact_numbers.sql" | indent 4 }}
+  V1.4__add_llm_judge_evaluations_table.sql: |-
+{{ .Files.Get "sql/V1.4__add_llm_judge_evaluations_table.sql" | indent 4 }}
 ---
 apiVersion: v1
 kind: ConfigMap
