@@ -1,4 +1,4 @@
--- Migration V1.3: Add qr_code_url, responsibility, and metadata columns to contact_numbers table
+-- Migration V3.1: Add qr_code_url, responsibility, and metadata columns to contact_numbers table
 -- This migration adds support for QR code URLs (e.g., for Otis elevator service),
 -- responsibility fields (to match problems with correct contacts), and metadata
 -- (for additional instructions like ACAF number 153596)

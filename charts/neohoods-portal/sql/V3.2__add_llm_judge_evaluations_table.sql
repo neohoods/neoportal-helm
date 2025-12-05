@@ -1,4 +1,4 @@
--- Migration V1.4: Add llm_judge_evaluations table for LLM-as-a-Judge evaluations
+-- Migration V3.2: Add llm_judge_evaluations table for LLM-as-a-Judge evaluations
 -- This table stores evaluations of AI assistant responses, including scores, feedback, and user reactions
 
 CREATE TABLE IF NOT EXISTS llm_judge_evaluations (
