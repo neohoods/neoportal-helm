@@ -121,7 +121,7 @@ backend:
       secretKeyRef:
         name: matrix-secret
         key: local-assistant-permanent-token
-    MATRIX_LOCAL_ASSISTANT_AVATAR_URL: "https://neohoods.com/assets/chat/alfred-avatar.jpeg"
+    MATRIX_LOCAL_ASSISTANT_AVATAR_URL: "https://neohoods.com/assets/chat/alfred-avatar.png"
     MATRIX_LOCAL_ASSISTANT_DISPLAY_NAME: "Alfred [Assistant AI]"
     MATRIX_LOCAL_ASSISTANT_SPACE_ID: "" # If empty, uses MATRIX_SPACE_ID
     # Matrix Assistant AI configuration
