@@ -218,6 +218,13 @@ spec:
             # Matrix Assistant Notifications configuration
             - name: MATRIX_ASSISTANT_NOTIFICATIONS_ENABLED
               value: "{{ .Values.backend.env.MATRIX_ASSISTANT_NOTIFICATIONS_ENABLED }}"
+            # Matrix Exception Notification configuration
+            - name: MATRIX_EXCEPTION_NOTIFICATION_ENABLED
+              value: "{{ .Values.backend.env.MATRIX_EXCEPTION_NOTIFICATION_ENABLED }}"
+            - name: GRAFANA_URL
+              value: "{{ .Values.backend.env.GRAFANA_URL }}"
+            - name: BACKEND_APP_NAME
+              value: "portal-{{ .Release.Name }}-backend"
             # Cleaning Calendar configuration
             - name: CLEANING_CALENDAR_JWT_SECRET
               valueFrom:

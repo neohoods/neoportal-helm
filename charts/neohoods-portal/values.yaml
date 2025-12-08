@@ -145,6 +145,9 @@ backend:
     MATRIX_ASSISTANT_REMINDERS_FEEDBACK_DAYS: "1"
     # Matrix Assistant Notifications configuration
     MATRIX_ASSISTANT_NOTIFICATIONS_ENABLED: "false"
+    # Matrix Exception Notification configuration
+    MATRIX_EXCEPTION_NOTIFICATION_ENABLED: "true"
+    GRAFANA_URL: "https://grafana.neohoods.com"
     # Cleaning Calendar configuration
     CLEANING_CALENDAR_JWT_SECRET:
       secretKeyRef:
