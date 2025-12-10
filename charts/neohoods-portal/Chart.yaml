@@ -2,7 +2,7 @@ apiVersion: v2
 name: neohoods-portal-chart
 description: A Helm chart for deploying NeoHoods portal app
 type: application
-version: 0.1.236
+version: 0.1.237
 appVersion: "1.0.1"
 dependencies:
   - name: postgresql
