@@ -37,6 +37,8 @@ data:
 {{ .Files.Get "sql/V3.1__add_qr_code_url_to_contact_numbers.sql" | indent 4 }}
   V3.2__add_llm_judge_evaluations_table.sql: |-
 {{ .Files.Get "sql/V3.2__add_llm_judge_evaluations_table.sql" | indent 4 }}
+  V3.3__add_matrix_user_id_to_users.sql: |-
+{{ .Files.Get "sql/V3.3__add_matrix_user_id_to_users.sql" | indent 4 }}
 
 
 
