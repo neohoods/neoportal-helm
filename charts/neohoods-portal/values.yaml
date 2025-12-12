@@ -131,7 +131,7 @@ backend:
       secretKeyRef:
         name: matrix-secret
         key: mistral-ai-token
-    MATRIX_ASSISTANT_AI_MODEL: "mistral-small"
+    MATRIX_ASSISTANT_AI_MODEL: "devstral-medium-latest"
     # Matrix Assistant RAG configuration
     MATRIX_ASSISTANT_RAG_ENABLED: "true"
     MATRIX_ASSISTANT_RAG_CUSTOM_DOC_FILE: "file:/app/rag-custom-documentation.md"
