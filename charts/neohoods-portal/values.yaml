@@ -160,6 +160,14 @@ backend:
         key: bot-jwt-secret
     NEOHOODS_PORTAL_BOT_JWT_ISSUER: "matrix-sync-bot"
     NEOHOODS_PORTAL_BOT_JWT_AUDIENCE: "neohoods-portal"
+    # TV configuration
+    NEOHOODS_PORTAL_TV_JWT_SECRET:
+      secretKeyRef:
+        name: portal-secret
+        key: tv-jwt-secret
+    NEOHOODS_PORTAL_TV_JWT_ISSUER: "tv-display"
+    NEOHOODS_PORTAL_TV_JWT_AUDIENCE: "neohoods-portal"
+    NEOHOODS_PORTAL_TV_MAX_SLIDES: "10"
     # Spaces platform fees configuration
     NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FEE_PERCENTAGE: "2.00"
     NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FIXED_FEE: "0.25"
