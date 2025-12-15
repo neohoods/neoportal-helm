@@ -39,6 +39,7 @@ data:
 {{ .Files.Get "sql/V3.2__add_llm_judge_evaluations_table.sql" | indent 4 }}
   V3.3__add_matrix_user_id_to_users.sql: |-
 {{ .Files.Get "sql/V3.3__add_matrix_user_id_to_users.sql" | indent 4 }}
-
+  V3.4__add_recent_db_changes.sql: |-
+{{ .Files.Get "sql/V3.4__add_recent_db_changes.sql" | indent 4 }}
 
 
