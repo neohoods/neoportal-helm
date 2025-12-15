@@ -1,95 +1,11 @@
 -- Migration V3.4: Add recent database changes
--- This migration includes all schema changes from Flyway migrations V8 through V23
-
--- ============================================================================
--- V8: Create reservation_feedback table
--- ============================================================================
-CREATE TABLE IF NOT EXISTS reservation_feedback (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    reservation_id UUID NOT NULL,
-    user_id UUID NOT NULL,
-    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
-    comment TEXT,
-    cleanliness INTEGER CHECK (cleanliness >= 1 AND cleanliness <= 5),
-    communication INTEGER CHECK (communication >= 1 AND communication <= 5),
-    value INTEGER CHECK (value >= 1 AND value <= 5),
-    submitted_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    
-    -- Foreign key constraints
-    CONSTRAINT fk_reservation_feedback_reservation 
-        FOREIGN KEY (reservation_id) REFERENCES reservations(id) ON DELETE CASCADE,
-    CONSTRAINT fk_reservation_feedback_user 
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    
-    -- Unique constraint: one feedback per reservation
-    CONSTRAINT uk_reservation_feedback_reservation 
-        UNIQUE (reservation_id),
-    
-    -- Check constraints for optional ratings
-    CONSTRAINT chk_cleanliness_range CHECK (cleanliness IS NULL OR (cleanliness >= 1 AND cleanliness <= 5)),
-    CONSTRAINT chk_communication_range CHECK (communication IS NULL OR (communication >= 1 AND communication <= 5)),
-    CONSTRAINT chk_value_range CHECK (value IS NULL OR (value >= 1 AND value <= 5))
-);
-
-CREATE INDEX IF NOT EXISTS idx_reservation_feedback_reservation_id ON reservation_feedback(reservation_id);
-CREATE INDEX IF NOT EXISTS idx_reservation_feedback_user_id ON reservation_feedback(user_id);
-CREATE INDEX IF NOT EXISTS idx_reservation_feedback_submitted_at ON reservation_feedback(submitted_at);
-
--- Create trigger for reservation_feedback updated_at
-CREATE TRIGGER update_reservation_feedback_updated_at BEFORE UPDATE ON reservation_feedback
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
--- ============================================================================
--- V9: Add cleaning settings to spaces table
--- ============================================================================
-ALTER TABLE spaces
-ADD COLUMN IF NOT EXISTS cleaning_enabled BOOLEAN DEFAULT FALSE NOT NULL,
-ADD COLUMN IF NOT EXISTS cleaning_email VARCHAR(255),
-ADD COLUMN IF NOT EXISTS cleaning_notifications_enabled BOOLEAN DEFAULT FALSE NOT NULL,
-ADD COLUMN IF NOT EXISTS cleaning_calendar_enabled BOOLEAN DEFAULT FALSE NOT NULL,
-ADD COLUMN IF NOT EXISTS cleaning_days_after_checkout INTEGER DEFAULT 0 NOT NULL,
-ADD COLUMN IF NOT EXISTS cleaning_hour VARCHAR(5) DEFAULT '10:00' NOT NULL;
-
--- ============================================================================
--- V17: Make residence_role required in unit_members
--- ============================================================================
--- First, update all NULL values to 'TENANT' (default)
-UPDATE unit_members SET residence_role = 'TENANT' WHERE residence_role IS NULL;
-
--- Now make the column NOT NULL with default
-ALTER TABLE unit_members 
-    ALTER COLUMN residence_role SET NOT NULL,
-    ALTER COLUMN residence_role SET DEFAULT 'TENANT';
-
--- ============================================================================
--- V18: Add phone_number to users table
--- ============================================================================
-ALTER TABLE users ADD COLUMN IF NOT EXISTS phone_number VARCHAR(255);
-
--- ============================================================================
--- V19: Add COMMERCIAL and OTHER to unit types
--- ============================================================================
-ALTER TABLE units DROP CONSTRAINT IF EXISTS units_type_check;
-ALTER TABLE units ADD CONSTRAINT units_type_check CHECK (type IN ('FLAT', 'GARAGE', 'PARKING', 'COMMERCIAL', 'OTHER'));
+-- This migration includes schema changes from Flyway migrations V20 through V24
+-- Note: V8-V9, V17-V19, V21 are already included in V1.1__init.sql baseline
 
 -- ============================================================================
 -- V20: Remove user_properties table
 -- ============================================================================
 DROP TABLE IF EXISTS user_properties CASCADE;
-
--- ============================================================================
--- V21: Add UNIT_JOIN_REQUEST and RESERVATION to notifications type CHECK constraint
--- ============================================================================
-ALTER TABLE notifications DROP CONSTRAINT IF EXISTS notifications_type_check;
-ALTER TABLE notifications ADD CONSTRAINT notifications_type_check CHECK (type IN (
-    'ADMIN_NEW_USER',
-    'NEW_ANNOUNCEMENT',
-    'RESERVATION',
-    'UNIT_INVITATION',
-    'UNIT_JOIN_REQUEST'
-));
 
 -- ============================================================================
 -- V22: Create TV info tables
@@ -211,24 +127,31 @@ CREATE INDEX IF NOT EXISTS idx_tv_slide_designs_name ON tv_slide_designs(name);
 CREATE INDEX IF NOT EXISTS idx_tv_slide_designs_enabled ON tv_slide_designs(enabled);
 
 -- Create triggers for TV tables updated_at
+DROP TRIGGER IF EXISTS update_tv_info_updated_at ON tv_info;
 CREATE TRIGGER update_tv_info_updated_at BEFORE UPDATE ON tv_info
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_tv_info_announcements_updated_at ON tv_info_announcements;
 CREATE TRIGGER update_tv_info_announcements_updated_at BEFORE UPDATE ON tv_info_announcements
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_tv_info_welcome_updated_at ON tv_info_welcome;
 CREATE TRIGGER update_tv_info_welcome_updated_at BEFORE UPDATE ON tv_info_welcome
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_tv_info_static_updated_at ON tv_info_static;
 CREATE TRIGGER update_tv_info_static_updated_at BEFORE UPDATE ON tv_info_static
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_tv_info_spaces_updated_at ON tv_info_spaces;
 CREATE TRIGGER update_tv_info_spaces_updated_at BEFORE UPDATE ON tv_info_spaces
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_tv_info_css_updated_at ON tv_info_css;
 CREATE TRIGGER update_tv_info_css_updated_at BEFORE UPDATE ON tv_info_css
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_tv_slide_designs_updated_at ON tv_slide_designs;
 CREATE TRIGGER update_tv_slide_designs_updated_at BEFORE UPDATE ON tv_slide_designs
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
