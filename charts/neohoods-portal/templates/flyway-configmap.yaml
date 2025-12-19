@@ -41,5 +41,7 @@ data:
 {{ .Files.Get "sql/V3.3__add_matrix_user_id_to_users.sql" | indent 4 }}
   V3.4__add_recent_db_changes.sql: |-
 {{ .Files.Get "sql/V3.4__add_recent_db_changes.sql" | indent 4 }}
+  V3.5__add_assistant_debug_conversations.sql: |-
+{{ .Files.Get "sql/V3.5__add_assistant_debug_conversations.sql" | indent 4 }}
 
 
