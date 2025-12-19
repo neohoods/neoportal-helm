@@ -131,7 +131,24 @@ backend:
       secretKeyRef:
         name: matrix-secret
         key: mistral-ai-token
-    MATRIX_ASSISTANT_AI_MODEL: "devstral-medium-latest"
+    MATRIX_ASSISTANT_AI_MODEL: "devstral-medium-latest"  # Default model (fallback)
+    # Matrix Assistant AI Agent Models (per-agent customization)
+    MATRIX_ASSISTANT_AI_AGENT_ROUTER_MODEL: "devstral-medium-latest"
+    MATRIX_ASSISTANT_AI_AGENT_GENERAL_MODEL: "devstral-medium-latest"
+    MATRIX_ASSISTANT_AI_AGENT_RESIDENT_INFO_MODEL: "devstral-medium-latest"
+    MATRIX_ASSISTANT_AI_AGENT_SPACE_MODEL: "devstral-medium-latest"
+    # Matrix Assistant AI Agent Space Step Models (per-step customization)
+    MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_REQUEST_SPACE_INFO_MODEL: "devstral-medium-latest"
+    MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_CHOOSE_SPACE_MODEL: "devstral-medium-latest"
+    MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_CONFIRM_RESERVATION_SUMMARY_MODEL: "devstral-medium-latest"
+    MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_COMPLETE_RESERVATION_MODEL: "devstral-medium-latest"
+    MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_PAYMENT_INSTRUCTIONS_MODEL: "devstral-medium-latest"
+    MATRIX_ASSISTANT_AI_AGENT_HELP_MODEL: "devstral-medium-latest"
+    # Matrix Assistant LLM Judge configuration
+    MATRIX_ASSISTANT_LLM_JUDGE_ENABLED: "true"
+    # Matrix Assistant Conversation configuration
+    MATRIX_ASSISTANT_CONVERSATION_TIMEOUT_HOURS: "1"  # Timeout in hours to create a new conversation
+    MATRIX_ASSISTANT_CONVERSATION_DATE_FORMAT_TIMEZONE: "UTC"  # Timezone for date format
     # Matrix Assistant RAG configuration
     MATRIX_ASSISTANT_RAG_ENABLED: "true"
     MATRIX_ASSISTANT_RAG_CUSTOM_DOC_FILE: "file:/app/rag-custom-documentation.md"

@@ -196,6 +196,36 @@ spec:
                   key: {{ .Values.backend.env.MISTRAL_AI_TOKEN.secretKeyRef.key }}
             - name: MATRIX_ASSISTANT_AI_MODEL
               value: "{{ .Values.backend.env.MATRIX_ASSISTANT_AI_MODEL }}"
+            # Matrix Assistant AI Agent Models (per-agent customization)
+            - name: MATRIX_ASSISTANT_AI_AGENT_ROUTER_MODEL
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_AI_AGENT_ROUTER_MODEL }}"
+            - name: MATRIX_ASSISTANT_AI_AGENT_GENERAL_MODEL
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_AI_AGENT_GENERAL_MODEL }}"
+            - name: MATRIX_ASSISTANT_AI_AGENT_RESIDENT_INFO_MODEL
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_AI_AGENT_RESIDENT_INFO_MODEL }}"
+            - name: MATRIX_ASSISTANT_AI_AGENT_SPACE_MODEL
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_AI_AGENT_SPACE_MODEL }}"
+            # Matrix Assistant AI Agent Space Step Models (per-step customization)
+            - name: MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_REQUEST_SPACE_INFO_MODEL
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_REQUEST_SPACE_INFO_MODEL }}"
+            - name: MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_CHOOSE_SPACE_MODEL
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_CHOOSE_SPACE_MODEL }}"
+            - name: MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_CONFIRM_RESERVATION_SUMMARY_MODEL
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_CONFIRM_RESERVATION_SUMMARY_MODEL }}"
+            - name: MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_COMPLETE_RESERVATION_MODEL
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_COMPLETE_RESERVATION_MODEL }}"
+            - name: MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_PAYMENT_INSTRUCTIONS_MODEL
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_AI_AGENT_SPACE_STEP_PAYMENT_INSTRUCTIONS_MODEL }}"
+            - name: MATRIX_ASSISTANT_AI_AGENT_HELP_MODEL
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_AI_AGENT_HELP_MODEL }}"
+            # Matrix Assistant LLM Judge configuration
+            - name: MATRIX_ASSISTANT_LLM_JUDGE_ENABLED
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_LLM_JUDGE_ENABLED }}"
+            # Matrix Assistant Conversation configuration
+            - name: MATRIX_ASSISTANT_CONVERSATION_TIMEOUT_HOURS
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_CONVERSATION_TIMEOUT_HOURS }}"
+            - name: MATRIX_ASSISTANT_CONVERSATION_DATE_FORMAT_TIMEZONE
+              value: "{{ .Values.backend.env.MATRIX_ASSISTANT_CONVERSATION_DATE_FORMAT_TIMEZONE }}"
             # Matrix Assistant RAG configuration
             - name: MATRIX_ASSISTANT_RAG_ENABLED
               value: "{{ .Values.backend.env.MATRIX_ASSISTANT_RAG_ENABLED }}"
