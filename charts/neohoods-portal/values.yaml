@@ -27,7 +27,7 @@ backend:
     enabled: false # Set to true in dev environment
   image:
     repository: ghcr.io/neohoods/portal-platform-api
-    tag: 0.0.282
+    tag: 0.0.283
   replicaCount: 2
   service:
     type: NodePort
@@ -214,7 +214,7 @@ frontend:
   enabled: true
   image:
     repository: ghcr.io/neohoods/portal-platform-ui
-    tag: 0.0.282
+    tag: 0.0.283
   replicaCount: 1
   service:
     type: NodePort
