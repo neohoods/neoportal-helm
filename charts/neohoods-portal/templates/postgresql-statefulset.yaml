@@ -29,6 +29,10 @@ spec:
         app.kubernetes.io/instance: {{ .Values.global.chatName }}
         app.kubernetes.io/name: postgresql
     spec:
+      {{- if and .Values.postgresql.primary.nodeSelector (ne (len .Values.postgresql.primary.nodeSelector) 0) }}
+      nodeSelector:
+        {{- toYaml .Values.postgresql.primary.nodeSelector | nindent 8 }}
+      {{- end }}
       containers:
         - name: postgresql
           image: {{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}

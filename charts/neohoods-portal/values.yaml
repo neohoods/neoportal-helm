@@ -13,6 +13,9 @@ postgresql:
     tag: "18.1"
     pullPolicy: IfNotPresent
   primary:
+    # Node selector to ensure pod is scheduled on the same node as the PVC
+    # This is important for hostPath volumes which are bound to specific nodes
+    nodeSelector: {}  # Example: { role: worker-1 }
     persistence:
       enabled: true
       size: 10Gi
