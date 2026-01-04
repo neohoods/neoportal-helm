@@ -84,7 +84,7 @@ spec:
                     curl -X PUT "https://matrix.neohoods.com/_matrix/client/v3/rooms/%21YjLQBUZJNVrOSZdiQn%3Achat.neohoods.com/send/m.room.message/$txn_id" \
                       -H "Authorization: Bearer $MATRIX_TOKEN" \
                       -H "Content-Type: application/json" \
-                      -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} - $PGDATABASE] 🚨 Backup upload failed: '$timestamp'"}' || true
+                      -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} - {{ .Values.postgresql.auth.database }}] 🚨 Backup upload failed: '$timestamp'"}' || true
                     {{- end }}
                     exit 1
                   }
@@ -128,7 +128,7 @@ spec:
                   curl -X PUT "https://matrix.neohoods.com/_matrix/client/v3/rooms/%21YjLQBUZJNVrOSZdiQn%3Achat.neohoods.com/send/m.room.message/$txn_id" \
                     -H "Authorization: Bearer $MATRIX_TOKEN" \
                     -H "Content-Type: application/json" \
-                    -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} - $PGDATABASE] ✅ DB backup successful: '$timestamp'"}' || true
+                    -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} - {{ .Values.postgresql.auth.database }}] ✅ DB backup successful: '$timestamp'"}' || true
                   {{- end }}
                   echo "DB backup completed: $timestamp"
               volumeMounts:
