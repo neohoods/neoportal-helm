@@ -1,0 +1,62 @@
+{{- if .Values.postgresql.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.global.chatName }}-postgresql-init
+  namespace: {{ .Values.global.namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-8"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+  labels:
+    app: {{ .Values.global.chatName }}-postgresql-init
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: postgres:18.1
+          command:
+            - /bin/sh
+            - -c
+            - |
+              POD_FQDN="{{ .Values.global.chatName }}-postgresql-0.{{ .Values.global.chatName }}-postgresql-hl.{{ .Values.global.namespace }}.svc.cluster.local"
+              until pg_isready -h "$POD_FQDN" -p 5432 -U {{ .Values.postgresql.auth.username }} -d postgres; do
+                echo "Waiting for PostgreSQL to be ready at $POD_FQDN..."
+                sleep 2
+              done
+              echo "PostgreSQL is ready!"
+      containers:
+        - name: create-database
+          image: postgres:18.1
+          command:
+            - /bin/bash
+            - -c
+            - |
+              set -e
+              export PGPASSWORD="${POSTGRES_PASSWORD}"
+              POD_FQDN="{{ .Values.global.chatName }}-postgresql-0.{{ .Values.global.chatName }}-postgresql-hl.{{ .Values.global.namespace }}.svc.cluster.local"
+              
+              # Check if database exists
+              DB_EXISTS=$(psql -h "$POD_FQDN" -U "${POSTGRES_USER}" -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${POSTGRES_DB}'" | xargs)
+              
+              if [ "$DB_EXISTS" != "1" ]; then
+                echo "Creating database ${POSTGRES_DB}..."
+                psql -h "$POD_FQDN" -U "${POSTGRES_USER}" -d postgres -c "CREATE DATABASE \"${POSTGRES_DB}\";"
+                echo "Database ${POSTGRES_DB} created successfully!"
+              else
+                echo "Database ${POSTGRES_DB} already exists, skipping creation."
+              fi
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.postgresql.auth.username }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgresql.auth.existingSecret }}
+                  key: {{ .Values.postgresql.auth.secretKeys.userPasswordKey }}
+            - name: POSTGRES_DB
+              value: {{ .Values.postgresql.auth.database }}
+      restartPolicy: Never
+{{- end }}
+
