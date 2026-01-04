@@ -18,23 +18,39 @@ spec:
             - |
               set -e
               export PGPASSWORD="${POSTGRES_PASSWORD}"
+              
+              # Try multiple connection methods
+              SERVICE_NAME="{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local"
+              HEADLESS_SERVICE="{{ .Values.global.chatName }}-postgresql-hl.{{ .Values.global.namespace }}.svc.cluster.local"
               POD_FQDN="{{ .Values.global.chatName }}-postgresql-0.{{ .Values.global.chatName }}-postgresql-hl.{{ .Values.global.namespace }}.svc.cluster.local"
               
-              # Wait for PostgreSQL to be ready
-              echo "Waiting for PostgreSQL to be ready at $POD_FQDN..."
-              until pg_isready -h "$POD_FQDN" -p 5432 -U {{ .Values.postgresql.auth.username }} -d postgres; do
+              # Wait for PostgreSQL to be ready (try multiple methods)
+              echo "Waiting for PostgreSQL to be ready..."
+              until pg_isready -h "$SERVICE_NAME" -p 5432 -U {{ .Values.postgresql.auth.username }} -d postgres 2>/dev/null || \
+                    pg_isready -h "$HEADLESS_SERVICE" -p 5432 -U {{ .Values.postgresql.auth.username }} -d postgres 2>/dev/null || \
+                    pg_isready -h "$POD_FQDN" -p 5432 -U {{ .Values.postgresql.auth.username }} -d postgres 2>/dev/null; do
                 echo "Waiting for PostgreSQL to be ready..."
                 sleep 2
               done
-              echo "PostgreSQL is ready!"
+              
+              # Determine which host works
+              if pg_isready -h "$SERVICE_NAME" -p 5432 -U {{ .Values.postgresql.auth.username }} -d postgres 2>/dev/null; then
+                PG_HOST="$SERVICE_NAME"
+              elif pg_isready -h "$HEADLESS_SERVICE" -p 5432 -U {{ .Values.postgresql.auth.username }} -d postgres 2>/dev/null; then
+                PG_HOST="$HEADLESS_SERVICE"
+              else
+                PG_HOST="$POD_FQDN"
+              fi
+              
+              echo "PostgreSQL is ready at $PG_HOST!"
               
               # Create database if it doesn't exist
               echo "Checking if database ${POSTGRES_DB} exists..."
-              DB_EXISTS=$(psql -h "$POD_FQDN" -U "${POSTGRES_USER}" -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${POSTGRES_DB}'" | xargs || echo "")
+              DB_EXISTS=$(psql -h "$PG_HOST" -U "${POSTGRES_USER}" -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${POSTGRES_DB}'" 2>/dev/null | xargs || echo "")
               
               if [ "$DB_EXISTS" != "1" ]; then
                 echo "Creating database ${POSTGRES_DB}..."
-                psql -h "$POD_FQDN" -U "${POSTGRES_USER}" -d postgres -c "CREATE DATABASE \"${POSTGRES_DB}\";"
+                psql -h "$PG_HOST" -U "${POSTGRES_USER}" -d postgres -c "CREATE DATABASE \"${POSTGRES_DB}\";"
                 echo "Database ${POSTGRES_DB} created successfully!"
               else
                 echo "Database ${POSTGRES_DB} already exists, skipping creation."
