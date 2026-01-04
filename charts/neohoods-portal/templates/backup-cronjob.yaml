@@ -1,0 +1,140 @@
+{{- if .Values.backup.enabled }}
+{{- $backupPvcName := .Values.backup.persistentVolumeClaim.name | default (printf "portal-%s-backups" .Release.Name) }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: portal-{{ .Release.Name }}-db-backup
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: portal-{{ .Release.Name }}-backup
+    component: backup
+spec:
+  schedule: {{ .Values.backup.schedule | default "0 2 * * *" }}
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 3600
+      template:
+        spec:
+          containers:
+            - name: pg-backup
+              image: postgres:16-alpine
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.postgresql.auth.existingSecret }}
+                      key: {{ .Values.postgresql.auth.secretKeys.userPasswordKey }}
+                - name: PGUSER
+                  value: {{ .Values.postgresql.auth.username }}
+                - name: PGDATABASE
+                  value: {{ .Values.postgresql.auth.database }}
+                - name: PGHOST
+                  value: {{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local
+                - name: SCW_BUCKET
+                  value: {{ .Values.backup.scaleway.bucket | required "backup.scaleway.bucket is required" }}
+                - name: SCW_ENDPOINT
+                  value: {{ .Values.backup.scaleway.endpoint | required "backup.scaleway.endpoint is required" }}
+                - name: SCW_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.backup.scaleway.secretName | required "backup.scaleway.secretName is required" }}
+                      key: {{ .Values.backup.scaleway.accessKeyKey | default "access-key" }}
+                - name: SCW_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.backup.scaleway.secretName }}
+                      key: {{ .Values.backup.scaleway.secretKeyKey | default "secret-key" }}
+                {{- if .Values.backup.webhook.enabled }}
+                - name: WEBHOOK_URL
+                  value: {{ .Values.backup.webhook.url }}
+                {{- end }}
+                - name: KEEP_BACKUPS
+                  value: {{ .Values.backup.keepBackups | default "5" | quote }}
+                - name: BACKUP_PREFIX
+                  value: {{ .Values.backup.backupPrefix | default "backup_portal_db_" }}
+              command:
+                - "/bin/sh"
+                - "-c"
+                - |
+                  set -e
+                  apk add --no-cache curl
+                  wget -q https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x mc && mv mc /usr/local/bin/
+                  mc alias set myscw https://$SCW_ENDPOINT $SCW_ACCESS_KEY $SCW_SECRET_KEY
+                  
+                  # Create backup
+                  timestamp=$(date +%F_%H-%M-%S)
+                  backup_file="/backup/${BACKUP_PREFIX}${timestamp}.sql"
+                  pg_dump -h $PGHOST -U $PGUSER -d $PGDATABASE > "$backup_file"
+                  
+                  # Upload to Scaleway Object Storage in backup/ folder
+                  mc cp "$backup_file" "myscw/$SCW_BUCKET/backup/" || {
+                    echo "Failed to upload backup"
+                    {{- if .Values.backup.webhook.enabled }}
+                    curl -X POST "$WEBHOOK_URL" -H "Content-Type: application/json" -d '{
+                      "roomId": "{{ .Values.backup.webhook.roomId }}",
+                      "message": "🚨 Backup upload failed: '$timestamp'"
+                    }' || true
+                    {{- end }}
+                    exit 1
+                  }
+                  
+                  # Cleanup old backups (keep only the KEEP_BACKUPS most recent)
+                  echo "Cleaning up old backups, keeping $KEEP_BACKUPS most recent..."
+                  backup_list=$(mc ls "myscw/$SCW_BUCKET/backup/" | grep "^.*${BACKUP_PREFIX}" | awk '{print $6}' | sort -r)
+                  backup_count=$(echo "$backup_list" | grep -c . || echo "0")
+                  
+                  if [ "$backup_count" -gt "$KEEP_BACKUPS" ]; then
+                    echo "$backup_list" | tail -n +$((KEEP_BACKUPS + 1)) | while read -r backup; do
+                      if [ -n "$backup" ]; then
+                        echo "Deleting old backup: $backup"
+                        mc rm "myscw/$SCW_BUCKET/backup/$backup" || echo "Failed to delete $backup"
+                      fi
+                    done
+                  else
+                    echo "No cleanup needed, only $backup_count backups found (keeping $KEEP_BACKUPS)"
+                  fi
+                  
+                  # Send success notification
+                  {{- if .Values.backup.webhook.enabled }}
+                  curl -X POST "$WEBHOOK_URL" -H "Content-Type: application/json" -d '{
+                    "roomId": "{{ .Values.backup.webhook.roomId }}",
+                    "message": "✅ DB backup successful: '$timestamp'"
+                  }' || true
+                  {{- end }}
+                  echo "DB backup completed: $timestamp"
+              volumeMounts:
+                - mountPath: /backup
+                  name: backup-volume
+          restartPolicy: OnFailure
+          volumes:
+            - name: backup-volume
+              {{- if .Values.backup.persistentVolumeClaim.enabled }}
+              persistentVolumeClaim:
+                claimName: {{ $backupPvcName }}
+              {{- else }}
+              emptyDir: {}
+              {{- end }}
+---
+{{- if .Values.backup.persistentVolumeClaim.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $backupPvcName }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: portal-{{ .Release.Name }}-backup
+    component: backup
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.backup.persistentVolumeClaim.size | default "20Gi" }}
+  {{- if .Values.backup.persistentVolumeClaim.storageClass }}
+  storageClassName: {{ .Values.backup.persistentVolumeClaim.storageClass }}
+  {{- end }}
+{{- end }}
+{{- end }}
+

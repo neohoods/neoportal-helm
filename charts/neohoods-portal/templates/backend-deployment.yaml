@@ -276,6 +276,25 @@ spec:
               value: "{{ .Values.backend.env.NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FEE_PERCENTAGE }}"
             - name: NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FIXED_FEE
               value: "{{ .Values.backend.env.NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FIXED_FEE }}"
+            # S3 storage configuration
+            - name: S3_ENABLED
+              value: "{{ .Values.backend.env.S3_ENABLED }}"
+            - name: S3_ENDPOINT
+              value: "{{ .Values.backend.env.S3_ENDPOINT }}"
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.S3_ACCESS_KEY.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.S3_ACCESS_KEY.secretKeyRef.key }}
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.S3_SECRET_KEY.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.S3_SECRET_KEY.secretKeyRef.key }}
+            - name: S3_BUCKET
+              value: "{{ .Values.backend.env.S3_BUCKET }}"
+            - name: S3_REGION
+              value: "{{ .Values.backend.env.S3_REGION }}"
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}
