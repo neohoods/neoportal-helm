@@ -6,7 +6,6 @@ global:
   emailTemplate:
     logoUrl: "https://portal.neohoods.com/logo-bright.png"
     appName: "NeoHoods"
-
 postgresql:
   enabled: true
   shmSize: "1Gi"
@@ -15,7 +14,6 @@ postgresql:
     repository: bitnamilegacy/postgresql
     tag: 15.4.0-debian-11-r45
     pullPolicy: IfNotPresent
-
   primary:
     persistence:
       enabled: true
@@ -27,7 +25,6 @@ postgresql:
       limits:
         cpu: "500m"
         memory: "512Mi"
-
   auth:
     database: neohoods_portal
     username: neohoods_portal_user
@@ -43,7 +40,7 @@ backend:
     enabled: false # Set to true in dev environment
   image:
     repository: ghcr.io/neohoods/portal-platform-api
-    tag: 0.0.284
+    tag: 0.0.285
   replicaCount: 2
   service:
     type: NodePort
@@ -206,7 +203,7 @@ backend:
     NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FIXED_FEE: "0.25"
     # S3 storage configuration
     S3_ENABLED: "true"
-    S3_ENDPOINT: ""  # e.g., "s3.fr-par.scw.cloud" for Scaleway Paris
+    S3_ENDPOINT: "" # e.g., "s3.fr-par.scw.cloud" for Scaleway Paris
     S3_ACCESS_KEY:
       secretKeyRef:
         name: portal-secret
@@ -215,8 +212,8 @@ backend:
       secretKeyRef:
         name: portal-secret
         key: scaleway-secret-key
-    S3_BUCKET: ""  # e.g., "terresdelaya" or "neohoods-dev"
-    S3_REGION: "fr-par"  # Scaleway Paris region
+    S3_BUCKET: "" # e.g., "terresdelaya" or "neohoods-dev"
+    S3_REGION: "fr-par" # Scaleway Paris region
   matrixRooms:
     enabled: true
     configMapName: "" # Default: {{ .Release.Name }}-matrix-rooms
@@ -243,7 +240,7 @@ frontend:
   enabled: true
   image:
     repository: ghcr.io/neohoods/portal-platform-ui
-    tag: 0.0.284
+    tag: 0.0.285
   replicaCount: 1
   service:
     type: NodePort
@@ -304,7 +301,7 @@ flyway:
 backup:
   enabled: false
   # Schedule for the backup cron job (cron format)
-  schedule: "0 2 * * *"  # Daily at 2 AM
+  schedule: "0 2 * * *" # Daily at 2 AM
   # Number of backups to keep (oldest will be deleted)
   keepBackups: 5
   # Prefix for backup files
@@ -313,19 +310,19 @@ backup:
   backupPrefix: "backup_portal_db_"
   # Scaleway Object Storage configuration
   scaleway:
-    bucket: ""  # Required: e.g., "neohoods-backups"
-    endpoint: ""  # Required: e.g., "s3.fr-par.scw.cloud" (or your region endpoint)
-    secretName: ""  # Required: e.g., "scaleway-secret"
+    bucket: "" # Required: e.g., "neohoods-backups"
+    endpoint: "" # Required: e.g., "s3.fr-par.scw.cloud" (or your region endpoint)
+    secretName: "" # Required: e.g., "scaleway-secret"
     accessKeyKey: "access-key"
     secretKeyKey: "secret-key"
   # Webhook notification (optional)
   webhook:
     enabled: false
-    url: ""  # e.g., "http://terres-de-laya-bot.terresdelaya.svc.cluster.local/send-message"
-    roomId: ""  # Matrix room ID for notifications
+    url: "" # e.g., "http://terres-de-laya-bot.terresdelaya.svc.cluster.local/send-message"
+    roomId: "" # Matrix room ID for notifications
   # Persistent volume for backups (optional, uses emptyDir if disabled)
   persistentVolumeClaim:
     enabled: true
-    name: ""  # Default: portal-{{ .Release.Name }}-backups
+    name: "" # Default: portal-{{ .Release.Name }}-backups
     size: "20Gi"
-    storageClass: ""  # Optional: specify storage class
+    storageClass: "" # Optional: specify storage class
