@@ -80,20 +80,36 @@ spec:
                     exit 1
                   }
                   
-                  # Cleanup old backups (keep only the KEEP_BACKUPS most recent)
-                  echo "Cleaning up old backups, keeping $KEEP_BACKUPS most recent..."
+                  # Cleanup old backups in Scaleway (keep only the KEEP_BACKUPS most recent)
+                  echo "Cleaning up old backups in Scaleway, keeping $KEEP_BACKUPS most recent..."
                   backup_list=$(mc ls "myscw/$SCW_BUCKET/backup/" | grep "^.*${BACKUP_PREFIX}" | awk '{print $6}' | sort -r)
                   backup_count=$(echo "$backup_list" | grep -c . || echo "0")
                   
                   if [ "$backup_count" -gt "$KEEP_BACKUPS" ]; then
                     echo "$backup_list" | tail -n +$((KEEP_BACKUPS + 1)) | while read -r backup; do
                       if [ -n "$backup" ]; then
-                        echo "Deleting old backup: $backup"
+                        echo "Deleting old backup from Scaleway: $backup"
                         mc rm "myscw/$SCW_BUCKET/backup/$backup" || echo "Failed to delete $backup"
                       fi
                     done
                   else
-                    echo "No cleanup needed, only $backup_count backups found (keeping $KEEP_BACKUPS)"
+                    echo "No cleanup needed in Scaleway, only $backup_count backups found (keeping $KEEP_BACKUPS)"
+                  fi
+                  
+                  # Cleanup old backups in local PVC (keep only the KEEP_BACKUPS most recent)
+                  echo "Cleaning up old backups in local PVC, keeping $KEEP_BACKUPS most recent..."
+                  local_backup_list=$(ls -t /backup/${BACKUP_PREFIX}*.sql 2>/dev/null | sort -r || echo "")
+                  local_backup_count=$(echo "$local_backup_list" | grep -c . || echo "0")
+                  
+                  if [ "$local_backup_count" -gt "$KEEP_BACKUPS" ]; then
+                    echo "$local_backup_list" | tail -n +$((KEEP_BACKUPS + 1)) | while read -r local_backup; do
+                      if [ -n "$local_backup" ] && [ -f "$local_backup" ]; then
+                        echo "Deleting old backup from local PVC: $(basename $local_backup)"
+                        rm -f "$local_backup" || echo "Failed to delete $local_backup"
+                      fi
+                    done
+                  else
+                    echo "No cleanup needed in local PVC, only $local_backup_count backups found (keeping $KEEP_BACKUPS)"
                   fi
                   
                   # Send success notification

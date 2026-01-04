@@ -203,7 +203,7 @@ backend:
     NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FIXED_FEE: "0.25"
     # S3 storage configuration
     S3_ENABLED: "true"
-    S3_ENDPOINT: "" # e.g., "s3.fr-par.scw.cloud" for Scaleway Paris
+    S3_ENDPOINT: ""  # e.g., "https://s3.fr-par.scw.cloud" for Scaleway Paris
     S3_ACCESS_KEY:
       secretKeyRef:
         name: portal-secret
@@ -303,6 +303,10 @@ backup:
   # Schedule for the backup cron job (cron format)
   schedule: "0 2 * * *" # Daily at 2 AM
   # Number of backups to keep (oldest will be deleted)
+  # This applies to both Scaleway Object Storage and local PVC
+  # IMPORTANT: Old backups are automatically cleaned up from both locations
+  # to prevent disk space issues. Only the most recent KEEP_BACKUPS backups
+  # are retained in each location.
   keepBackups: 5
   # Prefix for backup files
   # Note: Backups are stored in the 'backup/' folder in the S3 bucket
