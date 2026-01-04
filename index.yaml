@@ -3,6 +3,20 @@ entries:
   neohoods-portal-chart:
   - apiVersion: v2
     appVersion: 1.0.1
+    created: "2026-01-04T09:08:31.48348289Z"
+    dependencies:
+    - name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    description: A Helm chart for deploying NeoHoods portal app
+    digest: a9b3ea78cd55d93e2fb62d04ecec107f832696b17becbb74ee14745cf6d2c84a
+    name: neohoods-portal-chart
+    type: application
+    urls:
+    - https://github.com/neohoods/neoportal-helm/releases/download/neohoods-portal-chart-0.1.268/neohoods-portal-chart-0.1.268.tgz
+    version: 0.1.268
+  - apiVersion: v2
+    appVersion: 1.0.1
     created: "2025-12-28T08:52:06.169839559Z"
     dependencies:
     - name: postgresql
@@ -2843,4 +2857,4 @@ entries:
     urls:
     - https://github.com/neohoods/neoportal-helm/releases/download/neohoods-portal-chart-0.1.64/neohoods-portal-chart-0.1.64.tgz
     version: 0.1.64
-generated: "2025-12-28T08:52:06.171068295Z"
+generated: "2026-01-04T09:08:31.484048102Z"
