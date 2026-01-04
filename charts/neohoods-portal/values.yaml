@@ -6,6 +6,7 @@ global:
   emailTemplate:
     logoUrl: "https://portal.neohoods.com/logo-bright.png"
     appName: "NeoHoods"
+
 postgresql:
   enabled: true
 
@@ -18,6 +19,14 @@ postgresql:
     persistence:
       enabled: true
       size: 10Gi# Or use a secret reference
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+        
   auth:
     database: neohoods_portal
     username: neohoods_portal_user
