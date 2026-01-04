@@ -322,7 +322,7 @@ backup:
   # Matrix notification (optional)
   matrix:
     enabled: false
-    homeserver: "https://chat.neohoods.com" # Matrix homeserver URL
+    homeserver: "https://matrix.neohoods.com" # Matrix API URL (use matrix.neohoods.com, not chat.neohoods.com)
     roomId: "" # Matrix room ID for notifications (e.g., "!YjLQBUZJNVrOSZdiQn:chat.neohoods.com")
     secretName: "matrix-secret" # Secret name containing the Matrix token
     tokenKey: "local-assistant-permanent-token" # Key in the secret containing the Matrix token

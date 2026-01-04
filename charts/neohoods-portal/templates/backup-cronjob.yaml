@@ -48,7 +48,7 @@ spec:
                       key: {{ .Values.backup.scaleway.secretKeyKey | default "secret-key" }}
                 {{- if .Values.backup.matrix.enabled }}
                 - name: MATRIX_HOMESERVER
-                  value: {{ .Values.backup.matrix.homeserver | default "https://chat.neohoods.com" }}
+                  value: {{ .Values.backup.matrix.homeserver | default "https://matrix.neohoods.com" }}
                 - name: MATRIX_ROOM_ID
                   value: {{ .Values.backup.matrix.roomId | required "backup.matrix.roomId is required when backup.matrix.enabled is true" }}
                 - name: MATRIX_TOKEN
