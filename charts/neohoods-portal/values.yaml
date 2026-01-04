@@ -319,11 +319,13 @@ backup:
     secretName: "" # Required: e.g., "scaleway-secret"
     accessKeyKey: "access-key"
     secretKeyKey: "secret-key"
-  # Webhook notification (optional)
-  webhook:
+  # Matrix notification (optional)
+  matrix:
     enabled: false
-    url: "" # e.g., "http://terres-de-laya-bot.terresdelaya.svc.cluster.local/send-message"
-    roomId: "" # Matrix room ID for notifications
+    homeserver: "https://chat.neohoods.com" # Matrix homeserver URL
+    roomId: "" # Matrix room ID for notifications (e.g., "!YjLQBUZJNVrOSZdiQn:chat.neohoods.com")
+    secretName: "matrix-secret" # Secret name containing the Matrix token
+    tokenKey: "local-assistant-permanent-token" # Key in the secret containing the Matrix token
   # Persistent volume for backups (optional, uses emptyDir if disabled)
   persistentVolumeClaim:
     enabled: true

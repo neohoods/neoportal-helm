@@ -164,3 +164,4 @@ CREATE INDEX idx_incident_watchers_user_id ON incident_watchers(user_id);
 CREATE TRIGGER update_incidents_updated_at BEFORE UPDATE ON incidents
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+

@@ -77,3 +77,4 @@ echo ""
 echo "💡 Pour nettoyer le Job de test:"
 echo "   kubectl delete job $JOB_NAME -n $NAMESPACE"
 
+

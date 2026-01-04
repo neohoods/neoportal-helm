@@ -46,9 +46,16 @@ spec:
                     secretKeyRef:
                       name: {{ .Values.backup.scaleway.secretName }}
                       key: {{ .Values.backup.scaleway.secretKeyKey | default "secret-key" }}
-                {{- if .Values.backup.webhook.enabled }}
-                - name: WEBHOOK_URL
-                  value: {{ .Values.backup.webhook.url }}
+                {{- if .Values.backup.matrix.enabled }}
+                - name: MATRIX_HOMESERVER
+                  value: {{ .Values.backup.matrix.homeserver | default "https://chat.neohoods.com" }}
+                - name: MATRIX_ROOM_ID
+                  value: {{ .Values.backup.matrix.roomId | required "backup.matrix.roomId is required when backup.matrix.enabled is true" }}
+                - name: MATRIX_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.backup.matrix.secretName | default "matrix-secret" }}
+                      key: {{ .Values.backup.matrix.tokenKey | default "local-assistant-permanent-token" }}
                 {{- end }}
                 - name: KEEP_BACKUPS
                   value: {{ .Values.backup.keepBackups | default "5" | quote }}
@@ -71,11 +78,11 @@ spec:
                   # Upload to Scaleway Object Storage in backup/ folder
                   mc cp "$backup_file" "myscw/$SCW_BUCKET/backup/" || {
                     echo "Failed to upload backup"
-                    {{- if .Values.backup.webhook.enabled }}
-                    curl -X POST "$WEBHOOK_URL" -H "Content-Type: application/json" -d '{
-                      "roomId": "{{ .Values.backup.webhook.roomId }}",
-                      "message": "🚨 Backup upload failed: '$timestamp'"
-                    }' || true
+                    {{- if .Values.backup.matrix.enabled }}
+                    curl -X POST "$MATRIX_HOMESERVER/_matrix/client/r0/rooms/$MATRIX_ROOM_ID/send/m.room.message" \
+                      -H "Authorization: Bearer $MATRIX_TOKEN" \
+                      -H "Content-Type: application/json" \
+                      -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} - $PGDATABASE] 🚨 Backup upload failed: '$timestamp'"}' || true
                     {{- end }}
                     exit 1
                   }
@@ -113,11 +120,11 @@ spec:
                   fi
                   
                   # Send success notification
-                  {{- if .Values.backup.webhook.enabled }}
-                  curl -X POST "$WEBHOOK_URL" -H "Content-Type: application/json" -d '{
-                    "roomId": "{{ .Values.backup.webhook.roomId }}",
-                    "message": "✅ DB backup successful: '$timestamp'"
-                  }' || true
+                  {{- if .Values.backup.matrix.enabled }}
+                  curl -X POST "$MATRIX_HOMESERVER/_matrix/client/r0/rooms/$MATRIX_ROOM_ID/send/m.room.message" \
+                    -H "Authorization: Bearer $MATRIX_TOKEN" \
+                    -H "Content-Type: application/json" \
+                    -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} - $PGDATABASE] ✅ DB backup successful: '$timestamp'"}' || true
                   {{- end }}
                   echo "DB backup completed: $timestamp"
               volumeMounts:
