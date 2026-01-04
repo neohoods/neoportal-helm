@@ -2,7 +2,13 @@
 
 -- Incident Management Tables
 -- Sequence for incremental incident reference numbers
-CREATE SEQUENCE IF NOT EXISTS incident_ref_seq START WITH 1 INCREMENT BY 1;
+-- Use DO block to create sequence only if it doesn't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_sequences WHERE sequencename = 'incident_ref_seq') THEN
+        CREATE SEQUENCE incident_ref_seq START WITH 1 INCREMENT BY 1;
+    END IF;
+END $$;
 
 -- Main incidents table
 CREATE TABLE IF NOT EXISTS incidents (
