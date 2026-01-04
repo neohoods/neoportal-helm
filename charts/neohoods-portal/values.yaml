@@ -8,6 +8,12 @@ global:
     appName: "NeoHoods"
 postgresql:
   enabled: true
+
+  image:
+    registry: docker.io
+    repository: postgres
+    tag: "16"
+
   primary:
     persistence:
       enabled: true
