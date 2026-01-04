@@ -79,17 +79,12 @@ spec:
                   mc cp "$backup_file" "myscw/$SCW_BUCKET/backup/" || {
                     echo "Failed to upload backup"
                     {{- if .Values.backup.matrix.enabled }}
-                    if [ -z "$MATRIX_ROOM_ID" ]; then
-                      echo "ERROR: MATRIX_ROOM_ID is empty, skipping Matrix notification"
-                    else
-                      txn_id=$(date +%s%N | sha256sum | cut -d' ' -f1 | cut -c1-32)
-                      encoded_room_id=$(echo "$MATRIX_ROOM_ID" | sed 's/!/%21/g' | sed 's/:/%3A/g')
-                      echo "Sending Matrix notification (upload failed): curl -X PUT \"$MATRIX_HOMESERVER/_matrix/client/v3/rooms/$encoded_room_id/send/m.room.message/$txn_id\""
-                      curl -X PUT "$MATRIX_HOMESERVER/_matrix/client/v3/rooms/$encoded_room_id/send/m.room.message/$txn_id" \
-                        -H "Authorization: Bearer $MATRIX_TOKEN" \
-                        -H "Content-Type: application/json" \
-                        -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} - $PGDATABASE] 🚨 Backup upload failed: '$timestamp'"}' || true
-                    fi
+                    txn_id=$(date +%s%N | sha256sum | cut -d' ' -f1 | cut -c1-32)
+                    echo "Sending Matrix notification (upload failed): curl -X PUT \"https://matrix.neohoods.com/_matrix/client/v3/rooms/%21YjLQBUZJNVrOSZdiQn%3Achat.neohoods.com/send/m.room.message/$txn_id\""
+                    curl -X PUT "https://matrix.neohoods.com/_matrix/client/v3/rooms/%21YjLQBUZJNVrOSZdiQn%3Achat.neohoods.com/send/m.room.message/$txn_id" \
+                      -H "Authorization: Bearer $MATRIX_TOKEN" \
+                      -H "Content-Type: application/json" \
+                      -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} - $PGDATABASE] 🚨 Backup upload failed: '$timestamp'"}' || true
                     {{- end }}
                     exit 1
                   }
@@ -128,17 +123,12 @@ spec:
                   
                   # Send success notification
                   {{- if .Values.backup.matrix.enabled }}
-                  if [ -z "$MATRIX_ROOM_ID" ]; then
-                    echo "ERROR: MATRIX_ROOM_ID is empty, skipping Matrix notification"
-                  else
-                    txn_id=$(date +%s%N | sha256sum | cut -d' ' -f1 | cut -c1-32)
-                    encoded_room_id=$(echo "$MATRIX_ROOM_ID" | sed 's/!/%21/g' | sed 's/:/%3A/g')
-                    echo "Sending Matrix notification (success): curl -X PUT \"$MATRIX_HOMESERVER/_matrix/client/v3/rooms/$encoded_room_id/send/m.room.message/$txn_id\""
-                    curl -X PUT "$MATRIX_HOMESERVER/_matrix/client/v3/rooms/$encoded_room_id/send/m.room.message/$txn_id" \
-                      -H "Authorization: Bearer $MATRIX_TOKEN" \
-                      -H "Content-Type: application/json" \
-                      -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} - $PGDATABASE] ✅ DB backup successful: '$timestamp'"}' || true
-                  fi
+                  txn_id=$(date +%s%N | sha256sum | cut -d' ' -f1 | cut -c1-32)
+                  echo "Sending Matrix notification (success): curl -X PUT \"https://matrix.neohoods.com/_matrix/client/v3/rooms/%21YjLQBUZJNVrOSZdiQn%3Achat.neohoods.com/send/m.room.message/$txn_id\""
+                  curl -X PUT "https://matrix.neohoods.com/_matrix/client/v3/rooms/%21YjLQBUZJNVrOSZdiQn%3Achat.neohoods.com/send/m.room.message/$txn_id" \
+                    -H "Authorization: Bearer $MATRIX_TOKEN" \
+                    -H "Content-Type: application/json" \
+                    -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} - $PGDATABASE] ✅ DB backup successful: '$timestamp'"}' || true
                   {{- end }}
                   echo "DB backup completed: $timestamp"
               volumeMounts:
