@@ -45,5 +45,7 @@ data:
 {{ .Files.Get "sql/V3.5__add_assistant_debug_conversations.sql" | indent 4 }}
   V3.6__add_incidents_schema.sql: |-
 {{ .Files.Get "sql/V3.6__add_incidents_schema.sql" | indent 4 }}
+  V3.7__add_incident_application.sql: |-
+{{ .Files.Get "sql/V3.7__add_incident_application.sql" | indent 4 }}
 
 
