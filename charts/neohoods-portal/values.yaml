@@ -8,16 +8,15 @@ global:
     appName: "NeoHoods"
 postgresql:
   enabled: true
-  shmSize: "1Gi"
   image:
-    registry: docker.io
-    repository: bitnamilegacy/postgresql
-    tag: 15.4.0-debian-11-r45
+    repository: postgres
+    tag: "18.1"
     pullPolicy: IfNotPresent
   primary:
     persistence:
       enabled: true
       size: 10Gi
+      storageClass: ""  # Use default storage class
     resources:
       requests:
         cpu: "100m"
@@ -43,10 +42,10 @@ backend:
     tag: 0.0.285
   replicaCount: 2
   service:
-    type: NodePort
+    type: ClusterIP  # Changed from NodePort to ClusterIP for Ingress compatibility
     port: 80
-    nodePort: 30096
-    nodePortForDebug: 30197
+    nodePort: 30096  # Only used if type is NodePort
+    nodePortForDebug: 30197  # Only used if type is NodePort
   env:
     # Spring properties
     SERVER_PORT: 8486
@@ -243,9 +242,9 @@ frontend:
     tag: 0.0.285
   replicaCount: 1
   service:
-    type: NodePort
+    type: ClusterIP  # Changed from NodePort to ClusterIP for Ingress compatibility
     port: 80
-    nodePort: 30095
+    nodePort: 30095  # Only used if type is NodePort
   env:
     API_BASE_PATH: https://portal.neohoods.com
     USE_MOCK_API: "false"
