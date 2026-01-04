@@ -9,16 +9,25 @@ metadata:
     "helm.sh/hook-weight": "-10"
   labels:
     app: {{ .Values.global.chatName }}-postgresql
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: {{ .Values.global.chatName }}
+    app.kubernetes.io/name: postgresql
 spec:
   serviceName: {{ .Values.global.chatName }}-postgresql
   replicas: 1
   selector:
     matchLabels:
       app: {{ .Values.global.chatName }}-postgresql
+      app.kubernetes.io/component: primary
+      app.kubernetes.io/instance: {{ .Values.global.chatName }}
+      app.kubernetes.io/name: postgresql
   template:
     metadata:
       labels:
         app: {{ .Values.global.chatName }}-postgresql
+        app.kubernetes.io/component: primary
+        app.kubernetes.io/instance: {{ .Values.global.chatName }}
+        app.kubernetes.io/name: postgresql
     spec:
       containers:
         - name: postgresql
@@ -87,6 +96,9 @@ kind: Service
 metadata:
   name: {{ .Values.global.chatName }}-postgresql
   namespace: {{ .Values.global.namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-9"
   labels:
     app: {{ .Values.global.chatName }}-postgresql
 spec:
@@ -98,5 +110,8 @@ spec:
       name: postgresql
   selector:
     app: {{ .Values.global.chatName }}-postgresql
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/instance: {{ .Values.global.chatName }}
+    app.kubernetes.io/name: postgresql
 {{- end }}
 
