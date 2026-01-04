@@ -4,11 +4,23 @@ metadata:
   name: portal-{{ .Release.Name }}-flyway
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-weight": "-3"
     "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
     spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: postgres:18.1
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until pg_isready -h {{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local -p 5432 -U {{ .Values.postgresql.auth.username }}; do
+                echo "Waiting for PostgreSQL to be ready..."
+                sleep 2
+              done
+              echo "PostgreSQL is ready!"
       containers:
         - name: portal-{{ .Release.Name }}-flyway
           image: "{{ .Values.flyway.image.repository }}:{{ .Values.flyway.image.tag }}"
