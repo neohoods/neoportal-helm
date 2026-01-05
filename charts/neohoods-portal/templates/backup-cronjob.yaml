@@ -19,7 +19,7 @@ spec:
         spec:
           containers:
             - name: pg-backup
-              image: postgres:16-alpine
+              image: postgres:18-alpine
               env:
                 - name: PGPASSWORD
                   valueFrom:
@@ -49,8 +49,6 @@ spec:
                 {{- if .Values.backup.matrix.enabled }}
                 - name: MATRIX_HOMESERVER
                   value: {{ .Values.backup.matrix.homeserver | default "https://matrix.neohoods.com" }}
-                - name: MATRIX_ROOM_ID
-                  value: {{ .Values.backup.matrix.roomId | required "backup.matrix.roomId is required when backup.matrix.enabled is true" }}
                 - name: MATRIX_TOKEN
                   valueFrom:
                     secretKeyRef:
@@ -66,7 +64,7 @@ spec:
                 - "-c"
                 - |
                   set -e
-                  apk add --no-cache curl
+                  apk add --no-cache curl coreutils
                   wget -q https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x mc && mv mc /usr/local/bin/
                   mc alias set myscw https://$SCW_ENDPOINT $SCW_ACCESS_KEY $SCW_SECRET_KEY
                   
