@@ -4,9 +4,6 @@ kind: StatefulSet
 metadata:
   name: {{ .Values.global.chatName }}-postgresql
   namespace: {{ .Values.global.namespace }}
-  annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "-10"
   labels:
     app: {{ .Values.global.chatName }}-postgresql
     app.kubernetes.io/component: primary
@@ -100,9 +97,6 @@ kind: Service
 metadata:
   name: {{ .Values.global.chatName }}-postgresql
   namespace: {{ .Values.global.namespace }}
-  annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "-9"
   labels:
     app: {{ .Values.global.chatName }}-postgresql
 spec:
