@@ -42,7 +42,7 @@ backend:
     enabled: false # Set to true in dev environment
   image:
     repository: ghcr.io/neohoods/portal-platform-api
-    tag: 0.0.291
+    tag: 0.0.292
   replicaCount: 2
   service:
     type: ClusterIP # Changed from NodePort to ClusterIP for Ingress compatibility
@@ -242,7 +242,7 @@ frontend:
   enabled: true
   image:
     repository: ghcr.io/neohoods/portal-platform-ui
-    tag: 0.0.291
+    tag: 0.0.292
   replicaCount: 1
   service:
     type: ClusterIP # Changed from NodePort to ClusterIP for Ingress compatibility
