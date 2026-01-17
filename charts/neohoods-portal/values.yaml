@@ -230,7 +230,7 @@ backend:
     # inline: |
     #   ---
     #   Structure des bâtiments
-    #   
+    #
     #   La copropriété a 3 bâtiments : A, B, C.
     #   Format : [Bâtiment][Étage][Numéro] (ex: A701, C302)
     #   ---
