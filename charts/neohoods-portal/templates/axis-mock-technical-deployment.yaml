@@ -1,0 +1,53 @@
+{{- if .Values.axisMock.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portal-{{ .Release.Name }}-axis-mock-technical
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portal-{{ .Release.Name }}-axis-mock-technical
+  template:
+    metadata:
+      labels:
+        app: portal-{{ .Release.Name }}-axis-mock-technical
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: axis-mock-technical
+          image: "{{ .Values.axisMock.image.repository }}:{{ .Values.axisMock.image.tag }}"
+          ports:
+            - name: http
+              containerPort: 8089
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "default"
+            - name: AXIS_MOCK_CONTROLLER_NAME
+              value: "{{ .Values.axisMock.technical.controllerName }}"
+            - name: AXIS_MOCK_DOORS
+              value: "{{ .Values.axisMock.technical.doors }}"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: portal-{{ .Release.Name }}-axis-mock-technical
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8089
+      targetPort: 8089
+      protocol: TCP
+      name: http
+  selector:
+    app: portal-{{ .Release.Name }}-axis-mock-technical
+{{- end }}

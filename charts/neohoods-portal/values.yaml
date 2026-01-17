@@ -333,3 +333,15 @@ backup:
     name: "" # Default: portal-{{ .Release.Name }}-backups
     size: "20Gi"
     storageClass: "" # Optional: specify storage class
+# Axis Mock Server configuration
+axisMock:
+  enabled: false # Set to true to deploy 2 mock instances for development/testing
+  image:
+    repository: ghcr.io/neohoods/portal-axis-mock-server
+    tag: 0.0.293
+  main:
+    controllerName: "Contrôleur principal"
+    doors: "Chambre d'hôtes:Porte principale de la chambre d'hôtes:Axis-00408c184bdb:1353665586.846691000,Salle commune:Porte de la salle commune:Axis-00408c184bdb:1353665587.123456789"
+  technical:
+    controllerName: "Contrôleur local technique"
+    doors: "Local technique:Porte du local technique:Axis-technical:1353665588.000000000"
