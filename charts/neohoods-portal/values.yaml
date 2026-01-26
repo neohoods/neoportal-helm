@@ -42,7 +42,7 @@ backend:
     enabled: false # Set to true in dev environment
   image:
     repository: ghcr.io/neohoods/portal-platform-api
-    tag: 0.0.297
+    tag: 0.0.298
   replicaCount: 2
   service:
     type: ClusterIP # Changed from NodePort to ClusterIP for Ingress compatibility
@@ -242,7 +242,7 @@ frontend:
   enabled: true
   image:
     repository: ghcr.io/neohoods/portal-platform-ui
-    tag: 0.0.297
+    tag: 0.0.298
   replicaCount: 1
   service:
     type: ClusterIP # Changed from NodePort to ClusterIP for Ingress compatibility
@@ -338,10 +338,13 @@ axisMock:
   enabled: false # Set to true to deploy 2 mock instances for development/testing
   image:
     repository: ghcr.io/neohoods/portal-axis-mock-server
-    tag: 0.0.297
+    tag: 0.0.298
   main:
     controllerName: "Contrôleur principal"
     doors: "Chambre d'hôtes:Porte principale de la chambre d'hôtes:Axis-00408c184bdb:1353665586.846691000,Salle commune:Porte de la salle commune:Axis-00408c184bdb:1353665587.123456789"
   technical:
     controllerName: "Contrôleur local technique"
     doors: "Local technique:Porte du local technique:Axis-technical:1353665588.000000000"
+unifiMock:
+  image:
+    tag: 0.0.298
