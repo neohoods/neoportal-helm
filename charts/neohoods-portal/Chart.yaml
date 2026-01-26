@@ -2,7 +2,7 @@ apiVersion: v2
 name: neohoods-portal-chart
 description: A Helm chart for deploying NeoHoods portal app
 type: application
-version: 0.1.317
+version: 0.1.318
 appVersion: "1.0.1"
 # PostgreSQL is now deployed via custom template (postgresql-statefulset.yaml) using official postgres image
 # dependencies:
