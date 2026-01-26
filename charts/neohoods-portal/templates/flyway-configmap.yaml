@@ -65,5 +65,7 @@ data:
 {{ .Files.Get "sql/V3.9__add_board_member_and_incident_visibility.sql" | indent 4 }}
   V3.10__add_axis_door_controllers.sql: |-
 {{ .Files.Get "sql/V3.10__add_axis_door_controllers.sql" | indent 4 }}
+  V3.11__add_unifi_door_controllers.sql: |-
+{{ .Files.Get "sql/V3.11__add_unifi_door_controllers.sql" | indent 4 }}
 
 

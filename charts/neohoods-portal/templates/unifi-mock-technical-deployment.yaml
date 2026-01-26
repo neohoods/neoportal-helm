@@ -1,0 +1,53 @@
+{{- if .Values.unifiMock.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portal-{{ .Release.Name }}-unifi-mock-technical
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portal-{{ .Release.Name }}-unifi-mock-technical
+  template:
+    metadata:
+      labels:
+        app: portal-{{ .Release.Name }}-unifi-mock-technical
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: unifi-mock-technical
+          image: "{{ .Values.unifiMock.image.repository }}:{{ .Values.unifiMock.image.tag }}"
+          ports:
+            - name: http
+              containerPort: 8091
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "default"
+            - name: UNIFI_MOCK_CONTROLLER_NAME
+              value: "{{ .Values.unifiMock.technical.controllerName }}"
+            - name: UNIFI_MOCK_DOORS
+              value: "{{ .Values.unifiMock.technical.doors }}"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: portal-{{ .Release.Name }}-unifi-mock-technical
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8091
+      targetPort: 8091
+      protocol: TCP
+      name: http
+  selector:
+    app: portal-{{ .Release.Name }}-unifi-mock-technical
+{{- end }}

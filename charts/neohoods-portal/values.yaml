@@ -345,6 +345,16 @@ axisMock:
   technical:
     controllerName: "Contrôleur local technique"
     doors: "Local technique:Porte du local technique:Axis-technical:1353665588.000000000"
+
+# UniFi Mock Server configuration
 unifiMock:
+  enabled: false # Set to true to deploy 2 mock instances for development/testing
   image:
+    repository: ghcr.io/neohoods/portal-unifi-mock-server
     tag: 0.0.298
+  main:
+    controllerName: "Contrôleur principal UniFi"
+    doors: "door-1:Chambre d'hôtes,door-2:Salle commune"
+  technical:
+    controllerName: "Contrôleur local technique UniFi"
+    doors: "door-technical:Local technique"
