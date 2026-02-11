@@ -67,5 +67,8 @@ data:
 {{ .Files.Get "sql/V3.10__add_axis_door_controllers.sql" | indent 4 }}
   V3.11__add_unifi_door_controllers.sql: |-
 {{ .Files.Get "sql/V3.11__add_unifi_door_controllers.sql" | indent 4 }}
-
+  V3.12__sync_schema_with_init.sql: |-
+{{ .Files.Get "sql/V3.12__sync_schema_with_init.sql" | indent 4 }}
+  V3.13__add_spaces_location_columns.sql: |-
+{{ .Files.Get "sql/V3.13__add_spaces_location_columns.sql" | indent 4 }}
 
