@@ -216,6 +216,17 @@ backend:
         key: scaleway-secret-key
     S3_BUCKET: "" # e.g., "terresdelaya" or "neohoods-dev"
     S3_REGION: "fr-par" # Scaleway Paris region
+    # UniFi Access (Dream Wall) - leave empty for prod or set UNIFI_CONTROLLER_URL; when unifiMock.enabled, URL defaults to mock service
+    UNIFI_CONTROLLER_ID: "" # e.g. "main-controller"
+    UNIFI_CONTROLLER_NAME: "" # e.g. "Contrôleur principal UniFi"
+    UNIFI_CONTROLLER_MODEL: "" # e.g. "Dream-Wall"
+    UNIFI_CONTROLLER_URL: "" # e.g. "https://192.168.10.1:12445" or leave empty when using unifiMock
+    UNIFI_API_KEY: "" # API token from Access > Settings > API Token (use secretKeyRef in env overrides if needed)
+    UNIFI_ALLOW_INSECURE_SSL: "true" # Use only in dev/test for self-signed certs
+    UNIFI_RETRY_MAX_ATTEMPTS: "3"
+    UNIFI_RETRY_INITIAL_DELAY: "1000"
+    UNIFI_RETRY_MULTIPLIER: "2"
+    UNIFI_ADMIN_EMAIL: "admin@neohoods.com"
   matrixRooms:
     enabled: true
     configMapName: "" # Default: {{ .Release.Name }}-matrix-rooms
@@ -333,15 +344,11 @@ backup:
     name: "" # Default: portal-{{ .Release.Name }}-backups
     size: "20Gi"
     storageClass: "" # Optional: specify storage class
-# UniFi Mock Server configuration
+# UniFi Mock Server configuration (single instance; Dream Wall can manage multiple doors)
 unifiMock:
-  enabled: false # Set to true to deploy 2 mock instances for development/testing
+  enabled: false # Set to true for dev/test; backend will use this service when UNIFI_CONTROLLER_URL is not set
   image:
     repository: ghcr.io/neohoods/portal-unifi-mock-server
     tag: 0.0.301
-  main:
-    controllerName: "Contrôleur principal UniFi"
-    doors: "door-1:Chambre d'hôtes,door-2:Salle commune"
-  technical:
-    controllerName: "Contrôleur local technique UniFi"
-    doors: "door-technical:Local technique"
+  controllerName: "Contrôleur principal UniFi"
+  doors: "door-1:Chambre d'hôtes,door-2:Salle commune,door-technical:Local technique"

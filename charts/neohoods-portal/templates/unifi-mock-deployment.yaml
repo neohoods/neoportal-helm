@@ -2,21 +2,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: portal-{{ .Release.Name }}-unifi-mock-technical
+  name: portal-{{ .Release.Name }}-unifi-mock
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: portal-{{ .Release.Name }}-unifi-mock-technical
+      app: portal-{{ .Release.Name }}-unifi-mock
   template:
     metadata:
       labels:
-        app: portal-{{ .Release.Name }}-unifi-mock-technical
+        app: portal-{{ .Release.Name }}-unifi-mock
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-        - name: unifi-mock-technical
+        - name: unifi-mock
           image: "{{ .Values.unifiMock.image.repository }}:{{ .Values.unifiMock.image.tag }}"
           ports:
             - name: http
@@ -26,9 +26,9 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: "default"
             - name: UNIFI_MOCK_CONTROLLER_NAME
-              value: "{{ .Values.unifiMock.technical.controllerName }}"
+              value: "{{ .Values.unifiMock.controllerName }}"
             - name: UNIFI_MOCK_DOORS
-              value: "{{ .Values.unifiMock.technical.doors }}"
+              value: "{{ .Values.unifiMock.doors }}"
           resources:
             requests:
               cpu: "50m"
@@ -40,7 +40,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: portal-{{ .Release.Name }}-unifi-mock-technical
+  name: portal-{{ .Release.Name }}-unifi-mock
 spec:
   type: ClusterIP
   ports:
@@ -49,5 +49,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: portal-{{ .Release.Name }}-unifi-mock-technical
+    app: portal-{{ .Release.Name }}-unifi-mock
 {{- end }}

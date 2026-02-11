@@ -295,6 +295,27 @@ spec:
               value: "{{ .Values.backend.env.S3_BUCKET }}"
             - name: S3_REGION
               value: "{{ .Values.backend.env.S3_REGION }}"
+            # UniFi Access (Dream Wall) configuration; when unifiMock.enabled and UNIFI_CONTROLLER_URL not set, backend uses the mock service
+            - name: UNIFI_CONTROLLER_ID
+              value: {{ .Values.backend.env.UNIFI_CONTROLLER_ID | default "main-controller" | quote }}
+            - name: UNIFI_CONTROLLER_NAME
+              value: {{ .Values.backend.env.UNIFI_CONTROLLER_NAME | default "Contrôleur principal UniFi" | quote }}
+            - name: UNIFI_CONTROLLER_MODEL
+              value: {{ .Values.backend.env.UNIFI_CONTROLLER_MODEL | default "Dream-Wall" | quote }}
+            - name: UNIFI_CONTROLLER_URL
+              value: {{ if .Values.backend.env.UNIFI_CONTROLLER_URL }}{{ .Values.backend.env.UNIFI_CONTROLLER_URL | quote }}{{ else if .Values.unifiMock.enabled }}{{ printf "http://portal-%s-unifi-mock.%s.svc.cluster.local:8091" .Release.Name .Values.global.namespace | quote }}{{ else }}{{ "" | quote }}{{ end }}
+            - name: UNIFI_API_KEY
+              value: {{ .Values.backend.env.UNIFI_API_KEY | default "" | quote }}
+            - name: UNIFI_ALLOW_INSECURE_SSL
+              value: {{ .Values.backend.env.UNIFI_ALLOW_INSECURE_SSL | default "true" | quote }}
+            - name: UNIFI_RETRY_MAX_ATTEMPTS
+              value: {{ .Values.backend.env.UNIFI_RETRY_MAX_ATTEMPTS | default "3" | quote }}
+            - name: UNIFI_RETRY_INITIAL_DELAY
+              value: {{ .Values.backend.env.UNIFI_RETRY_INITIAL_DELAY | default "1000" | quote }}
+            - name: UNIFI_RETRY_MULTIPLIER
+              value: {{ .Values.backend.env.UNIFI_RETRY_MULTIPLIER | default "2" | quote }}
+            - name: UNIFI_ADMIN_EMAIL
+              value: {{ .Values.backend.env.UNIFI_ADMIN_EMAIL | default "admin@neohoods.com" | quote }}
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}
