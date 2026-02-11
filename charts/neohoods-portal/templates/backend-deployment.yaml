@@ -295,33 +295,6 @@ spec:
               value: "{{ .Values.backend.env.S3_BUCKET }}"
             - name: S3_REGION
               value: "{{ .Values.backend.env.S3_REGION }}"
-            {{- if .Values.axisMock.enabled }}
-            # Axis door controllers configuration (when using mock servers)
-            - name: AXIS_CONTROLLER_ID
-              value: "main-controller"
-            - name: AXIS_CONTROLLER_NAME
-              value: "{{ .Values.axisMock.main.controllerName }}"
-            - name: AXIS_CONTROLLER_MODEL
-              value: "A1610"
-            - name: AXIS_CONTROLLER_URL
-              value: "http://portal-{{ .Release.Name }}-axis-mock-main:8089"
-            - name: AXIS_USERNAME
-              value: "root"
-            - name: AXIS_PASSWORD
-              value: "pass"
-            - name: AXIS_TECHNICAL_CONTROLLER_ID
-              value: "technical-controller"
-            - name: AXIS_TECHNICAL_CONTROLLER_NAME
-              value: "{{ .Values.axisMock.technical.controllerName }}"
-            - name: AXIS_TECHNICAL_CONTROLLER_MODEL
-              value: "A1610"
-            - name: AXIS_TECHNICAL_CONTROLLER_URL
-              value: "http://portal-{{ .Release.Name }}-axis-mock-technical:8089"
-            - name: AXIS_TECHNICAL_USERNAME
-              value: "root"
-            - name: AXIS_TECHNICAL_PASSWORD
-              value: "pass"
-            {{- end }}
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}
