@@ -27,8 +27,9 @@ spec:
               value: "default"
             - name: UNIFI_MOCK_CONTROLLER_NAME
               value: "{{ .Values.unifiMock.controllerName }}"
+            # Default doors must match unifi-mock-server application.yml so deployed mock has doors when values are not overridden
             - name: UNIFI_MOCK_DOORS
-              value: "{{ .Values.unifiMock.doors }}"
+              value: {{ .Values.unifiMock.doors | default "door-1:Chambre d'hôtes,door-2:Salle commune" | quote }}
           resources:
             requests:
               cpu: "50m"
