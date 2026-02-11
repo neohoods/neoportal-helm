@@ -42,7 +42,7 @@ backend:
     enabled: false # Set to true in dev environment
   image:
     repository: ghcr.io/neohoods/portal-platform-api
-    tag: 0.0.300
+    tag: 0.0.301
   replicaCount: 2
   service:
     type: ClusterIP # Changed from NodePort to ClusterIP for Ingress compatibility
@@ -242,7 +242,7 @@ frontend:
   enabled: true
   image:
     repository: ghcr.io/neohoods/portal-platform-ui
-    tag: 0.0.300
+    tag: 0.0.301
   replicaCount: 1
   service:
     type: ClusterIP # Changed from NodePort to ClusterIP for Ingress compatibility
@@ -350,7 +350,7 @@ unifiMock:
   enabled: false # Set to true to deploy 2 mock instances for development/testing
   image:
     repository: ghcr.io/neohoods/portal-unifi-mock-server
-    tag: 0.0.300
+    tag: 0.0.301
   main:
     controllerName: "Contrôleur principal UniFi"
     doors: "door-1:Chambre d'hôtes,door-2:Salle commune"
