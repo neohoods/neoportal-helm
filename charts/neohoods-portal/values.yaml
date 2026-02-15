@@ -128,6 +128,8 @@ backend:
     MATRIX_OAUTH2_SCOPE: "urn:matrix:client:api:* urn:synapse:admin:* urn:matrix:client:device:BOT-PERMANENT-TOKEN"
     MATRIX_OAUTH2_AUTHORIZATION_ENDPOINT: "https://matrix.neohoods.com/_matrix/client/v3/oauth2/authorize"
     MATRIX_OAUTH2_TOKEN_ENDPOINT: "https://matrix.neohoods.com/_matrix/client/v3/oauth2/token"
+    # MAS token endpoint for admin (client_credentials) flow; auto-derived from device endpoint if empty
+    MATRIX_OAUTH2_ADMIN_TOKEN_ENDPOINT: ""
     MATRIX_OAUTH2_DEVICE_AUTHORIZATION_ENDPOINT: "https://mas.chat.neohoods.com/oauth2/device"
     # Matrix Local Assistant configuration (Alfred)
     MATRIX_LOCAL_ASSISTANT_ENABLED: "true"

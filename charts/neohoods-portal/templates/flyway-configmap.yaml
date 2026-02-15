@@ -71,4 +71,5 @@ data:
 {{ .Files.Get "sql/V3.12__sync_schema_with_init.sql" | indent 4 }}
   V3.13__add_spaces_location_columns.sql: |-
 {{ .Files.Get "sql/V3.13__add_spaces_location_columns.sql" | indent 4 }}
-
+  V3.14__add_usage_conditions_to_users.sql: |-
+{{ .Files.Get "sql/V3.14__add_usage_conditions_to_users.sql" | indent 4 }}
