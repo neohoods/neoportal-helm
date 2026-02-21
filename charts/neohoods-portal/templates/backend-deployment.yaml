@@ -167,7 +167,7 @@ spec:
             - name: MATRIX_OAUTH2_TOKEN_ENDPOINT
               value: "{{ .Values.backend.env.MATRIX_OAUTH2_TOKEN_ENDPOINT }}"
             - name: MATRIX_OAUTH2_ADMIN_TOKEN_ENDPOINT
-              value: "{{ .Values.backend.env.MATRIX_OAUTH2_ADMIN_TOKEN_ENDPOINT | default \"\" }}"
+              value: {{ .Values.backend.env.MATRIX_OAUTH2_ADMIN_TOKEN_ENDPOINT | default "" | quote }}
             - name: MATRIX_OAUTH2_DEVICE_AUTHORIZATION_ENDPOINT
               value: "{{ .Values.backend.env.MATRIX_OAUTH2_DEVICE_AUTHORIZATION_ENDPOINT }}"
             # Matrix Local Assistant configuration (Alfred)
