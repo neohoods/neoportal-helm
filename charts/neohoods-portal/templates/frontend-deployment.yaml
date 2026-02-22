@@ -38,6 +38,8 @@ spec:
               value: "{{ .Values.frontend.env.BRAND_COPYRIGHT }}"
             - name: BRAND_LOGO
               value: "{{ .Values.frontend.env.BRAND_LOGO }}"
+            - name: USAGE_CONDITIONS_VERSION
+              value: {{ .Values.frontend.env.USAGE_CONDITIONS_VERSION | default "1" | quote }}
           ports:
             - name: http-server
               containerPort: 80

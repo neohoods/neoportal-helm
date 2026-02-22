@@ -272,6 +272,8 @@ frontend:
     BRAND_COPYRIGHT: "2025 Portal NeoHoods"
     BRAND_LOGO: "/logo-bright.png"
     STRIPE_DEMO_MODE: "false"
+    # Version des conditions d'utilisation (doit correspondre au fichier assets/legal/usage-conditions-<n>.md et au backend)
+    USAGE_CONDITIONS_VERSION: "1"
   theme:
     configMapName: my-custom-theme
 mailersend:
