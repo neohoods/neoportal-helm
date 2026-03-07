@@ -1,11 +1,13 @@
+{{- if .Values.flyway.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: portal-{{ .Release.Name }}-flyway
   annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "-3"
     "helm.sh/hook-delete-policy": hook-succeeded
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   template:
     spec:
@@ -139,3 +141,4 @@ spec:
             name: {{ .Values.flyway.customInitData.configMapName }}
         {{- end }}
       restartPolicy: Never
+{{- end }}

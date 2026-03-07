@@ -1,3 +1,4 @@
+{{- if .Values.flyway.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -75,3 +76,6 @@ data:
 {{ .Files.Get "sql/V3.14__add_usage_conditions_to_users.sql" | indent 4 }}
   V3.15__add_user_devices.sql: |-
 {{ .Files.Get "sql/V3.15__add_user_devices.sql" | indent 4 }}
+  V3.16__add_gdpr_user_columns.sql: |-
+{{ .Files.Get "sql/V3.16__add_gdpr_user_columns.sql" | indent 4 }}
+{{- end }}

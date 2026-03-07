@@ -3,6 +3,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.flyway.customInitData.configMapName }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
   labels:
     app: portal-{{ .Release.Name }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
