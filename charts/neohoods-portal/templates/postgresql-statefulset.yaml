@@ -33,6 +33,10 @@ spec:
       nodeSelector:
         {{- toYaml .Values.postgresql.primary.nodeSelector | nindent 8 }}
       {{- end }}
+      {{- if .Values.postgresql.primary.tolerations }}
+      tolerations:
+        {{- toYaml .Values.postgresql.primary.tolerations | nindent 8 }}
+      {{- end }}
       containers:
         - name: postgresql
           image: {{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}

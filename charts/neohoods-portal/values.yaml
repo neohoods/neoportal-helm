@@ -16,6 +16,14 @@ postgresql:
     # Node selector to ensure pod is scheduled on the same node as the PVC
     # This is important for hostPath volumes which are bound to specific nodes
     nodeSelector: {} # Example: { role: worker-1 }
+    # Allow scheduling on master/control-plane when worker is down (e.g. dev cluster)
+    tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
     persistence:
       enabled: true
       size: 10Gi
@@ -108,7 +116,7 @@ backend:
     NEOHOODS_PORTAL_SSO_SCOPE: "openid profile email"
     # Matrix configuration
     MATRIX_BOT_ENABLED: "true"
-    MATRIX_BOT_DISABLED: "false"
+    NEOHOODS_PORTAL_MATRIX_DISABLED: "false"
     MATRIX_HOMESERVER_URL: "matrix.neohoods.com"
     MATRIX_SERVER_NAME: "chat.neohoods.com"
     MATRIX_SPACE_ID: "!YenniyNVsUoBCLHtZS:chat.neohoods.com"
