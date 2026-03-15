@@ -40,8 +40,57 @@ spec:
               value: "https://{{ .Values.global.domain }}"
             - name: NEOHOODS_PORTAL_FRONTEND_URL
               value: "https://{{ .Values.global.domain }}"
-            - name: NEOHOODS_PORTAL_EMAIL_VERIFICATION_URL
-              value: "https://{{ .Values.global.domain }}/email-confirmation"
+            - name: NEOHOODS_PORTAL_SUPER_ADMIN_EMAIL
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_SUPER_ADMIN_EMAIL | quote }}
+            - name: NEOHOODS_PORTAL_USAGE_CONDITIONS_VERSION
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_USAGE_CONDITIONS_VERSION | default "1" | quote }}
+            - name: NEOHOODS_PORTAL_SESSION_COOKIE_SECURE
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_SESSION_COOKIE_SECURE | default "true" | quote }}
+            - name: NEOHOODS_PORTAL_MOBILE_DEV_ORIGIN
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_MOBILE_DEV_ORIGIN | default "" | quote }}
+            - name: NEOHOODS_PORTAL_MAILERSEND_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_MAILERSEND_WEBHOOK_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_MAILERSEND_WEBHOOK_SECRET.secretKeyRef.key }}
+            - name: NEOHOODS_PORTAL_INCIDENTS_EMAIL_FROM
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_INCIDENTS_EMAIL_FROM | default "support@ms.mail.neohoods.com" | quote }}
+            - name: NEOHOODS_PORTAL_INCIDENTS_EMAIL_FROM_NAME
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_INCIDENTS_EMAIL_FROM_NAME | default "NeoHoods Support" | quote }}
+            - name: NEOHOODS_PORTAL_GDPR_EMAIL_HASH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_GDPR_EMAIL_HASH_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_GDPR_EMAIL_HASH_SECRET.secretKeyRef.key }}
+            - name: NEOHOODS_PORTAL_GDPR_ANONYMIZATION_DELAY_DAYS
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_GDPR_ANONYMIZATION_DELAY_DAYS | default "30" | quote }}
+            - name: NEOHOODS_PORTAL_MOBILE_SESSION_JWT_VALIDITY_DAYS
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_MOBILE_SESSION_JWT_VALIDITY_DAYS | default "30" | quote }}
+            - name: NEOHOODS_PORTAL_TV_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_TV_JWT_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_TV_JWT_SECRET.secretKeyRef.key }}
+            - name: NEOHOODS_PORTAL_TV_JWT_ISSUER
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_TV_JWT_ISSUER | default "tv-display" | quote }}
+            - name: NEOHOODS_PORTAL_TV_JWT_AUDIENCE
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_TV_JWT_AUDIENCE | default "neohoods-portal" | quote }}
+            - name: NEOHOODS_PORTAL_TV_MAX_SLIDES
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_TV_MAX_SLIDES | default "10" | quote }}
+            - name: NEOHOODS_PORTAL_ERROR_NOTIFICATION_ENABLED
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_ERROR_NOTIFICATION_ENABLED | default "false" | quote }}
+            - name: NEOHOODS_PORTAL_ERROR_NOTIFICATION_ADMIN_EMAIL
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_ERROR_NOTIFICATION_ADMIN_EMAIL | default "" | quote }}
+            - name: NEOHOODS_PORTAL_ERROR_NOTIFICATION_GRAFANA_URL
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_ERROR_NOTIFICATION_GRAFANA_URL | default "https://grafana.neohoods.com" | quote }}
+            - name: NEOHOODS_PORTAL_ERROR_NOTIFICATION_BACKEND_APP_NAME
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_ERROR_NOTIFICATION_BACKEND_APP_NAME | default "" | quote }}
+            - name: APP_BASE_URL
+              value: {{ .Values.backend.env.APP_BASE_URL | default (printf "https://%s" .Values.global.domain) | quote }}
+            - name: NEOHOODS_PORTAL_ID
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_ID | default "neohoods-portal" | quote }}
+            - name: NEOHOODS_TENANT_ROUTING_ENABLED
+              value: {{ .Values.backend.env.NEOHOODS_TENANT_ROUTING_ENABLED | default "true" | quote }}
             - name: MAILERSEND_API_KEY
               valueFrom:
                 secretKeyRef:

@@ -101,6 +101,34 @@ backend:
         key: jwt-secret
     NEOHOODS_PORTAL_MAIL_SILENT_MODE: "false"
     NEOHOODS_PORTAL_MAIL_WHITELIST: "quentincastel86@gmail.com"
+    # Superadmin emails (comma-separated, SSO only)
+    NEOHOODS_PORTAL_SUPER_ADMIN_EMAIL: "quentin.castel@neohoods.com,geoffroy.surault@neohoods.com"
+    NEOHOODS_PORTAL_USAGE_CONDITIONS_VERSION: "1"
+    NEOHOODS_PORTAL_SESSION_COOKIE_SECURE: "true"
+    NEOHOODS_PORTAL_MOBILE_DEV_ORIGIN: ""
+    NEOHOODS_PORTAL_MAILERSEND_WEBHOOK_SECRET:
+      secretKeyRef:
+        name: portal-secret
+        key: mailersend-webhook-secret
+    NEOHOODS_PORTAL_INCIDENTS_EMAIL_FROM: "support@ms.mail.neohoods.com"
+    NEOHOODS_PORTAL_INCIDENTS_EMAIL_FROM_NAME: "NeoHoods Support"
+    NEOHOODS_PORTAL_EMAIL_TEMPLATE_LEAFS_URL: "" # Optional; derived from frontend-url if empty
+    NEOHOODS_PORTAL_EMAIL_TEMPLATE_LEAFS_ACCENT_URL: ""
+    NEOHOODS_PORTAL_EMAIL_TEMPLATE_NOTIFICATIONS_URL: ""
+    NEOHOODS_PORTAL_EMAIL_TEMPLATE_TEAM_SIGNATURE: ""
+    NEOHOODS_PORTAL_GDPR_EMAIL_HASH_SECRET:
+      secretKeyRef:
+        name: portal-secret
+        key: gdpr-email-hash-secret
+    NEOHOODS_PORTAL_GDPR_ANONYMIZATION_DELAY_DAYS: "30"
+    NEOHOODS_PORTAL_MOBILE_SESSION_JWT_VALIDITY_DAYS: "30"
+    NEOHOODS_PORTAL_ERROR_NOTIFICATION_ENABLED: "false"
+    NEOHOODS_PORTAL_ERROR_NOTIFICATION_ADMIN_EMAIL: "quentin.castel.neohoods+support@gmail.com"
+    NEOHOODS_PORTAL_ERROR_NOTIFICATION_GRAFANA_URL: "https://grafana.neohoods.com"
+    NEOHOODS_PORTAL_ERROR_NOTIFICATION_BACKEND_APP_NAME: "portal-neohoods-backend"
+    APP_BASE_URL: "https://portal.neohoods.com"
+    NEOHOODS_PORTAL_ID: "neohoods-portal"
+    NEOHOODS_TENANT_ROUTING_ENABLED: "true"
     # SSO configuration
     NEOHOODS_PORTAL_SSO_ENABLED: "false"
     NEOHOODS_PORTAL_SSO_CLIENT_ID:
@@ -297,14 +325,13 @@ mailersend:
 flyway:
   enabled: true
   url: jdbc:postgresql://neohoods-postgresql.platform.svc.cluster.local:5432/neohoods_portal
-  fakeData: false
   image:
     repository: flyway/flyway
     tag: latest
     pullPolicy: IfNotPresent
   config:
     schemas: public
-    locations: "filesystem:/flyway/sql"
+    locations: "filesystem:/flyway/sql-init,filesystem:/flyway/sql-global,filesystem:/flyway/sql-tenant-demo"
   # Resource limits to prevent ephemeral-storage issues
   # Override these if you have large customInitData ConfigMaps
   resources:
