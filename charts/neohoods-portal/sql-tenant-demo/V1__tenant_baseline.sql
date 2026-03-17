@@ -98,7 +98,8 @@ CREATE TABLE "user_roles" (
 CREATE TABLE "infos" (
     "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
     "next_ag_date" timestamp with time zone,
-    "rules_url" varchar(255)
+    "rules_url" varchar(255),
+    "emails_enabled" boolean NOT NULL DEFAULT true
 );
 
 CREATE TABLE "delegates" (

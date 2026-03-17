@@ -37,6 +37,8 @@ data:
 {{ .Files.Get "sql-tenant-demo/V27__add_tenant_user.sql" | indent 4 }}
   V28__add_newsletters_reservations_if_missing.sql: |-
 {{ .Files.Get "sql-tenant-demo/V28__add_newsletters_reservations_if_missing.sql" | indent 4 }}
+  V29__add_emails_enabled_to_infos.sql: |-
+{{ .Files.Get "sql-tenant-demo/V29__add_emails_enabled_to_infos.sql" | indent 4 }}
   V2__data_demo.sql: |-
 {{ .Files.Get "sql-tenant-demo/V2__data_demo.sql" | indent 4 }}
 {{- end }}

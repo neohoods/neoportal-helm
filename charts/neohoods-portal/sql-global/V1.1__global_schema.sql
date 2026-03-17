@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS global.users (
 CREATE INDEX IF NOT EXISTS idx_global_users_email ON global.users(email);
 CREATE INDEX IF NOT EXISTS idx_global_users_username ON global.users(username);
 CREATE INDEX IF NOT EXISTS idx_global_users_auth0_sub ON global.users(auth0_sub);
+-- Migration: add is_super_admin if table already existed without it
 ALTER TABLE global.users ADD COLUMN IF NOT EXISTS is_super_admin boolean NOT NULL DEFAULT false;
 
 CREATE TABLE IF NOT EXISTS global.tenants (
@@ -46,8 +47,15 @@ CREATE TABLE IF NOT EXISTS global.tenants (
     disabled boolean NOT NULL DEFAULT false,
     custom_domains jsonb,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
-    db_name varchar(255) NOT NULL
+    db_name varchar(255) NOT NULL,
+    description text,
+    address text,
+    units_count integer
 );
+-- Ensure columns exist for DBs created before this migration (idempotent)
+ALTER TABLE global.tenants ADD COLUMN IF NOT EXISTS description text;
+ALTER TABLE global.tenants ADD COLUMN IF NOT EXISTS address text;
+ALTER TABLE global.tenants ADD COLUMN IF NOT EXISTS units_count integer;
 
 CREATE TABLE IF NOT EXISTS global.user_tenants (
     id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,

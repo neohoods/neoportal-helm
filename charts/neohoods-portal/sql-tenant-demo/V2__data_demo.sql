@@ -19,7 +19,7 @@ INSERT INTO unit_members (id, unit_id, user_id, role, residence_role, joined_at)
   ('550e8400-e29b-41d4-a716-446655440202', '550e8400-e29b-41d4-a716-446655440101', 'b1000001-0000-4000-8000-000000000003', 'ADMIN', 'PROPRIETAIRE', '2024-01-10 10:00:00+00'),
   ('550e8400-e29b-41d4-a716-446655440203', '550e8400-e29b-41d4-a716-446655440101', 'b1000001-0000-4000-8000-000000000004', 'MEMBER', 'TENANT', '2024-01-10 10:00:00+00');
 
-INSERT INTO infos (id, next_ag_date, rules_url) VALUES ('00000000-0000-0000-0000-000000000001', '2025-06-01 10:00:00+00', 'https://demo.example.com/reglement');
+INSERT INTO infos (id, next_ag_date, rules_url, emails_enabled) VALUES ('00000000-0000-0000-0000-000000000001', '2025-06-01 10:00:00+00', 'https://demo.example.com/reglement', true);
 
 INSERT INTO delegates (id, info_id, building, first_name, last_name, email, matrix_user) VALUES
   ('550e8400-e29b-41d4-a716-446655440010', '00000000-0000-0000-0000-000000000001', 'Résidence Demo', 'Jean', 'Demo', 'jean.demo@demo.example.com', '@jeandemo:matrix.org');
