@@ -2,6 +2,9 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE "users" (
     "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    -- Code expects `users.user_id` as the identifier (see `UserEntity`).
+    -- Demo schema historically used `id`; we keep it for FK compatibility and expose `user_id` as a generated column.
+    "user_id" uuid GENERATED ALWAYS AS ("id") STORED,
     "username" varchar(255) NOT NULL UNIQUE,
     "email" varchar(255) NOT NULL UNIQUE,
     "password" varchar(255) NOT NULL,
