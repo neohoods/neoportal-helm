@@ -1,6 +1,6 @@
--- Tenant demo (db_name = schema name for search_path routing)
-INSERT INTO global.tenants (id, slug, name, disabled, db_name)
-VALUES ('a0000000-0000-0000-0000-000000000002', 'demo', 'Demo', false, 'demo')
+-- Tenant demo (db_name = schema name for search_path routing); is_public = true for live demos
+INSERT INTO global.tenants (id, slug, name, disabled, is_public, db_name)
+VALUES ('a0000000-0000-0000-0000-000000000002', 'demo', 'Demo', false, true, 'demo')
 ON CONFLICT (slug) DO NOTHING;
 
 -- Create schema for tenant demo (used by TenantDataSourceProvider search_path)

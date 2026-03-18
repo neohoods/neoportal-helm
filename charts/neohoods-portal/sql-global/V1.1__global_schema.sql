@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS global.tenants (
     slug varchar(255) NOT NULL UNIQUE,
     name varchar(255) NOT NULL,
     disabled boolean NOT NULL DEFAULT false,
+    is_public boolean NOT NULL DEFAULT false,
     custom_domains jsonb,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
     db_name varchar(255) NOT NULL,
@@ -53,6 +54,7 @@ CREATE TABLE IF NOT EXISTS global.tenants (
     units_count integer
 );
 -- Ensure columns exist for DBs created before this migration (idempotent)
+ALTER TABLE global.tenants ADD COLUMN IF NOT EXISTS is_public boolean NOT NULL DEFAULT false;
 ALTER TABLE global.tenants ADD COLUMN IF NOT EXISTS description text;
 ALTER TABLE global.tenants ADD COLUMN IF NOT EXISTS address text;
 ALTER TABLE global.tenants ADD COLUMN IF NOT EXISTS units_count integer;
