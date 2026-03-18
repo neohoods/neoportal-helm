@@ -10,10 +10,11 @@ CREATE SCHEMA IF NOT EXISTS demo;
 INSERT INTO global.users (id, username, email, password, first_name, last_name, preferred_language, is_email_verified, disabled, is_super_admin)
 VALUES
   ('c0000000-0000-0000-0000-000000000001', 'qcastel', 'quentin.castel@neohoods.com', NULL, 'Quentin', 'Castel', 'fr', true, false, true),
-  ('c0000000-0000-0000-0000-000000000002', 'gsurault', 'geoffroy.surault@neohoods.com', NULL, 'Geoffroy', 'Surault', 'fr', true, false, true)
+  ('c0000000-0000-0000-0000-000000000002', 'gsurault', 'geoffroy.surault@neohoods.com', NULL, 'Geoffroy', 'Surault', 'fr', true, false, true),
+  ('c0000000-0000-0000-0000-000000000003', 'qcastel_gmail', 'quentin.castel.neohoods@gmail.com', NULL, 'Quentin', 'Castel', 'fr', true, false, true)
 ON CONFLICT (id) DO NOTHING;
 
-UPDATE global.users SET is_super_admin = true WHERE email IN ('quentin.castel@neohoods.com', 'geoffroy.surault@neohoods.com');
+UPDATE global.users SET is_super_admin = true WHERE email IN ('quentin.castel@neohoods.com', 'geoffroy.surault@neohoods.com', 'quentin.castel.neohoods@gmail.com');
 
 -- Demo tenant: 4 users (SSO only, password NULL)
 INSERT INTO global.users (id, username, email, password, first_name, last_name, flat_number, street_address, city, postal_code, country, preferred_language, is_email_verified, disabled)
@@ -26,12 +27,13 @@ ON CONFLICT (id) DO NOTHING;
 
 -- Link superadmins + demo users to tenant demo
 INSERT INTO global.user_tenants (user_id, tenant_id, role)
-SELECT u.id, t.id, CASE WHEN u.username IN ('qcastel', 'gsurault', 'demo') THEN 'ADMIN' ELSE 'HUB' END
+SELECT u.id, t.id, CASE WHEN u.username IN ('qcastel', 'gsurault', 'qcastel_gmail', 'demo') THEN 'ADMIN' ELSE 'HUB' END
 FROM global.users u
 CROSS JOIN (SELECT id FROM global.tenants WHERE slug = 'demo') t
 WHERE u.id IN (
   'c0000000-0000-0000-0000-000000000001',
   'c0000000-0000-0000-0000-000000000002',
+  'c0000000-0000-0000-0000-000000000003',
   'b1000001-0000-4000-8000-000000000001',
   'b1000001-0000-4000-8000-000000000002',
   'b1000001-0000-4000-8000-000000000003',

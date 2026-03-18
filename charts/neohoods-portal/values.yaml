@@ -70,8 +70,8 @@ backend:
     MANAGEMENT_OTLP_METRICS_URL: "http://tempo.observability.svc.cluster.local:4317/v1/metrics"
     MANAGEMENT_OTLP_TRACING_URL: "http://tempo.observability.svc.cluster.local:4317/v1/traces"
     MANAGEMENT_METRICS_EXPORT_OTLP_URL: "http://tempo.observability.svc.cluster.local:4317/v1/metrics"
-    # Auth0 properties
-    AUTH0_DOMAIN: terresdelaya.eu.auth0.com
+    # Auth0 properties (tenant neohoods)
+    AUTH0_DOMAIN: neohoods.eu.auth0.com
     AUTH0_CLIENT_ID:
       secretKeyRef:
         name: auth0-secret
@@ -80,7 +80,7 @@ backend:
       secretKeyRef:
         name: auth0-secret
         key: auth0-client-secret
-    AUTH0_AUDIENCE: https://terresdelaya.eu.auth0.com/api/v2/
+    AUTH0_AUDIENCE: https://neohoods.eu.auth0.com/api/v2/
     AUTH0_CONNECTION: Username-Password-Authentication
     # Stripe properties
     STRIPE_SECRET_KEY:
@@ -101,8 +101,8 @@ backend:
         key: jwt-secret
     NEOHOODS_PORTAL_MAIL_SILENT_MODE: "false"
     NEOHOODS_PORTAL_MAIL_WHITELIST: "quentincastel86@gmail.com"
-    # Superadmin emails (comma-separated, SSO only)
-    NEOHOODS_PORTAL_SUPER_ADMIN_EMAIL: "quentin.castel@neohoods.com,geoffroy.surault@neohoods.com"
+    # Superadmin emails (comma-separated, SSO only). Include quentincastel86@gmail.com for dev/personal login.
+    NEOHOODS_PORTAL_SUPER_ADMIN_EMAIL: "quentin.castel@neohoods.com,geoffroy.surault@neohoods.com,quentincastel86@gmail.com"
     NEOHOODS_PORTAL_USAGE_CONDITIONS_VERSION: "1"
     NEOHOODS_PORTAL_SESSION_COOKIE_SECURE: "true"
     NEOHOODS_PORTAL_MOBILE_DEV_ORIGIN: ""
@@ -129,7 +129,7 @@ backend:
     APP_BASE_URL: "https://portal.neohoods.com"
     NEOHOODS_PORTAL_ID: "neohoods-portal"
     NEOHOODS_TENANT_ROUTING_ENABLED: "true"
-    # SSO configuration
+    # SSO configuration (Auth0 tenant neohoods)
     NEOHOODS_PORTAL_SSO_ENABLED: "false"
     NEOHOODS_PORTAL_SSO_CLIENT_ID:
       secretKeyRef:
@@ -139,8 +139,8 @@ backend:
       secretKeyRef:
         name: portal-secret
         key: sso-client-secret
-    NEOHOODS_PORTAL_SSO_TOKEN_ENDPOINT: ""
-    NEOHOODS_PORTAL_SSO_AUTHORIZATION_ENDPOINT: ""
+    NEOHOODS_PORTAL_SSO_TOKEN_ENDPOINT: "https://neohoods.eu.auth0.com/oauth/token"
+    NEOHOODS_PORTAL_SSO_AUTHORIZATION_ENDPOINT: "https://neohoods.eu.auth0.com/authorize"
     NEOHOODS_PORTAL_SSO_SCOPE: "openid profile email"
     # Matrix configuration
     MATRIX_BOT_ENABLED: "true"
