@@ -2,7 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS users_join_requests (
     id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-    requested_by uuid NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    requested_by uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     status varchar(50) NOT NULL CHECK (status IN ('PENDING', 'AWAITING_UNIT_CONFIRMATION', 'COMPLETED', 'REJECTED')),
     requester_role varchar(50) NOT NULL CHECK (requester_role IN ('PROPRIETAIRE', 'LOCATAIRE', 'SYNDIC', 'PRESTATAIRE', 'AUTRE')),
     message text,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users_join_requests (
     suggested_unit_ids jsonb,
     created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     responded_at timestamp with time zone,
-    responded_by uuid REFERENCES users(user_id)
+    responded_by uuid REFERENCES users(id)
 );
 
 CREATE INDEX IF NOT EXISTS idx_users_join_requests_status
