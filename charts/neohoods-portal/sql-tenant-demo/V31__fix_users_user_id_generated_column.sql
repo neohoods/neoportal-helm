@@ -27,12 +27,20 @@ BEGIN
     END IF;
 END $$;
 
--- Keep id/user_id aligned for inserts done with user_id only.
+-- Keep id/user_id aligned for inserts done with user_id only (only when column "id" exists).
 CREATE OR REPLACE FUNCTION sync_users_id_user_id()
 RETURNS TRIGGER AS $$
 BEGIN
     IF NEW.user_id IS NOT NULL THEN
-        NEW.id := NEW.user_id;
+        IF EXISTS (
+            SELECT 1
+            FROM information_schema.columns
+            WHERE table_schema = current_schema()
+              AND table_name = 'users'
+              AND column_name = 'id'
+        ) THEN
+            NEW.id := NEW.user_id;
+        END IF;
     END IF;
     RETURN NEW;
 END;

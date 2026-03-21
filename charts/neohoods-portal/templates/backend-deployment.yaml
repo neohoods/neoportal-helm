@@ -91,6 +91,8 @@ spec:
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_ID | default "neohoods-portal" | quote }}
             - name: NEOHOODS_TENANT_ROUTING_ENABLED
               value: {{ .Values.backend.env.NEOHOODS_TENANT_ROUTING_ENABLED | default "true" | quote }}
+            - name: NEOHOODS_TENANT_FLYWAY_REPAIR_BEFORE_MIGRATE
+              value: {{ .Values.backend.env.NEOHOODS_TENANT_FLYWAY_REPAIR_BEFORE_MIGRATE | default "false" | quote }}
             - name: MAILERSEND_API_KEY
               valueFrom:
                 secretKeyRef:
@@ -181,16 +183,16 @@ spec:
             # Matrix configuration
             - name: MATRIX_BOT_ENABLED
               value: "{{ .Values.backend.env.MATRIX_BOT_ENABLED }}"
-            - name: NEOHOODS_PORTAL_MATRIX_DISABLED
-              value: "{{ .Values.backend.env.NEOHOODS_PORTAL_MATRIX_DISABLED }}"
             - name: MATRIX_HOMESERVER_URL
               value: "{{ .Values.backend.env.MATRIX_HOMESERVER_URL }}"
             - name: MATRIX_SERVER_NAME
               value: "{{ .Values.backend.env.MATRIX_SERVER_NAME }}"
-            - name: MATRIX_SPACE_ID
-              value: "{{ .Values.backend.env.MATRIX_SPACE_ID }}"
             - name: MATRIX_INITIALIZATION_ENABLED
               value: "{{ .Values.backend.env.MATRIX_INITIALIZATION_ENABLED }}"
+            - name: MATRIX_SYNC_SCHEDULED_ENABLED
+              value: "{{ .Values.backend.env.MATRIX_SYNC_SCHEDULED_ENABLED }}"
+            - name: MATRIX_SYNC_CRON
+              value: "{{ .Values.backend.env.MATRIX_SYNC_CRON }}"
             - name: MATRIX_MAS_URL
               value: "{{ .Values.backend.env.MATRIX_MAS_URL }}"
             - name: MATRIX_ROOMS_CONFIG_FILE
@@ -233,8 +235,6 @@ spec:
               value: "{{ .Values.backend.env.MATRIX_LOCAL_ASSISTANT_AVATAR_URL }}"
             - name: MATRIX_LOCAL_ASSISTANT_DISPLAY_NAME
               value: "{{ .Values.backend.env.MATRIX_LOCAL_ASSISTANT_DISPLAY_NAME }}"
-            - name: MATRIX_LOCAL_ASSISTANT_SPACE_ID
-              value: "{{ .Values.backend.env.MATRIX_LOCAL_ASSISTANT_SPACE_ID }}"
             # Assistant AI configuration
             - name: ASSISTANT_AI_ENABLED
               value: "{{ .Values.backend.env.ASSISTANT_AI_ENABLED }}"

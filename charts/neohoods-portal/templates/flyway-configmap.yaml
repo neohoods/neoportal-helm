@@ -26,6 +26,8 @@ data:
 {{ .Files.Get "sql-global/V1.3__add_tenant_is_public.sql" | indent 4 }}
   V1.4__user_tenant_join_requests_index.sql: |-
 {{ .Files.Get "sql-global/V1.4__user_tenant_join_requests_index.sql" | indent 4 }}
+  V1.5__matrix_bot_tokens_global.sql: |-
+{{ .Files.Get "sql-global/V1.5__matrix_bot_tokens_global.sql" | indent 4 }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -45,6 +47,10 @@ data:
 {{ .Files.Get "sql-tenant-demo/V29__add_emails_enabled_to_infos.sql" | indent 4 }}
   V30__users_join_requests.sql: |-
 {{ .Files.Get "sql-tenant-demo/V30__users_join_requests.sql" | indent 4 }}
+  V31__fix_users_user_id_generated_column.sql: |-
+{{ .Files.Get "sql-tenant-demo/V31__fix_users_user_id_generated_column.sql" | indent 4 }}
+  V32__fix_sync_users_id_trigger_when_no_id_column.sql: |-
+{{ .Files.Get "sql-tenant-demo/V32__fix_sync_users_id_trigger_when_no_id_column.sql" | indent 4 }}
   V2__data_demo.sql: |-
 {{ .Files.Get "sql-tenant-demo/V2__data_demo.sql" | indent 4 }}
 {{- end }}

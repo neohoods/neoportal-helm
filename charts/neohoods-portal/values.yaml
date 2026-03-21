@@ -129,6 +129,8 @@ backend:
     APP_BASE_URL: "https://portal.neohoods.com"
     NEOHOODS_PORTAL_ID: "neohoods-portal"
     NEOHOODS_TENANT_ROUTING_ENABLED: "true"
+    # One-shot: "true" runs Flyway repair() before tenant migrate (fix checksum drift / removed V*.sql), then set back to "false"
+    NEOHOODS_TENANT_FLYWAY_REPAIR_BEFORE_MIGRATE: "false"
     # SSO configuration (Auth0 tenant neohoods)
     NEOHOODS_PORTAL_SSO_ENABLED: "false"
     NEOHOODS_PORTAL_SSO_CLIENT_ID:
@@ -144,11 +146,12 @@ backend:
     NEOHOODS_PORTAL_SSO_SCOPE: "openid profile email"
     # Matrix configuration
     MATRIX_BOT_ENABLED: "true"
-    NEOHOODS_PORTAL_MATRIX_DISABLED: "false"
     MATRIX_HOMESERVER_URL: "matrix.neohoods.com"
     MATRIX_SERVER_NAME: "chat.neohoods.com"
-    MATRIX_SPACE_ID: "!YenniyNVsUoBCLHtZS:chat.neohoods.com"
     MATRIX_INITIALIZATION_ENABLED: "true"
+    # Daily Matrix room/user sync (server timezone); disable with "false"
+    MATRIX_SYNC_SCHEDULED_ENABLED: "true"
+    MATRIX_SYNC_CRON: "0 0 1 * * ?"
     MATRIX_MAS_URL: "https://mas.chat.neohoods.com"
     MATRIX_ROOMS_CONFIG_FILE: "file:/app/matrix-default-rooms.yaml"
     MATRIX_INITIALIZATION_ADMIN_USERS: "@quentincastel86:chat.neohoods.com"
@@ -177,7 +180,6 @@ backend:
         key: local-assistant-permanent-token
     MATRIX_LOCAL_ASSISTANT_AVATAR_URL: "https://neohoods.com/assets/chat/alfred-avatar.png"
     MATRIX_LOCAL_ASSISTANT_DISPLAY_NAME: "Alfred [Assistant AI]"
-    MATRIX_LOCAL_ASSISTANT_SPACE_ID: "" # If empty, uses MATRIX_SPACE_ID
     # Assistant AI configuration
     ASSISTANT_AI_ENABLED: "true"
     ASSISTANT_AI_PROVIDER: "mistral"
