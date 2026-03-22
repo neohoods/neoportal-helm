@@ -5,8 +5,10 @@ metadata:
   name: {{ .Values.global.chatName }}-postgresql
   namespace: {{ .Values.global.namespace }}
   annotations:
+    # Order before Flyway (-4/-3). Default hook policy is before-hook-creation → StatefulSet deleted every upgrade → PG restart.
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-failed
   labels:
     app: {{ .Values.global.chatName }}-postgresql
     app.kubernetes.io/component: primary
@@ -105,8 +107,10 @@ metadata:
   name: {{ .Values.global.chatName }}-postgresql
   namespace: {{ .Values.global.namespace }}
   annotations:
+    # Order before Flyway (-4/-3). Default hook policy is before-hook-creation → StatefulSet deleted every upgrade → PG restart.
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-failed
   labels:
     app: {{ .Values.global.chatName }}-postgresql
 spec:
