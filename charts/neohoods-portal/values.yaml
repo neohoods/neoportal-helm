@@ -339,11 +339,13 @@ flyway:
   url: jdbc:postgresql://neohoods-postgresql.platform.svc.cluster.local:5432/neohoods_portal
   image:
     repository: flyway/flyway
-    tag: latest
+    # Pin to the same major line as org.flywaydb:flyway-core from Spring Boot parent (platform-api).
+    # "latest" (often Flyway 12+) caused checksum mismatches vs embedded Flyway 11.x when both ran on tenant SQL.
+    tag: "11.7.2"
     pullPolicy: IfNotPresent
   config:
     schemas: public
-    locations: "filesystem:/flyway/sql-init,filesystem:/flyway/sql-global,filesystem:/flyway/sql-tenant-demo"
+    locations: "filesystem:/flyway/sql-init,filesystem:/flyway/sql-global"
   # NeoHoods SaaS flyway job resources (neohoods-dev / neohoods-prod)
   resources:
     requests:
