@@ -313,6 +313,8 @@ frontend:
     STRIPE_DEMO_MODE: "false"
     # Version des conditions d'utilisation (doit correspondre au fichier assets/legal/usage-conditions-<n>.md et au backend)
     USAGE_CONDITIONS_VERSION: "1"
+  # Hostname -> tenant slug : la racine `/` redirige vers `/tenants/<slug>/residents` (config.json via entrypoint)
+  domainTenantMap: {}
   theme:
     configMapName: my-custom-theme
 mailersend:
@@ -394,3 +396,9 @@ unifiMock:
     tag: 0.0.324
   controllerName: "Contrôleur principal UniFi"
   doors: "door-1:Chambre d'hôtes,door-2:Salle commune,door-technical:Local technique"
+# Hosts dédiés par tenant (un Ingress par entrée) — voir templates/ingress-tenants.yaml
+tenants:
+  ingressDefaults:
+    certManagerClusterIssuer: letsencrypt-prod
+    ingressClassName: nginx
+  ingress: {}
