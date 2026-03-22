@@ -1,4 +1,5 @@
--- Seed data for tenant demo (from neoportal-app/db/postgres/tenant/data-demo.sql)
+-- Tenant demo seed data (ex-V2; former V2__data_demo.sql)
+-- Source lineage: neoportal-app/db/postgres/tenant/data-demo.sql
 -- Adapted for full tenant users table (id, username, email, password, ...). SSO placeholder for password.
 
 INSERT INTO users (id, username, email, password, first_name, last_name, flat_number, street_address, city, postal_code, country, preferred_language, is_email_verified, disabled, status, user_type, is_board_member, primary_unit_id)

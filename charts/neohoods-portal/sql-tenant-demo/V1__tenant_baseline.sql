@@ -1,10 +1,7 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
+-- Squashed baseline (ex-V1…V32): user_id is writable; sync_users_id_user_id trigger aligns id/user_id (ex-V31/V32).
 CREATE TABLE "users" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-    -- Code expects `users.user_id` as the identifier (see `UserEntity`).
-    -- Demo schema historically used `id`; we keep it for FK compatibility and expose `user_id` as a generated column.
-    "user_id" uuid GENERATED ALWAYS AS ("id") STORED,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    "user_id" uuid NOT NULL UNIQUE,
     "username" varchar(255) NOT NULL UNIQUE,
     "email" varchar(255) NOT NULL UNIQUE,
     "password" varchar(255) NOT NULL,
@@ -38,14 +35,14 @@ CREATE TABLE "users" (
 
 
 CREATE TABLE "help_categories" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "display_order" integer,
     "icon" varchar(255),
     "name" varchar(255)
 );
 
 CREATE TABLE "help_articles" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "content" varchar(4000),
     "display_order" integer,
     "title" varchar(255),
@@ -53,7 +50,7 @@ CREATE TABLE "help_articles" (
 );
 
 CREATE TABLE "notifications" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "user_id" uuid REFERENCES users(id),
     "already_read" boolean NOT NULL,
     "author" varchar(255),
@@ -64,25 +61,26 @@ CREATE TABLE "notifications" (
         'NEW_ANNOUNCEMENT',
         'RESERVATION',
         'UNIT_INVITATION',
-        'UNIT_JOIN_REQUEST'
+        'UNIT_JOIN_REQUEST',
+        'TENANT_JOIN_REQUEST'
     ))
 );
 
 
 CREATE TABLE settings (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "is_registration_enabled" BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE "notification_settings" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "user_id" uuid REFERENCES users(id) NOT NULL UNIQUE,
     "enable_notifications" boolean NOT NULL DEFAULT true,
     "newsletter_enabled" boolean NOT NULL DEFAULT true
 );
 
 CREATE TABLE "user_devices" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "user_id" uuid REFERENCES users(id) NOT NULL,
     "device_id" varchar(255) NOT NULL,
     "push_token" text,
@@ -97,16 +95,25 @@ CREATE TABLE "user_roles" (
     "role" varchar(255)
 );
 
+CREATE TABLE IF NOT EXISTS tenant_user (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    global_user_id uuid NOT NULL,
+    role varchar(255) NOT NULL,
+    matrix_user_id varchar(255),
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (global_user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_tenant_user_global_user_id ON tenant_user(global_user_id);
 
 CREATE TABLE "infos" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "next_ag_date" timestamp with time zone,
     "rules_url" varchar(255),
     "emails_enabled" boolean NOT NULL DEFAULT true
 );
 
 CREATE TABLE "delegates" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "info_id" uuid REFERENCES infos(id) ON DELETE CASCADE,
     "building" varchar(255),
     "first_name" varchar(255),
@@ -116,7 +123,7 @@ CREATE TABLE "delegates" (
 );
 
 CREATE TABLE "contact_numbers" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "info_id" uuid REFERENCES infos(id) ON DELETE CASCADE,
     "contact_type" varchar(50) CHECK (contact_type IN ('syndic', 'emergency', 'maintenance')),
     "type" varchar(255),
@@ -134,7 +141,7 @@ CREATE TABLE "contact_numbers" (
 );
 
 CREATE TABLE "announcements" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "title" varchar(255) NOT NULL,
     "content" text NOT NULL,
     "summary" text,
@@ -144,7 +151,7 @@ CREATE TABLE "announcements" (
 );
 
 CREATE TABLE "custom_pages" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "ref" varchar(255) NOT NULL UNIQUE,
     "page_order" integer,
     "position" varchar(50) NOT NULL CHECK (position IN ('FOOTER_LINKS', 'COPYRIGHT', 'FOOTER_HELP')),
@@ -153,7 +160,7 @@ CREATE TABLE "custom_pages" (
 );
 
 CREATE TABLE "newsletters" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "subject" varchar(255) NOT NULL,
     "content" text,
     "status" varchar(50) NOT NULL CHECK (status IN ('DRAFT', 'SCHEDULED', 'SENDING', 'SENT', 'CANCELLED', 'FAILED')) DEFAULT 'DRAFT',
@@ -171,7 +178,7 @@ CREATE TABLE "newsletters" (
 );
 
 CREATE TABLE "newsletter_logs" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "newsletter_id" uuid NOT NULL,
     "user_id" uuid NOT NULL,
     "user_email" varchar(255) NOT NULL,
@@ -189,7 +196,7 @@ CREATE INDEX "idx_newsletter_logs_status" ON "newsletter_logs"("status");
 CREATE INDEX "idx_newsletter_logs_created_at" ON "newsletter_logs"("created_at");
 
 CREATE TABLE "email_templates" (
-    "id" uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    "id" uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     "type" varchar(50) NOT NULL CHECK (type IN ('WELCOME')),
     "name" varchar(255) NOT NULL,
     "subject" varchar(255) NOT NULL,
@@ -368,7 +375,7 @@ CREATE INDEX idx_space_cleaning_days_space_id ON space_cleaning_days(space_id);
 
 -- Units table (must be created before reservations as reservations references units)
 CREATE TABLE units (
-    id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     name varchar(255) NOT NULL,
     type varchar(50) NOT NULL DEFAULT 'FLAT' CHECK (type IN ('FLAT', 'GARAGE', 'PARKING', 'COMMERCIAL', 'OTHER')),
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
@@ -443,7 +450,7 @@ CREATE TRIGGER update_digital_door_credentials_updated_at
 
 -- Unit members table
 CREATE TABLE unit_members (
-    id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     unit_id uuid REFERENCES units(id) ON DELETE CASCADE NOT NULL,
     user_id uuid REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     role varchar(50) NOT NULL CHECK (role IN ('ADMIN', 'MEMBER')),
@@ -462,7 +469,7 @@ CREATE INDEX idx_users_is_board_member ON users(is_board_member);
 
 -- Unit invitations table
 CREATE TABLE unit_invitations (
-    id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     unit_id uuid REFERENCES units(id) ON DELETE CASCADE NOT NULL,
     invited_user_id uuid REFERENCES users(id) ON DELETE SET NULL,
     invited_email varchar(255),
@@ -477,7 +484,7 @@ CREATE INDEX idx_unit_invitations_status ON unit_invitations(status);
 
 -- Unit join requests table (requests from users to join a unit)
 CREATE TABLE unit_join_requests (
-    id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     unit_id uuid REFERENCES units(id) ON DELETE CASCADE NOT NULL,
     requested_by uuid REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     status varchar(50) NOT NULL CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED')),
@@ -489,6 +496,34 @@ CREATE TABLE unit_join_requests (
 CREATE INDEX idx_unit_join_requests_unit_id ON unit_join_requests(unit_id);
 CREATE INDEX idx_unit_join_requests_requested_by ON unit_join_requests(requested_by);
 CREATE INDEX idx_unit_join_requests_status ON unit_join_requests(status);
+
+-- Tenant-level join requests (copropriété); ex-V30
+CREATE TABLE IF NOT EXISTS users_join_requests (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    requested_by uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    status varchar(50) NOT NULL CHECK (status IN ('PENDING', 'AWAITING_UNIT_CONFIRMATION', 'COMPLETED', 'REJECTED')),
+    requester_role varchar(50) NOT NULL CHECK (requester_role IN ('PROPRIETAIRE', 'LOCATAIRE', 'SYNDIC', 'PRESTATAIRE', 'AUTRE')),
+    message text,
+    tenant_slug_snapshot varchar(255),
+    decision_source varchar(30) CHECK (decision_source IN ('PORTAL', 'EMAIL')),
+    suggested_unit_ids jsonb,
+    created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    responded_at timestamp with time zone,
+    responded_by uuid REFERENCES users(id)
+);
+CREATE INDEX IF NOT EXISTS idx_users_join_requests_status ON users_join_requests(status);
+CREATE INDEX IF NOT EXISTS idx_users_join_requests_requested_by ON users_join_requests(requested_by);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_users_join_requests_one_open_per_user
+    ON users_join_requests(requested_by)
+    WHERE status IN ('PENDING', 'AWAITING_UNIT_CONFIRMATION');
+
+CREATE TABLE IF NOT EXISTS users_join_request_units (
+    join_request_id uuid NOT NULL REFERENCES users_join_requests(id) ON DELETE CASCADE,
+    unit_id uuid NOT NULL REFERENCES units(id) ON DELETE CASCADE,
+    source varchar(30) NOT NULL CHECK (source IN ('USER_SELECTED', 'AUTO_SUGGESTED', 'ADMIN_CONFIRMED')),
+    PRIMARY KEY (join_request_id, unit_id)
+);
+CREATE INDEX IF NOT EXISTS idx_users_join_request_units_unit ON users_join_request_units(unit_id);
 
 -- Reservations (migrated from V2__Create_reservations_tables.sql)
 CREATE TABLE reservations (
@@ -1075,3 +1110,27 @@ CREATE INDEX idx_incident_watchers_user_id ON incident_watchers(user_id);
 -- Create trigger for incidents updated_at
 CREATE TRIGGER update_incidents_updated_at BEFORE UPDATE ON incidents
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Align users.id and users.user_id (ex-V31/V32; V32 guards when only user_id column exists)
+CREATE OR REPLACE FUNCTION sync_users_id_user_id()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.user_id IS NOT NULL THEN
+        IF EXISTS (
+            SELECT 1 FROM information_schema.columns
+            WHERE table_schema = current_schema() AND table_name = 'users' AND column_name = 'id'
+        ) THEN
+            NEW.id := NEW.user_id;
+        END IF;
+    ELSIF NEW.id IS NOT NULL THEN
+        NEW.user_id := NEW.id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_sync_users_id_user_id ON users;
+CREATE TRIGGER trg_sync_users_id_user_id
+    BEFORE INSERT OR UPDATE ON users
+    FOR EACH ROW
+    EXECUTE PROCEDURE sync_users_id_user_id();
