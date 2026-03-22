@@ -19,8 +19,9 @@ spec:
         - name: portal-{{ .Release.Name }}-frontend
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
           env:
+            # Default /api: same-origin calls (avoids CORS when ingress serves /api on each tenant host). Override with absolute URL if needed.
             - name: API_BASE_PATH
-              value: {{ .Values.frontend.env.API_BASE_PATH | default (printf "https://%s/api" .Values.global.domain) | quote }}
+              value: {{ .Values.frontend.env.API_BASE_PATH | default "/api" | quote }}
             - name: USE_MOCK_API
               value: "{{ .Values.frontend.env.USE_MOCK_API }}"
             - name: DEMO_MODE
@@ -41,7 +42,7 @@ spec:
             - name: USAGE_CONDITIONS_VERSION
               value: {{ .Values.frontend.env.USAGE_CONDITIONS_VERSION | default "1" | quote }}
             - name: DOMAIN_TENANT_MAP_JSON
-              value: {{ .Values.frontend.domainTenantMap | default dict | toJson | quote }}
+              value: {{ include "neohoods-portal.domainTenantMapJson" . | quote }}
           ports:
             - name: http-server
               containerPort: 80

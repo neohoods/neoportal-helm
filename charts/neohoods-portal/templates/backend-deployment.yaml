@@ -48,6 +48,8 @@ spec:
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_SESSION_COOKIE_SECURE | default "true" | quote }}
             - name: NEOHOODS_PORTAL_MOBILE_DEV_ORIGIN
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_MOBILE_DEV_ORIGIN | default "" | quote }}
+            - name: NEOHOODS_PORTAL_ADDITIONAL_CORS_ORIGINS
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_ADDITIONAL_CORS_ORIGINS | default "" | quote }}
             - name: NEOHOODS_PORTAL_MAILERSEND_WEBHOOK_SECRET
               valueFrom:
                 secretKeyRef:
