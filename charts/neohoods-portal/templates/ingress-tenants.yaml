@@ -1,6 +1,10 @@
-{{- /* Namespace: global.namespace si présent (chart values), sinon Release.Namespace (ArgoCD / parent chart peut omettre global) */}}
+{{- /* index() sans .Values.global pour éviter nil pointer si ArgoCD / parent n’injecte pas global. */}}
 {{- $ns := .Release.Namespace }}
-{{- if and .Values.global .Values.global.namespace }}{{ $ns = .Values.global.namespace }}{{ end }}
+{{- $g := index .Values "global" }}
+{{- if $g }}
+{{- $nn := index $g "namespace" }}
+{{- if $nn }}{{ $ns = $nn }}{{ end }}
+{{- end }}
 {{- $defaults := .Values.tenants.ingressDefaults | default dict }}
 {{- $defaultIssuer := index $defaults "certManagerClusterIssuer" | default "letsencrypt-prod" }}
 {{- $defaultClass := index $defaults "ingressClassName" | default "nginx" }}

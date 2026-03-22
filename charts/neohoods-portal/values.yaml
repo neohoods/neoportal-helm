@@ -6,6 +6,7 @@ global:
   emailTemplate:
     logoUrl: "https://portal.neohoods.com/logo-bright.png"
     appName: "NeoHoods"
+# PostgreSQL (custom StatefulSet). NeoHoods SaaS shares this block — override in umbrella values if needed.
 postgresql:
   enabled: true
   image:
@@ -15,7 +16,8 @@ postgresql:
   primary:
     # Node selector to ensure pod is scheduled on the same node as the PVC
     # This is important for hostPath volumes which are bound to specific nodes
-    nodeSelector: {} # Example: { role: worker-1 }
+    nodeSelector:
+      role: worker-1
     # Allow scheduling on master/control-plane when worker is down (e.g. dev cluster)
     tolerations:
       - key: node-role.kubernetes.io/control-plane
@@ -37,8 +39,8 @@ postgresql:
         memory: "512Mi"
   auth:
     database: neohoods_portal
-    username: neohoods_portal_user
-    existingSecret: neohoods-postgresql
+    username: postgres_admin
+    existingSecret: postgresql-secret
     secretKeys:
       adminPasswordKey: postgresql-password
       userPasswordKey: postgresql-password
@@ -61,7 +63,7 @@ backend:
     # Spring properties
     SERVER_PORT: 8486
     SPRING_PROFILES_ACTIVE: production
-    SPRING_DATASOURCE_USERNAME: neohoods_portal_user
+    SPRING_DATASOURCE_USERNAME: postgres_admin
     SPRING_DATASOURCE_URL: jdbc:postgresql://neohoods-postgresql.platform.svc.cluster.local:5432/neohoods_portal
     # OpenTelemetry configuration - using existing Tempo/Loki/Prometheus stack
     MANAGEMENT_OTLP_METRICS_ENABLED: "true"
@@ -132,7 +134,7 @@ backend:
     # One-shot: "true" runs Flyway repair() before tenant migrate (fix checksum drift / removed V*.sql), then set back to "false"
     NEOHOODS_TENANT_FLYWAY_REPAIR_BEFORE_MIGRATE: "false"
     # SSO configuration (Auth0 tenant neohoods)
-    NEOHOODS_PORTAL_SSO_ENABLED: "false"
+    NEOHOODS_PORTAL_SSO_ENABLED: "true"
     NEOHOODS_PORTAL_SSO_CLIENT_ID:
       secretKeyRef:
         name: portal-secret
@@ -246,7 +248,7 @@ backend:
     NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FIXED_FEE: "0.25"
     # S3 storage configuration
     S3_ENABLED: "true"
-    S3_ENDPOINT: "" # e.g., "https://s3.fr-par.scw.cloud" for Scaleway Paris
+    S3_ENDPOINT: "https://s3.fr-par.scw.cloud"
     S3_ACCESS_KEY:
       secretKeyRef:
         name: portal-secret
@@ -274,7 +276,7 @@ backend:
     inline: "" # YAML content inline (optional)
     existingConfigMap: "" # Reference to existing ConfigMap (optional)
   ragDocumentation:
-    enabled: false
+    enabled: true
     configMapName: "" # Default: {{ .Release.Name }}-rag-documentation
     inline: "" # Markdown content inline (optional). Use sections separated by "---" for multiple topics.
     existingConfigMap: "" # Reference to existing ConfigMap (optional). If set, uses this ConfigMap instead of creating one.
@@ -301,7 +303,8 @@ frontend:
     port: 80
     nodePort: 30095 # Only used if type is NodePort
   env:
-    API_BASE_PATH: https://portal.neohoods.com
+    # Full API root (OpenAPI base path), e.g. https://portal.example.com/api. If unset, defaults to https://<global.domain>/api.
+    API_BASE_PATH: ""
     USE_MOCK_API: "false"
     DEMO_MODE: "false"
     DEFAULT_LOCALE: "fr"
@@ -336,52 +339,39 @@ flyway:
   config:
     schemas: public
     locations: "filesystem:/flyway/sql-init,filesystem:/flyway/sql-global,filesystem:/flyway/sql-tenant-demo"
-  # Resource limits to prevent ephemeral-storage issues
-  # Override these if you have large customInitData ConfigMaps
+  # NeoHoods SaaS flyway job resources (neohoods-dev / neohoods-prod)
   resources:
     requests:
-      memory: "128Mi"
-      cpu: "100m"
-      ephemeral-storage: "500Mi"
+      memory: "256Mi"
+      cpu: "200m"
     limits:
-      memory: "512Mi"
-      cpu: "500m"
-      ephemeral-storage: "2Gi"
+      memory: "1Gi"
+      cpu: "1000m"
   # Custom initialization data
   customInitData:
     enabled: false
-    configMapName: "portal-custom-init-data" # Name of the ConfigMap containing custom init data
-    mountPath: "/flyway/sql-custom" # Mount path for custom data
-    files: [] # List of SQL files with inline content
-    sqlFiles: [] # List of SQL files to load from sql/ directory
-# Backup configuration
+    configMapName: "portal-custom-init-data"
+    mountPath: "/flyway/sql-custom"
+    files: []
+    sqlFiles: []
+    fakeData: false
+# Backup configuration (NeoHoods SaaS defaults — set scaleway.bucket per environment)
 backup:
-  enabled: false
-  # Schedule for the backup cron job (cron format)
-  schedule: "0 2 * * *" # Daily at 2 AM
-  # Number of backups to keep (oldest will be deleted)
-  # This applies to both Scaleway Object Storage and local PVC
-  # IMPORTANT: Old backups are automatically cleaned up from both locations
-  # to prevent disk space issues. Only the most recent KEEP_BACKUPS backups
-  # are retained in each location.
+  enabled: true
+  schedule: "0 2 * * *"
   keepBackups: 5
-  # Prefix for backup files
-  # Note: Backups are stored in the 'backup/' folder in the S3 bucket
-  # Incident attachments are stored in the 'incident/' folder
   backupPrefix: "backup_portal_db_"
-  # Scaleway Object Storage configuration
   scaleway:
-    bucket: "" # Required: e.g., "neohoods-backups"
-    endpoint: "" # Required: e.g., "s3.fr-par.scw.cloud" (or your region endpoint)
-    secretName: "" # Required: e.g., "scaleway-secret"
-    accessKeyKey: "access-key"
-    secretKeyKey: "secret-key"
-  # Matrix notification (optional)
+    bucket: ""
+    endpoint: "s3.fr-par.scw.cloud"
+    secretName: "portal-secret"
+    accessKeyKey: "scaleway-access-key"
+    secretKeyKey: "scaleway-secret-key"
   matrix:
-    enabled: false
-    homeserver: "https://matrix.neohoods.com" # Matrix API URL (use matrix.neohoods.com, not chat.neohoods.com)
-    secretName: "matrix-secret" # Secret name containing the Matrix token
-    tokenKey: "local-assistant-permanent-token" # Key in the secret containing the Matrix token
+    enabled: true
+    homeserver: "https://matrix.neohoods.com"
+    secretName: "matrix-secret"
+    tokenKey: "local-assistant-permanent-token"
   # Persistent volume for backups (optional, uses emptyDir if disabled)
   persistentVolumeClaim:
     enabled: true
