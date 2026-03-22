@@ -15,6 +15,100 @@ spec:
     spec:
       imagePullSecrets:
         - name: ghcr-secret
+      {{- if and .Values.postgresql.enabled .Values.flyway.enabled (eq (.Values.flyway.globalMigration | default "initContainer") "initContainer") }}
+      initContainers:
+        - name: wait-and-create-db
+          image: postgres:18.1
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              export PGPASSWORD="${POSTGRES_PASSWORD}"
+
+              HEADLESS_SERVICE="{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local"
+              POD_FQDN="{{ .Values.global.chatName }}-postgresql-0.{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local"
+              OLD_HEADLESS_SERVICE="{{ .Values.global.chatName }}-postgresql-hl.{{ .Values.global.namespace }}.svc.cluster.local"
+
+              echo "Waiting for PostgreSQL to be ready..."
+              PG_HOST=""
+              while [ -z "$PG_HOST" ]; do
+                if pg_isready -h "$POD_FQDN" -p 5432 -U {{ .Values.postgresql.auth.username }} -d postgres 2>/dev/null; then
+                  PG_HOST="$POD_FQDN"
+                  echo "PostgreSQL is ready at $PG_HOST (pod FQDN)!"
+                  break
+                fi
+                if pg_isready -h "$HEADLESS_SERVICE" -p 5432 -U {{ .Values.postgresql.auth.username }} -d postgres 2>/dev/null; then
+                  PG_HOST="$HEADLESS_SERVICE"
+                  echo "PostgreSQL is ready at $PG_HOST (headless service)!"
+                  break
+                fi
+                if pg_isready -h "$OLD_HEADLESS_SERVICE" -p 5432 -U {{ .Values.postgresql.auth.username }} -d postgres 2>/dev/null; then
+                  PG_HOST="$OLD_HEADLESS_SERVICE"
+                  echo "PostgreSQL is ready at $PG_HOST (old headless service)!"
+                  break
+                fi
+                echo "Waiting for PostgreSQL to be ready..."
+                sleep 2
+              done
+
+              echo "Checking if database ${POSTGRES_DB} exists..."
+              DB_EXISTS=$(psql -h "$PG_HOST" -U "${POSTGRES_USER}" -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '${POSTGRES_DB}'" 2>/dev/null | xargs || echo "")
+
+              if [ "$DB_EXISTS" != "1" ]; then
+                echo "Creating database ${POSTGRES_DB}..."
+                psql -h "$PG_HOST" -U "${POSTGRES_USER}" -d postgres -c "CREATE DATABASE \"${POSTGRES_DB}\";"
+                echo "Database ${POSTGRES_DB} created successfully!"
+              else
+                echo "Database ${POSTGRES_DB} already exists, skipping creation."
+              fi
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.postgresql.auth.username }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgresql.auth.existingSecret }}
+                  key: {{ .Values.postgresql.auth.secretKeys.userPasswordKey }}
+            - name: POSTGRES_DB
+              value: {{ .Values.postgresql.auth.database }}
+        - name: flyway-migrate
+          image: "{{ .Values.flyway.image.repository }}:{{ .Values.flyway.image.tag }}"
+          imagePullPolicy: {{ .Values.flyway.image.pullPolicy | default "IfNotPresent" }}
+          args: ["-connectRetries=60", "migrate", "-locations=filesystem:/flyway/sql-init,filesystem:/flyway/sql-global"]
+          resources:
+            {{- if .Values.flyway.resources }}
+            {{- toYaml .Values.flyway.resources | nindent 12 }}
+            {{- else }}
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+              ephemeral-storage: "500Mi"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+              ephemeral-storage: "2Gi"
+            {{- end }}
+          env:
+            - name: FLYWAY_USER
+              value: "{{ .Values.postgresql.auth.username }}"
+            - name: FLYWAY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.postgresql.auth.existingSecret }}"
+                  key: "{{ .Values.postgresql.auth.secretKeys.userPasswordKey }}"
+            - name: FLYWAY_URL
+              value: "jdbc:postgresql://{{ .Values.global.chatName }}-postgresql-0.{{ .Values.global.chatName }}-postgresql.{{ .Values.global.namespace }}.svc.cluster.local:5432/{{ .Values.postgresql.auth.database }}"
+            - name: FLYWAY_BASELINE_ON_MIGRATE
+              value: "true"
+            - name: FLYWAY_CLEAN_DISABLED
+              value: "true"
+          volumeMounts:
+            - name: flyway-sql-init
+              mountPath: /flyway/sql-init
+            - name: flyway-sql-global
+              mountPath: /flyway/sql-global
+      {{- end }}
       containers:
         - name: portal-{{ .Release.Name }}-backend
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
@@ -399,6 +493,14 @@ spec:
               subPath: rag-custom-documentation.md
             {{- end }}
       volumes:
+        {{- if and .Values.postgresql.enabled .Values.flyway.enabled (eq (.Values.flyway.globalMigration | default "initContainer") "initContainer") }}
+        - name: flyway-sql-init
+          configMap:
+            name: portal-{{ .Release.Name }}-flyway-sql-init
+        - name: flyway-sql-global
+          configMap:
+            name: portal-{{ .Release.Name }}-flyway-sql-global
+        {{- end }}
         {{- if .Values.backend.matrixRooms.enabled }}
         - name: matrix-rooms-config
           configMap:

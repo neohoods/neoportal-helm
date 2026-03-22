@@ -1,14 +1,12 @@
 {{- if .Values.postgresql.enabled }}
+{{/* StatefulSet + Service are NOT Helm hooks: hook resources are unreliable with GitOps (Argo CD
+     often applies manifests without re-running hooks the same way as helm install). Flyway still
+     waits for Postgres via its Job initContainer (pg_isready). */}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ .Values.global.chatName }}-postgresql
   namespace: {{ .Values.global.namespace }}
-  annotations:
-    # Order before Flyway (-4/-3). Default hook policy is before-hook-creation → StatefulSet deleted every upgrade → PG restart.
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "-5"
-    "helm.sh/hook-delete-policy": hook-failed
   labels:
     app: {{ .Values.global.chatName }}-postgresql
     app.kubernetes.io/component: primary
@@ -106,11 +104,6 @@ kind: Service
 metadata:
   name: {{ .Values.global.chatName }}-postgresql
   namespace: {{ .Values.global.namespace }}
-  annotations:
-    # Order before Flyway (-4/-3). Default hook policy is before-hook-creation → StatefulSet deleted every upgrade → PG restart.
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "-5"
-    "helm.sh/hook-delete-policy": hook-failed
   labels:
     app: {{ .Values.global.chatName }}-postgresql
 spec:

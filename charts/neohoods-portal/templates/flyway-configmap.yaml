@@ -3,9 +3,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: portal-{{ .Release.Name }}-flyway-sql-init
-  annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "-4"
 data:
   V1__baseline.sql: |-
 {{ .Files.Get "sql-init/V1__baseline.sql" | indent 4 }}
@@ -14,9 +11,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: portal-{{ .Release.Name }}-flyway-sql-global
-  annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "-4"
 data:
   V1.1__global_schema.sql: |-
 {{ .Files.Get "sql-global/V1.1__global_schema.sql" | indent 4 }}

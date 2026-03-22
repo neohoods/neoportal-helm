@@ -336,6 +336,9 @@ mailersend:
     name: NeoHoods
 flyway:
   enabled: true
+  # Global schema (sql-init + sql-global): run in backend pod initContainers (ordering vs Postgres, no separate Job).
+  # Set to "job" only if you need the legacy Helm Flyway Job (e.g. migrate without starting the API).
+  globalMigration: initContainer
   url: jdbc:postgresql://neohoods-postgresql.platform.svc.cluster.local:5432/neohoods_portal
   image:
     repository: flyway/flyway

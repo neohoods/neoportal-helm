@@ -1,4 +1,5 @@
-{{- if .Values.flyway.enabled }}
+{{- if and .Values.postgresql.enabled .Values.flyway.enabled (eq (.Values.flyway.globalMigration | default "initContainer") "job") }}
+# Legacy: separate Job. Default is globalMigration=initContainer (Flyway runs in backend pod initContainers).
 # Pre-upgrade hook: global schema only (public). Tenant schemas (e.g. demo) are migrated by the
 # platform-api at startup (classpath db/migration/tenant) — same Flyway version as the app. A second
 # Helm job + Flyway CLI on tenant SQL duplicated migrations and caused checksum drift vs flyway-core.
