@@ -55,8 +55,12 @@ rooms:
     description: "Signaler un probleme dans la copropriété. Des malveillance au niveau des poubelles, le verrouillage des portes etc ."
     image: https://neohoods.com/assets/chat/alerte.png
     auto-join: true
+  - name: "Support"
+    description: "Entraide entre habitants : questions du quotidien, bons plans, demandes d’aide (bricolage, colis, recommandations, etc.). Ce n’est PAS le support technique NeoHoods."
+    image: https://neohoods.com/assets/chat/support-habitants.png
+    auto-join: true
   - name: "Neohoods-support"
-    description: "Support pour les utilisateurs de NeoHoods. Si vous avez un probleme avec le logiciel, merci de laisser un message dans cette room."
+    description: "Support technique NeoHoods (logiciel/app) : bugs, accès, erreurs, demandes liées à la plateforme. Pour l’entraide entre voisins, utilisez la room \"Support\"."
     image: https://neohoods.com/assets/chat/support.png
     auto-join: true
 

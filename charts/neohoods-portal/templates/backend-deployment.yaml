@@ -134,8 +134,10 @@ spec:
               value: "https://{{ .Values.global.domain }}"
             - name: NEOHOODS_PORTAL_FRONTEND_URL
               value: "https://{{ .Values.global.domain }}"
+            {{- if .Values.backend.env.NEOHOODS_PORTAL_SUPER_ADMIN_EMAIL }}
             - name: NEOHOODS_PORTAL_SUPER_ADMIN_EMAIL
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_SUPER_ADMIN_EMAIL | quote }}
+            {{- end }}
             - name: NEOHOODS_PORTAL_USAGE_CONDITIONS_VERSION
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_USAGE_CONDITIONS_VERSION | default "1" | quote }}
             - name: NEOHOODS_PORTAL_SESSION_COOKIE_SECURE
@@ -331,6 +333,9 @@ spec:
               value: "{{ .Values.backend.env.MATRIX_LOCAL_ASSISTANT_AVATAR_URL }}"
             - name: MATRIX_LOCAL_ASSISTANT_DISPLAY_NAME
               value: "{{ .Values.backend.env.MATRIX_LOCAL_ASSISTANT_DISPLAY_NAME }}"
+            # Neohoods-Corporate Matrix space (IT room, superadmin sync, init summary); maps to neohoods.portal.matrix.corporate-space-id
+            - name: NEOHOODS_PORTAL_MATRIX_CORPORATE_SPACE_ID
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_MATRIX_CORPORATE_SPACE_ID | default "" | quote }}
             # Assistant AI configuration
             - name: ASSISTANT_AI_ENABLED
               value: "{{ .Values.backend.env.ASSISTANT_AI_ENABLED }}"

@@ -75,8 +75,8 @@ INSERT INTO spaces (id, name, description, instructions, location, type, status,
   ('550e8400-e29b-41d4-a716-446655440112', 'Salle commune', 'Salle à la disposition des résidents pour réunions ou apéros.', 'Réserver à l''avance. Code envoyé par email. Accès 8h-20h.', 'RDC', 'COMMON_ROOM', 'ACTIVE', 0.00, 0.00, 0.00, 0.00, 'EUR', 1, 1, NULL, 0, 0, '08:00', '20:00', '550e8400-e29b-41d4-a716-446655440002', true, true, false, NULL, false, false, 0, '10:00', '2024-01-10 09:00:00+00', '2024-01-10 09:00:00+00');
 
 INSERT INTO space_images (id, space_id, url, alt_text, is_primary, order_index, created_at, updated_at) VALUES
-  ('550e8400-e29b-41d4-a716-446655440211', '550e8400-e29b-41d4-a716-446655440111', 'https://local.portal.neohoods.com:4200/assets/spaces/chambre-dhotes.jpg', 'Airbnb', true, 0, '2024-01-10 09:00:00+00', '2024-01-10 09:00:00+00'),
-  ('550e8400-e29b-41d4-a716-446655440212', '550e8400-e29b-41d4-a716-446655440112', 'https://local.portal.neohoods.com:4200/assets/spaces/common-space.jpg', 'Salle commune', true, 0, '2024-01-10 09:00:00+00', '2024-01-10 09:00:00+00');
+  ('550e8400-e29b-41d4-a716-446655440211', '550e8400-e29b-41d4-a716-446655440111', '/assets/spaces/chambre-dhotes.jpg', 'Airbnb', true, 0, '2024-01-10 09:00:00+00', '2024-01-10 09:00:00+00'),
+  ('550e8400-e29b-41d4-a716-446655440212', '550e8400-e29b-41d4-a716-446655440112', '/assets/spaces/common-space.jpg', 'Salle commune', true, 0, '2024-01-10 09:00:00+00', '2024-01-10 09:00:00+00');
 
 INSERT INTO space_allowed_days (space_id, day_of_week) VALUES
   ('550e8400-e29b-41d4-a716-446655440111', 'MONDAY'), ('550e8400-e29b-41d4-a716-446655440111', 'TUESDAY'), ('550e8400-e29b-41d4-a716-446655440111', 'WEDNESDAY'), ('550e8400-e29b-41d4-a716-446655440111', 'THURSDAY'), ('550e8400-e29b-41d4-a716-446655440111', 'FRIDAY'), ('550e8400-e29b-41d4-a716-446655440111', 'SATURDAY'), ('550e8400-e29b-41d4-a716-446655440111', 'SUNDAY'),
