@@ -158,6 +158,8 @@ backend:
     MATRIX_SYNC_SCHEDULED_ENABLED: "true"
     MATRIX_SYNC_CRON: "0 0 1 * * ?"
     MATRIX_MAS_URL: "https://mas.chat.neohoods.com"
+    # Must match upstream_oauth2.providers[].id in MAS config (ULID, 26 chars)
+    MATRIX_MAS_AUTH0_PROVIDER_ID: "01HFVBY12TMNTYTBV8W921M5FA"
     MATRIX_ROOMS_CONFIG_FILE: "file:/app/matrix-default-rooms.yaml"
     MATRIX_INITIALIZATION_ADMIN_USERS: "@quentincastel86:chat.neohoods.com"
     MATRIX_OAUTH2_CLIENT_ID:

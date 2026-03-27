@@ -293,6 +293,8 @@ spec:
               value: "{{ .Values.backend.env.MATRIX_SYNC_CRON }}"
             - name: MATRIX_MAS_URL
               value: "{{ .Values.backend.env.MATRIX_MAS_URL }}"
+            - name: MATRIX_MAS_AUTH0_PROVIDER_ID
+              value: {{ .Values.backend.env.MATRIX_MAS_AUTH0_PROVIDER_ID | default "01HFVBY12TMNTYTBV8W921M5FA" | quote }}
             - name: MATRIX_ROOMS_CONFIG_FILE
               value: "{{ .Values.backend.env.MATRIX_ROOMS_CONFIG_FILE }}"
             - name: MATRIX_INITIALIZATION_ADMIN_USERS
