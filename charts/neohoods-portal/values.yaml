@@ -189,7 +189,8 @@ backend:
     MATRIX_LOCAL_ASSISTANT_DISPLAY_NAME: "Alfred [Assistant AI]"
     # Neohoods-Corporate space on prod homeserver (room IT, superadmin invites)
     NEOHOODS_PORTAL_MATRIX_CORPORATE_SPACE_ID: "!HeEWdDidvRFUVtmWwa:chat.neohoods.com"
-    # Assistant AI configuration
+    # Assistant AI configuration (LLM stack). Runtime on/off for Matrix bot replies is also stored in
+    # global.system_settings.matrix_assistant_enabled (superadmin: System → Matrix — Configuration).
     ASSISTANT_AI_ENABLED: "true"
     ASSISTANT_AI_PROVIDER: "mistral"
     MISTRAL_AI_TOKEN:

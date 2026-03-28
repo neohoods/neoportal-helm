@@ -18,4 +18,8 @@ data:
 {{ .Files.Get "sql-global/V1.2__global_seed_data.sql" | indent 4 }}
   V1.3__portal_base_url.sql: |-
 {{ .Files.Get "sql-global/V1.3__portal_base_url.sql" | indent 4 }}
+  V1.4__matrix_assistant_enabled.sql: |-
+{{ .Files.Get "sql-global/V1.4__matrix_assistant_enabled.sql" | indent 4 }}
+  V1.5__tenant_logo.sql: |-
+{{ .Files.Get "sql-global/V1.5__tenant_logo.sql" | indent 4 }}
 {{- end }}

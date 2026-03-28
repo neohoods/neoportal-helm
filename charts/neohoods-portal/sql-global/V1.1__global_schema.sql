@@ -92,6 +92,7 @@ CREATE TABLE IF NOT EXISTS global.system_settings (
     registration_enabled boolean NOT NULL DEFAULT false,
     maintenance_mode boolean NOT NULL DEFAULT false,
     usage_conditions_version varchar(255),
+    matrix_assistant_enabled boolean NOT NULL DEFAULT true,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 

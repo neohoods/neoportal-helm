@@ -39,6 +39,6 @@ WHERE u.id IN (
 )
 ON CONFLICT (user_id, tenant_id) DO NOTHING;
 
-INSERT INTO global.system_settings (id, registration_enabled, maintenance_mode, usage_conditions_version)
-VALUES ('b0000000-0000-0000-0000-000000000001', false, false, '1')
+INSERT INTO global.system_settings (id, registration_enabled, maintenance_mode, usage_conditions_version, matrix_assistant_enabled)
+VALUES ('b0000000-0000-0000-0000-000000000001', false, false, '1', true)
 ON CONFLICT (id) DO NOTHING;
