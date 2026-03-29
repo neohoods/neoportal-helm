@@ -84,7 +84,7 @@ backend:
         key: auth0-client-secret
     AUTH0_AUDIENCE: https://neohoods.eu.auth0.com/api/v2/
     AUTH0_CONNECTION: Username-Password-Authentication
-    # Stripe properties
+    # Stripe properties (platform + fallback for new copros)
     STRIPE_SECRET_KEY:
       secretKeyRef:
         name: stripe-secret
@@ -97,6 +97,11 @@ backend:
       secretKeyRef:
         name: stripe-secret
         key: stripe-webhook-secret
+    # Optional: keys copied into tenant_stripe_config when a copro is created (defaults to STRIPE_* via application.yml if unset).
+    # NEOHOODS_PORTAL_STRIPE_SANDBOX_SECRET_KEY:
+    #   secretKeyRef:
+    #     name: stripe-secret
+    #     key: stripe-secret-key
     JWT_SECRET:
       secretKeyRef:
         name: portal-secret
@@ -157,6 +162,8 @@ backend:
     # Daily Matrix room/user sync (server timezone); disable with "false"
     MATRIX_SYNC_SCHEDULED_ENABLED: "true"
     MATRIX_SYNC_CRON: "0 0 1 * * ?"
+    # When true, Matrix room names in each copro space become "{tenant name} — {room}". Default false (avoid duplicate rooms on existing homeservers).
+    MATRIX_SYNC_ROOM_NAME_PREFIX_WITH_TENANT: "false"
     MATRIX_MAS_URL: "https://mas.chat.neohoods.com"
     # Must match upstream_oauth2.providers[].id in MAS config (ULID, 26 chars)
     MATRIX_MAS_AUTH0_PROVIDER_ID: "01HFVBY12TMNTYTBV8W921M5FA"
@@ -382,9 +389,11 @@ backup:
     secretName: "portal-secret"
     accessKeyKey: "scaleway-access-key"
     secretKeyKey: "scaleway-secret-key"
+  # Notifications via Synapse Client API. homeserver defaults to https://<backend.env.MATRIX_HOMESERVER_URL>; roomId must live on that server (override per env).
   matrix:
     enabled: true
-    homeserver: "https://matrix.neohoods.com"
+    # homeserver: "https://matrix.chat.dev.neohoods.com"  # optional; omit to use backend Matrix URL
+    roomId: "!BwHndjfcBjyYLOWDwU:chat.neohoods.com"
     secretName: "matrix-secret"
     tokenKey: "local-assistant-permanent-token"
   # Persistent volume for backups (optional, uses emptyDir if disabled)

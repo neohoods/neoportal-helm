@@ -48,7 +48,9 @@ spec:
                       key: {{ .Values.backup.scaleway.secretKeyKey | default "secret-key" }}
                 {{- if .Values.backup.matrix.enabled }}
                 - name: MATRIX_HOMESERVER
-                  value: {{ .Values.backup.matrix.homeserver | default "https://matrix.neohoods.com" }}
+                  value: {{ .Values.backup.matrix.homeserver | default (printf "https://%s" .Values.backend.env.MATRIX_HOMESERVER_URL) }}
+                - name: MATRIX_ROOM_ID
+                  value: {{ .Values.backup.matrix.roomId | required "backup.matrix.roomId is required when backup.matrix.enabled — IT room on this env’s Matrix server (e.g. !xxx:chat.dev.neohoods.com)" }}
                 - name: MATRIX_TOKEN
                   valueFrom:
                     secretKeyRef:
@@ -78,11 +80,12 @@ spec:
                     echo "Failed to upload backup"
                     {{- if .Values.backup.matrix.enabled }}
                     txn_id=$(date +%s%N | sha256sum | cut -d' ' -f1 | cut -c1-32)
-                    echo "Sending Matrix notification (upload failed): curl -X PUT \"https://matrix.neohoods.com/_matrix/client/v3/rooms/%21YjLQBUZJNVrOSZdiQn%3Achat.neohoods.com/send/m.room.message/$txn_id\""
-                    curl -X PUT "https://matrix.neohoods.com/_matrix/client/v3/rooms/%21YjLQBUZJNVrOSZdiQn%3Achat.neohoods.com/send/m.room.message/$txn_id" \
+                    ROOM_ENC=$(echo "$MATRIX_ROOM_ID" | sed 's/!/%21/g; s/:/%3A/g')
+                    echo "Sending Matrix notification (upload failed): curl -X PUT \"${MATRIX_HOMESERVER}/_matrix/client/v3/rooms/${ROOM_ENC}/send/m.room.message/$txn_id\""
+                    curl -X PUT "${MATRIX_HOMESERVER}/_matrix/client/v3/rooms/${ROOM_ENC}/send/m.room.message/$txn_id" \
                       -H "Authorization: Bearer $MATRIX_TOKEN" \
                       -H "Content-Type: application/json" \
-                      -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} - {{ .Values.postgresql.auth.database }}] 🚨 Backup upload failed: '$timestamp' - https://console.scaleway.com/object-storage/buckets/fr-par"}' || true
+                      -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} | {{ .Values.backend.env.MATRIX_SERVER_NAME }} | {{ .Values.postgresql.auth.database }}] 🚨 Backup upload failed: '$timestamp' - https://console.scaleway.com/object-storage/buckets/fr-par"}' || true
                     {{- end }}
                     exit 1
                   }
@@ -122,11 +125,12 @@ spec:
                   # Send success notification
                   {{- if .Values.backup.matrix.enabled }}
                   txn_id=$(date +%s%N | sha256sum | cut -d' ' -f1 | cut -c1-32)
-                  echo "Sending Matrix notification (success): curl -X PUT \"https://matrix.neohoods.com/_matrix/client/v3/rooms/%21YjLQBUZJNVrOSZdiQn%3Achat.neohoods.com/send/m.room.message/$txn_id\""
-                  curl -X PUT "https://matrix.neohoods.com/_matrix/client/v3/rooms/%21YjLQBUZJNVrOSZdiQn%3Achat.neohoods.com/send/m.room.message/$txn_id" \
+                  ROOM_ENC=$(echo "$MATRIX_ROOM_ID" | sed 's/!/%21/g; s/:/%3A/g')
+                  echo "Sending Matrix notification (success): curl -X PUT \"${MATRIX_HOMESERVER}/_matrix/client/v3/rooms/${ROOM_ENC}/send/m.room.message/$txn_id\""
+                  curl -X PUT "${MATRIX_HOMESERVER}/_matrix/client/v3/rooms/${ROOM_ENC}/send/m.room.message/$txn_id" \
                     -H "Authorization: Bearer $MATRIX_TOKEN" \
                     -H "Content-Type: application/json" \
-                    -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} - {{ .Values.postgresql.auth.database }}] ✅ DB backup successful: '$timestamp' - https://console.scaleway.com/object-storage/buckets/fr-par"}' || true
+                    -d '{"msgtype": "m.text", "body": "[{{ .Release.Name }} | {{ .Values.backend.env.MATRIX_SERVER_NAME }} | {{ .Values.postgresql.auth.database }}] ✅ DB backup successful: '$timestamp' - https://console.scaleway.com/object-storage/buckets/fr-par"}' || true
                   {{- end }}
                   echo "DB backup completed: $timestamp"
               volumeMounts:
