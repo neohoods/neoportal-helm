@@ -75,7 +75,15 @@ spec:
         - name: flyway-migrate
           image: "{{ .Values.flyway.image.repository }}:{{ .Values.flyway.image.tag }}"
           imagePullPolicy: {{ .Values.flyway.image.pullPolicy | default "IfNotPresent" }}
-          args: ["-connectRetries=60", "migrate", "-locations=filesystem:/flyway/sql-init,filesystem:/flyway/sql-global"]
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -e
+              {{- if .Values.flyway.repairBeforeMigrate }}
+              echo "Flyway repair (global schema) before migrate..."
+              flyway -connectRetries=60 repair -locations=filesystem:/flyway/sql-init,filesystem:/flyway/sql-global
+              {{- end }}
+              exec flyway -connectRetries=60 migrate -locations=filesystem:/flyway/sql-init,filesystem:/flyway/sql-global
           resources:
             {{- if .Values.flyway.resources }}
             {{- toYaml .Values.flyway.resources | nindent 12 }}

@@ -351,6 +351,9 @@ flyway:
   # Global schema (sql-init + sql-global): run in backend pod initContainers (ordering vs Postgres, no separate Job).
   # Set to "job" only if you need the legacy Helm Flyway Job (e.g. migrate without starting the API).
   globalMigration: initContainer
+  # One-shot: true runs `flyway repair` then `migrate` (aligns flyway_schema_history checksums with current SQL files).
+  # Use after fixing/editing already-applied migrations, then set back to false.
+  repairBeforeMigrate: false
   url: jdbc:postgresql://neohoods-postgresql.platform.svc.cluster.local:5432/neohoods_portal
   image:
     repository: flyway/flyway
