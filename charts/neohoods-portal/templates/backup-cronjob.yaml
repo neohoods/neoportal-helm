@@ -50,7 +50,7 @@ spec:
                 - name: MATRIX_HOMESERVER
                   value: {{ .Values.backup.matrix.homeserver | default (printf "https://%s" .Values.backend.env.MATRIX_HOMESERVER_URL) }}
                 - name: MATRIX_ROOM_ID
-                  value: {{ .Values.backup.matrix.roomId | required "backup.matrix.roomId is required when backup.matrix.enabled — IT room on this env’s Matrix server (e.g. !xxx:chat.dev.neohoods.com)" }}
+                  value: {{ .Values.backup.matrix.roomId | required "backup.matrix.roomId is required when backup.matrix.enabled — IT room on this env’s Matrix server (e.g. !xxx:chat.dev.neohoods.com)" | quote }}
                 - name: MATRIX_TOKEN
                   valueFrom:
                     secretKeyRef:
