@@ -136,6 +136,8 @@ backend:
     NEOHOODS_PORTAL_ERROR_NOTIFICATION_ADMIN_EMAIL: "quentin.castel.neohoods+support@gmail.com"
     NEOHOODS_PORTAL_ERROR_NOTIFICATION_GRAFANA_URL: "https://grafana.neohoods.com"
     NEOHOODS_PORTAL_ERROR_NOTIFICATION_BACKEND_APP_NAME: "portal-neohoods-backend"
+    # Optional: deep-link to a prefiltered Grafana dashboard for backend support investigations
+    NEOHOODS_PORTAL_GRAFANA_SUPPORT_DASHBOARD_URL: ""
     APP_BASE_URL: "https://portal.neohoods.com"
     NEOHOODS_PORTAL_ID: "neohoods-portal"
     NEOHOODS_TENANT_ROUTING_ENABLED: "true"
@@ -274,6 +276,9 @@ backend:
         key: scaleway-secret-key
     S3_BUCKET: "" # e.g., "terresdelaya" or "neohoods-dev"
     S3_REGION: "fr-par" # Scaleway Paris region
+    # Optional: public URLs to portal and Matrix backups (e.g. Scaleway Object Browser / S3 static index)
+    NEOHOODS_PORTAL_BACKUP_URL: ""
+    NEOHOODS_MATRIX_BACKUP_URL: ""
     # UniFi Access (Dream Wall) - leave empty for prod or set UNIFI_CONTROLLER_URL; when unifiMock.enabled, URL defaults to mock service
     UNIFI_CONTROLLER_ID: "" # e.g. "main-controller"
     UNIFI_CONTROLLER_NAME: "" # e.g. "Contrôleur principal UniFi"
@@ -331,6 +336,8 @@ frontend:
     STRIPE_DEMO_MODE: "false"
     # Version des conditions d'utilisation (doit correspondre au fichier assets/legal/usage-conditions-<n>.md et au backend)
     USAGE_CONDITIONS_VERSION: "1"
+    # Feature flags
+    INCIDENTS_ENABLED: "true"
   # Hostname -> tenant slug : `/` et redirection post-login hub → `/tenants/<slug>/residents` (DOMAIN_TENANT_MAP_JSON).
   # Déprécié en doublon de tenants.ingress : les hosts déclarés sous tenants.ingress.<slug>.host sont fusionnés automatiquement ;
   # ce map sert à ajouter des hosts sans Ingress dédié ou à surcharger une entrée.
