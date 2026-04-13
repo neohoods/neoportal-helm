@@ -1,11 +1,18 @@
 {{- if and .Values.docs.enabled .Values.docs.ingress.host }}
+{{- /* Même logique que ingress-tenants : namespace explicite pour cert-manager / ArgoCD */}}
+{{- $g := index .Values "global" }}
+{{- $ns := .Release.Namespace }}
+{{- if and $g (index $g "namespace") }}{{ $ns = index $g "namespace" }}{{ end }}
+{{- $issuer := .Values.docs.ingress.certManagerClusterIssuer | default .Values.ingress.certManagerClusterIssuer | default "letsencrypt-prod" }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: portal-{{ .Release.Name }}-docs
+  namespace: {{ $ns }}
   annotations:
-    cert-manager.io/cluster-issuer: {{ .Values.docs.ingress.certManagerClusterIssuer | default .Values.ingress.certManagerClusterIssuer }}
+    cert-manager.io/cluster-issuer: {{ $issuer | quote }}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/ingress.class: "nginx"
 spec:
   ingressClassName: nginx
   rules:
@@ -13,7 +20,7 @@ spec:
       http:
         paths:
           - path: /
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: portal-{{ .Release.Name }}-docs
