@@ -1,0 +1,36 @@
+{{- if and .Values.docs.enabled .Values.docs.ingress.host }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portal-{{ .Release.Name }}-docs
+spec:
+  replicas: {{ .Values.docs.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: portal-{{ .Release.Name }}-docs
+  template:
+    metadata:
+      labels:
+        app: portal-{{ .Release.Name }}-docs
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: portal-{{ .Release.Name }}-docs
+          image: "{{ .Values.docs.image.repository }}:{{ .Values.docs.image.tag }}"
+          ports:
+            - name: http-server
+              containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+{{- end }}

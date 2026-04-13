@@ -1,0 +1,15 @@
+{{- if and .Values.docs.enabled .Values.docs.ingress.host }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: portal-{{ .Release.Name }}-docs
+  labels:
+    app: portal-{{ .Release.Name }}-docs
+spec:
+  type: {{ .Values.docs.service.type | default "ClusterIP" }}
+  selector:
+    app: portal-{{ .Release.Name }}-docs
+  ports:
+    - port: {{ .Values.docs.service.port | default 80 }}
+      targetPort: http-server
+{{- end }}

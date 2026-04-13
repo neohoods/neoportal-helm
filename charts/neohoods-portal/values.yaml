@@ -420,6 +420,20 @@ unifiMock:
     tag: 0.0.362
   controllerName: "Contrôleur principal UniFi"
   doors: "door-1:Chambre d'hôtes,door-2:Salle commune,door-technical:Local technique"
+# Site de documentation statique (Material for MkDocs, image nginx). Hosts typiques : docs.neohoods.com, docs.dev.neohoods.com (voir neohoods-saas).
+docs:
+  enabled: false
+  image:
+    repository: ghcr.io/neohoods/portal-docs
+    tag: 0.0.339
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    host: ""
+    tlsSecretName: ""
+    certManagerClusterIssuer: ""
 # Hosts dédiés par tenant (un Ingress par entrée) — voir templates/ingress-tenants.yaml.
 # Chaque host est aussi injecté dans DOMAIN_TENANT_MAP_JSON (host → slug) pour le front (plus besoin de dupliquer frontend.domainTenantMap).
 # Auth0 : ajouter https://<host>/token-exchange dans Allowed Callback URLs (et Web Origins) pour chaque host.
