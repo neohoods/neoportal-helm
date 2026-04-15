@@ -130,6 +130,11 @@ backend:
       secretKeyRef:
         name: portal-secret
         key: gdpr-email-hash-secret
+    NEOHOODS_PORTAL_AUTH_JWT_SIGNING_PRIVATE_JWK:
+      secretKeyRef:
+        name: portal-secret
+        key: neohoods-portal-auth-jwt-signing-private-jwk
+    NEOHOODS_PORTAL_AUTH_JWT_SIGNING_KID: "neohoods"
     NEOHOODS_PORTAL_GDPR_ANONYMIZATION_DELAY_DAYS: "30"
     NEOHOODS_PORTAL_MOBILE_SESSION_JWT_VALIDITY_DAYS: "30"
     NEOHOODS_PORTAL_ERROR_NOTIFICATION_ENABLED: "false"

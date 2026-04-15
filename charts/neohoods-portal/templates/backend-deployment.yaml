@@ -168,6 +168,13 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.backend.env.NEOHOODS_PORTAL_GDPR_EMAIL_HASH_SECRET.secretKeyRef.name }}
                   key: {{ .Values.backend.env.NEOHOODS_PORTAL_GDPR_EMAIL_HASH_SECRET.secretKeyRef.key }}
+            - name: NEOHOODS_PORTAL_AUTH_JWT_SIGNING_PRIVATE_JWK
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_AUTH_JWT_SIGNING_PRIVATE_JWK.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_AUTH_JWT_SIGNING_PRIVATE_JWK.secretKeyRef.key }}
+            - name: NEOHOODS_PORTAL_AUTH_JWT_SIGNING_KID
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_AUTH_JWT_SIGNING_KID | default "neohoods" | quote }}
             - name: NEOHOODS_PORTAL_GDPR_ANONYMIZATION_DELAY_DAYS
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_GDPR_ANONYMIZATION_DELAY_DAYS | default "30" | quote }}
             - name: NEOHOODS_PORTAL_MOBILE_SESSION_JWT_VALIDITY_DAYS
