@@ -60,7 +60,7 @@ backend:
     enabled: false # Set to true in dev environment
   image:
     repository: ghcr.io/neohoods/portal-platform-api
-    tag: 0.0.386
+    tag: 0.0.387
   replicaCount: 2
   resources:
     requests:
@@ -336,7 +336,7 @@ frontend:
   enabled: true
   image:
     repository: ghcr.io/neohoods/portal-platform-ui
-    tag: 0.0.386
+    tag: 0.0.387
   replicaCount: 1
   service:
     type: ClusterIP # Changed from NodePort to ClusterIP for Ingress compatibility
@@ -439,7 +439,7 @@ unifiMock:
   enabled: false # Set to true for dev/test; backend will use this service when UNIFI_CONTROLLER_URL is not set
   image:
     repository: ghcr.io/neohoods/portal-unifi-mock-server
-    tag: 0.0.386
+    tag: 0.0.387
   controllerName: "Contrôleur principal UniFi"
   doors: "door-1:Chambre d'hôtes,door-2:Salle commune,door-technical:Local technique"
 # Site de documentation statique (Material for MkDocs, image nginx). Hosts typiques : docs.neohoods.com, docs.dev.neohoods.com (voir neohoods-saas).
@@ -447,7 +447,7 @@ docs:
   enabled: false
   image:
     repository: ghcr.io/neohoods/portal-docs
-    tag: 0.0.386
+    tag: 0.0.387
   replicaCount: 1
   service:
     type: ClusterIP
