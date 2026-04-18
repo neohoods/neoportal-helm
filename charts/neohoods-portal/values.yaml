@@ -35,6 +35,9 @@ postgresql:
       enabled: true
       size: 10Gi
       storageClass: "" # Use default storage class
+      # K8s 1.23+: keep PVCs if the StatefulSet is deleted (prune / mistaken uninstall). Does not protect against kubectl delete pvc.
+      retentionPolicy:
+        enabled: true
     resources:
       requests:
         cpu: "100m"
@@ -348,11 +351,13 @@ frontend:
     # Branding configuration
     BRAND_NAME: "NeoHoods"
     BRAND_DISPLAY_NAME: "Portal NeoHoods"
-    BRAND_COPYRIGHT: "2025 Portal NeoHoods"
+    BRAND_COPYRIGHT: "2026 Portal NeoHoods"
     BRAND_LOGO: "/logo-bright.png"
     STRIPE_DEMO_MODE: "false"
     # Version des conditions d'utilisation (doit correspondre au fichier assets/legal/usage-conditions-<n>.md et au backend)
     USAGE_CONDITIONS_VERSION: "1"
+    # Optional: version affichée côté UI / header API (sinon = frontend.image.tag via template deployment)
+    # NEOHOODS_PORTAL_UI_VERSION: "0.0.400"
     # Feature flags
     INCIDENTS_ENABLED: "true"
   # Hostname -> tenant slug : `/` et redirection post-login hub → `/tenants/<slug>/residents` (DOMAIN_TENANT_MAP_JSON).

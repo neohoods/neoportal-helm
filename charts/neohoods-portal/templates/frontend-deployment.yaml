@@ -43,6 +43,12 @@ spec:
               value: {{ .Values.frontend.env.USAGE_CONDITIONS_VERSION | default "1" | quote }}
             - name: DOMAIN_TENANT_MAP_JSON
               value: {{ include "neohoods-portal.domainTenantMapJson" . | quote }}
+            # Duplicate of image tag for scripts that expect IMAGE_TAG (generate-config-json.cjs fallback)
+            - name: IMAGE_TAG
+              value: {{ .Values.frontend.image.tag | quote }}
+            # Same as image tag by default; override via frontend.env.NEOHOODS_PORTAL_UI_VERSION (e.g. semver vs digest tag)
+            - name: NEOHOODS_PORTAL_UI_VERSION
+              value: {{ .Values.frontend.env.NEOHOODS_PORTAL_UI_VERSION | default .Values.frontend.image.tag | quote }}
           ports:
             - name: http-server
               containerPort: 80

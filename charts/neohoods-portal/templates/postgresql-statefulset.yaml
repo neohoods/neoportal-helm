@@ -15,6 +15,12 @@ metadata:
 spec:
   serviceName: {{ .Values.global.chatName }}-postgresql
   replicas: 1
+  {{- $rp := .Values.postgresql.primary.persistence.retentionPolicy | default dict }}
+  {{- if ($rp.enabled | default true) }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  {{- end }}
   selector:
     matchLabels:
       app: {{ .Values.global.chatName }}-postgresql
