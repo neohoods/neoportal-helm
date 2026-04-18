@@ -22,4 +22,10 @@ data:
 {{ .Files.Get "sql-global/V1.4__matrix_assistant_enabled.sql" | indent 4 }}
   V1.5__tenant_logo.sql: |-
 {{ .Files.Get "sql-global/V1.5__tenant_logo.sql" | indent 4 }}
+  V1.6__tenant_onboarding_jobs.sql: |-
+{{ .Files.Get "sql-global/V1.6__tenant_onboarding_jobs.sql" | indent 4 }}
+  V1.7__refresh_sessions.sql: |-
+{{ .Files.Get "sql-global/V1.7__refresh_sessions.sql" | indent 4 }}
+  V1.8__tenant_stripe_config.sql: |-
+{{ .Files.Get "sql-global/V1.8__tenant_stripe_config.sql" | indent 4 }}
 {{- end }}

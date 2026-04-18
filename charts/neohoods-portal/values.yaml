@@ -14,6 +14,11 @@ postgresql:
     tag: "18.1"
     pullPolicy: IfNotPresent
   primary:
+    # NeoHoods opens many JDBC connections (main Hikari + one small pool per tenant schema).
+    # Default PostgreSQL max_connections (100) is easy to hit → "too many clients". Override via umbrella values if needed.
+    maxConnections: 200
+    # Optional extra postgres -c flags (e.g. ["-c", "log_min_duration_statement=1000"])
+    extraPostgresArgs: []
     # Node selector to ensure pod is scheduled on the same node as the PVC
     # This is important for hostPath volumes which are bound to specific nodes
     nodeSelector:
@@ -33,10 +38,10 @@ postgresql:
     resources:
       requests:
         cpu: "100m"
-        memory: "256Mi"
-      limits:
-        cpu: "500m"
         memory: "512Mi"
+      limits:
+        cpu: "1000m"
+        memory: "1536Mi"
   auth:
     database: neohoods_portal
     username: postgres_admin
@@ -54,6 +59,13 @@ backend:
     repository: ghcr.io/neohoods/portal-platform-api
     tag: 0.0.383
   replicaCount: 2
+  resources:
+    requests:
+      cpu: "750m"
+      memory: "768Mi"
+    limits:
+      cpu: "3000m"
+      memory: "2Gi"
   service:
     type: ClusterIP # Changed from NodePort to ClusterIP for Ingress compatibility
     port: 80

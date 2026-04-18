@@ -57,6 +57,14 @@ spec:
               value: {{ .Values.postgresql.auth.database }}
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
+          # docker-entrypoint.sh + "postgres" + -c flags (replaces image CMD). Raises max_connections above default 100.
+          args:
+            - postgres
+            - -c
+            - max_connections={{ .Values.postgresql.primary.maxConnections | default 200 }}
+            {{- range (.Values.postgresql.primary.extraPostgresArgs | default list) }}
+            - {{ . | quote }}
+            {{- end }}
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data

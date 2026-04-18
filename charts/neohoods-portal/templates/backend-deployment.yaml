@@ -505,6 +505,10 @@ spec:
             httpGet:
               path: /api/actuator/health
               port: {{ .Values.backend.env.SERVER_PORT }}
+          {{- with .Values.backend.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           volumeMounts:
             {{- if .Values.backend.matrixRooms.enabled }}
             - name: matrix-rooms-config
