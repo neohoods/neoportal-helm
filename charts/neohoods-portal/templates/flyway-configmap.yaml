@@ -28,4 +28,8 @@ data:
 {{ .Files.Get "sql-global/V1.7__refresh_sessions.sql" | indent 4 }}
   V1.8__tenant_stripe_config.sql: |-
 {{ .Files.Get "sql-global/V1.8__tenant_stripe_config.sql" | indent 4 }}
+  V1.9__platform_data_migration.sql: |-
+{{ .Files.Get "sql-global/V1.9__platform_data_migration.sql" | indent 4 }}
+  V1.10__tenant_logo_s3_key.sql: |-
+{{ .Files.Get "sql-global/V1.10__tenant_logo_s3_key.sql" | indent 4 }}
 {{- end }}
