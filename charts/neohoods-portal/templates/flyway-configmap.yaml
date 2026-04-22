@@ -32,4 +32,8 @@ data:
 {{ .Files.Get "sql-global/V1.9__platform_data_migration.sql" | indent 4 }}
   V1.10__tenant_logo_s3_key.sql: |-
 {{ .Files.Get "sql-global/V1.10__tenant_logo_s3_key.sql" | indent 4 }}
+  V1.11__tenant_resident_invitations.sql: |-
+{{ .Files.Get "sql-global/V1.11__tenant_resident_invitations.sql" | indent 4 }}
+  V1.12__sso_oauth_states.sql: |-
+{{ .Files.Get "sql-global/V1.12__sso_oauth_states.sql" | indent 4 }}
 {{- end }}

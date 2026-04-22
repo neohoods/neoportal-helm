@@ -123,6 +123,9 @@ backend:
         key: jwt-secret
     NEOHOODS_PORTAL_MAIL_SILENT_MODE: "false"
     NEOHOODS_PORTAL_MAIL_WHITELIST: "quentincastel86@gmail.com"
+    # Defaults for tenant notification_settings (backfill, new users). Prod overlays often set both to "true".
+    NEOHOODS_NOTIFICATION_DEFAULT_ENABLE: "false"
+    NEOHOODS_NOTIFICATION_NEWSLETTER_DEFAULT: "false"
     # Superadmin emails (comma-separated, SSO only). Include quentincastel86@gmail.com for dev/personal login.
     NEOHOODS_PORTAL_SUPER_ADMIN_EMAIL: "quentin.castel@neohoods.com,geoffroy.surault@neohoods.com,quentincastel86@gmail.com"
     NEOHOODS_PORTAL_USAGE_CONDITIONS_VERSION: "1"

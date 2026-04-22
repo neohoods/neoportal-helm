@@ -206,6 +206,10 @@ spec:
               value: {{ .Values.backend.env.NEOHOODS_TENANT_ROUTING_ENABLED | default "true" | quote }}
             - name: NEOHOODS_TENANT_FLYWAY_REPAIR_BEFORE_MIGRATE
               value: {{ .Values.backend.env.NEOHOODS_TENANT_FLYWAY_REPAIR_BEFORE_MIGRATE | default "false" | quote }}
+            - name: NEOHOODS_NOTIFICATION_DEFAULT_ENABLE
+              value: {{ .Values.backend.env.NEOHOODS_NOTIFICATION_DEFAULT_ENABLE | default "false" | quote }}
+            - name: NEOHOODS_NOTIFICATION_NEWSLETTER_DEFAULT
+              value: {{ .Values.backend.env.NEOHOODS_NOTIFICATION_NEWSLETTER_DEFAULT | default "false" | quote }}
             - name: MAILERSEND_API_KEY
               valueFrom:
                 secretKeyRef:
