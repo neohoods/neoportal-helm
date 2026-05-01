@@ -310,6 +310,8 @@ spec:
               value: "{{ .Values.backend.env.MATRIX_SYNC_SCHEDULED_ENABLED }}"
             - name: MATRIX_SYNC_CRON
               value: "{{ .Values.backend.env.MATRIX_SYNC_CRON }}"
+            - name: MATRIX_SYNC_POSTGRES_POLLING_ADVISORY_LOCK
+              value: "{{ .Values.backend.env.MATRIX_SYNC_POSTGRES_POLLING_ADVISORY_LOCK }}"
             - name: MATRIX_SYNC_ROOM_NAME_PREFIX_WITH_TENANT
               value: "{{ .Values.backend.env.MATRIX_SYNC_ROOM_NAME_PREFIX_WITH_TENANT }}"
             - name: MATRIX_MAS_URL

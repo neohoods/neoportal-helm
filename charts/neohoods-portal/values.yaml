@@ -187,6 +187,8 @@ backend:
     # Scheduled Matrix sync (all copros) — off by default; use UI/API manual sync. Enable with "true"
     MATRIX_SYNC_SCHEDULED_ENABLED: "false"
     MATRIX_SYNC_CRON: "0 0 1 * * ?"
+    # Live /sync polling: Postgres advisory lock so only one backend replica consumes the Matrix timeline (avoid duplicate Alfred replies).
+    MATRIX_SYNC_POSTGRES_POLLING_ADVISORY_LOCK: "true"
     # When true, Matrix room names in each copro space become "{tenant name} — {room}". Default false (avoid duplicate rooms on existing homeservers).
     MATRIX_SYNC_ROOM_NAME_PREFIX_WITH_TENANT: "false"
     MATRIX_MAS_URL: "https://mas.chat.neohoods.com"
