@@ -189,6 +189,10 @@ backend:
     MATRIX_SYNC_CRON: "0 0 1 * * ?"
     # Live /sync polling: Postgres advisory lock so only one backend replica consumes the Matrix timeline (avoid duplicate Alfred replies).
     MATRIX_SYNC_POSTGRES_POLLING_ADVISORY_LOCK: "true"
+    # Matrix inbox worker (each pod): poll tenant matrix_messages + room advisory lock
+    MATRIX_INBOX_ENABLED: "true"
+    MATRIX_INBOX_POLL_INTERVAL_MS: "2000"
+    MATRIX_INBOX_BATCH_SIZE: "50"
     # When true, Matrix room names in each copro space become "{tenant name} — {room}". Default false (avoid duplicate rooms on existing homeservers).
     MATRIX_SYNC_ROOM_NAME_PREFIX_WITH_TENANT: "false"
     MATRIX_MAS_URL: "https://mas.chat.neohoods.com"
