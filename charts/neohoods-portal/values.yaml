@@ -193,6 +193,13 @@ backend:
     MATRIX_INBOX_ENABLED: "true"
     MATRIX_INBOX_POLL_INTERVAL_MS: "2000"
     MATRIX_INBOX_BATCH_SIZE: "50"
+    # Global Matrix pre-routing (all pods → global.matrix_messages → tenant.matrix_messages)
+    MATRIX_PRE_ROUTING_ENABLED: "true"
+    MATRIX_PRE_ROUTING_POLL_INTERVAL_MS: "500"
+    MATRIX_PRE_ROUTING_BATCH_SIZE: "50"
+    MATRIX_PRE_ROUTING_MAX_EVENT_AGE_MINUTES: "30"
+    MATRIX_PRE_ROUTING_CLEANUP_CRON: "0 */5 * * * *"
+    MATRIX_PRE_ROUTING_CLEANUP_DELETE_BATCH_SIZE: "2000"
     # When true, Matrix room names in each copro space become "{tenant name} — {room}". Default false (avoid duplicate rooms on existing homeservers).
     MATRIX_SYNC_ROOM_NAME_PREFIX_WITH_TENANT: "false"
     MATRIX_MAS_URL: "https://mas.chat.neohoods.com"

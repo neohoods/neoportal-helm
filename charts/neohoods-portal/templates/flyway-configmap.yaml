@@ -36,4 +36,8 @@ data:
 {{ .Files.Get "sql-global/V1.11__tenant_resident_invitations.sql" | indent 4 }}
   V1.12__sso_oauth_states.sql: |-
 {{ .Files.Get "sql-global/V1.12__sso_oauth_states.sql" | indent 4 }}
+  V1.13__matrix_messages.sql: |-
+{{ .Files.Get "sql-global/V1.13__matrix_messages.sql" | indent 4 }}
+  V1.14__matrix_room_tenant.sql: |-
+{{ .Files.Get "sql-global/V1.14__matrix_room_tenant.sql" | indent 4 }}
 {{- end }}

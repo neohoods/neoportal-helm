@@ -318,6 +318,18 @@ spec:
               value: "{{ .Values.backend.env.MATRIX_INBOX_POLL_INTERVAL_MS }}"
             - name: MATRIX_INBOX_BATCH_SIZE
               value: "{{ .Values.backend.env.MATRIX_INBOX_BATCH_SIZE }}"
+            - name: MATRIX_PRE_ROUTING_ENABLED
+              value: "{{ .Values.backend.env.MATRIX_PRE_ROUTING_ENABLED }}"
+            - name: MATRIX_PRE_ROUTING_POLL_INTERVAL_MS
+              value: "{{ .Values.backend.env.MATRIX_PRE_ROUTING_POLL_INTERVAL_MS }}"
+            - name: MATRIX_PRE_ROUTING_BATCH_SIZE
+              value: "{{ .Values.backend.env.MATRIX_PRE_ROUTING_BATCH_SIZE }}"
+            - name: MATRIX_PRE_ROUTING_MAX_EVENT_AGE_MINUTES
+              value: "{{ .Values.backend.env.MATRIX_PRE_ROUTING_MAX_EVENT_AGE_MINUTES }}"
+            - name: MATRIX_PRE_ROUTING_CLEANUP_CRON
+              value: "{{ .Values.backend.env.MATRIX_PRE_ROUTING_CLEANUP_CRON }}"
+            - name: MATRIX_PRE_ROUTING_CLEANUP_DELETE_BATCH_SIZE
+              value: "{{ .Values.backend.env.MATRIX_PRE_ROUTING_CLEANUP_DELETE_BATCH_SIZE }}"
             - name: MATRIX_SYNC_ROOM_NAME_PREFIX_WITH_TENANT
               value: "{{ .Values.backend.env.MATRIX_SYNC_ROOM_NAME_PREFIX_WITH_TENANT }}"
             - name: MATRIX_MAS_URL
