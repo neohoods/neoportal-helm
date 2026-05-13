@@ -40,4 +40,6 @@ data:
 {{ .Files.Get "sql-global/V1.13__matrix_messages.sql" | indent 4 }}
   V1.14__matrix_room_tenant.sql: |-
 {{ .Files.Get "sql-global/V1.14__matrix_room_tenant.sql" | indent 4 }}
+  V1.15__demo_tenant_logo_seed.sql: |-
+{{ .Files.Get "sql-global/V1.15__demo_tenant_logo_seed.sql" | indent 4 }}
 {{- end }}

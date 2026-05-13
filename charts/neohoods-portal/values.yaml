@@ -347,6 +347,8 @@ backend:
 ingress:
   certManagerClusterIssuer: letsencrypt-prod
   secretName: letsencrypt-platform
+  # NGINX Ingress default is often 1m, which is too low for PDF/image uploads.
+  proxyBodySize: 25m
 # Frontend settings
 frontend:
   enabled: true
@@ -479,4 +481,5 @@ tenants:
   ingressDefaults:
     certManagerClusterIssuer: letsencrypt-prod
     ingressClassName: nginx
+    proxyBodySize: 25m
   ingress: {}

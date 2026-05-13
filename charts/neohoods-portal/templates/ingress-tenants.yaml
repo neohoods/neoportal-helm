@@ -22,6 +22,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: {{ $cfg.certManagerClusterIssuer | default $defaultIssuer }}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: {{ $cfg.proxyBodySize | default (index $defaults "proxyBodySize") | default "25m" | quote }}
 spec:
   ingressClassName: {{ $cfg.ingressClassName | default $defaultClass }}
   rules:
