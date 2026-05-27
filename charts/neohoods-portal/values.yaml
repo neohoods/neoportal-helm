@@ -122,7 +122,7 @@ backend:
         name: portal-secret
         key: jwt-secret
     NEOHOODS_PORTAL_MAIL_SILENT_MODE: "false"
-    NEOHOODS_PORTAL_MAIL_WHITELIST: "quentincastel86@gmail.com"
+    NEOHOODS_PORTAL_MAIL_WHITELIST: "quentin.castel.neohoods@gmail.com,quentincastel86@gmail.com,geoffroy.surault@gmail.com,geoffroy.surault@neohoods.com"
     # Defaults for tenant notification_settings (backfill, new users). Prod overlays often set both to "true".
     NEOHOODS_NOTIFICATION_DEFAULT_ENABLE: "false"
     NEOHOODS_NOTIFICATION_NEWSLETTER_DEFAULT: "false"
@@ -134,6 +134,13 @@ backend:
     # Comma-separated extra browser origins for credentialed CORS. Usually empty in K8s: tenant ingress serves /api on the
     # same host as the SPA (same-origin). Set when the API is called from another origin (e.g. split hosting, local dev).
     NEOHOODS_PORTAL_ADDITIONAL_CORS_ORIGINS: ""
+    NEOHOODS_PORTAL_MAUTIC_ENABLED: "false"
+    NEOHOODS_PORTAL_MAUTIC_BASE_URL: ""
+    NEOHOODS_PORTAL_MAUTIC_API_TOKEN:
+      secretKeyRef:
+        name: portal-secret
+        key: mautic-api-token
+    NEOHOODS_PORTAL_MAUTIC_SYNC_DELAY_MS: "300000"
     NEOHOODS_PORTAL_MAILERSEND_WEBHOOK_SECRET:
       secretKeyRef:
         name: portal-secret
@@ -295,6 +302,8 @@ backend:
         key: tv-jwt-secret
     NEOHOODS_PORTAL_TV_JWT_ISSUER: "tv-display"
     NEOHOODS_PORTAL_TV_JWT_AUDIENCE: "neohoods-portal"
+    # 0 = TV tokens omit exp (kiosk URLs). Set positive integer for hourly TTL if needed.
+    NEOHOODS_PORTAL_TV_JWT_EXPIRATION_HOURS: "0"
     NEOHOODS_PORTAL_TV_MAX_SLIDES: "10"
     # Spaces platform fees configuration
     NEOHOODS_PORTAL_SPACES_DEFAULT_PLATFORM_FEE_PERCENTAGE: "2.00"

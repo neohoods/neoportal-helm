@@ -154,6 +154,17 @@ spec:
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_MOBILE_DEV_ORIGIN | default "" | quote }}
             - name: NEOHOODS_PORTAL_ADDITIONAL_CORS_ORIGINS
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_ADDITIONAL_CORS_ORIGINS | default "" | quote }}
+            - name: NEOHOODS_PORTAL_MAUTIC_ENABLED
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_ENABLED | default "false" | quote }}
+            - name: NEOHOODS_PORTAL_MAUTIC_BASE_URL
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_BASE_URL | default "" | quote }}
+            - name: NEOHOODS_PORTAL_MAUTIC_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_API_TOKEN.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_API_TOKEN.secretKeyRef.key }}
+            - name: NEOHOODS_PORTAL_MAUTIC_SYNC_DELAY_MS
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_SYNC_DELAY_MS | default "300000" | quote }}
             - name: NEOHOODS_PORTAL_MAILERSEND_WEBHOOK_SECRET
               valueFrom:
                 secretKeyRef:
@@ -188,6 +199,8 @@ spec:
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_TV_JWT_ISSUER | default "tv-display" | quote }}
             - name: NEOHOODS_PORTAL_TV_JWT_AUDIENCE
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_TV_JWT_AUDIENCE | default "neohoods-portal" | quote }}
+            - name: NEOHOODS_PORTAL_TV_JWT_EXPIRATION_HOURS
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_TV_JWT_EXPIRATION_HOURS | default "0" | quote }}
             - name: NEOHOODS_PORTAL_TV_MAX_SLIDES
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_TV_MAX_SLIDES | default "10" | quote }}
             - name: NEOHOODS_PORTAL_ERROR_NOTIFICATION_ENABLED
