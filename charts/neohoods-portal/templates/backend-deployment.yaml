@@ -163,6 +163,16 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_API_TOKEN.secretKeyRef.name }}
                   key: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_API_TOKEN.secretKeyRef.key }}
+            - name: NEOHOODS_PORTAL_MAUTIC_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_USERNAME.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_USERNAME.secretKeyRef.key }}
+            - name: NEOHOODS_PORTAL_MAUTIC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_PASSWORD.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_PASSWORD.secretKeyRef.key }}
             - name: NEOHOODS_PORTAL_MAUTIC_SYNC_DELAY_MS
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_SYNC_DELAY_MS | default "300000" | quote }}
             - name: NEOHOODS_PORTAL_MAILERSEND_WEBHOOK_SECRET

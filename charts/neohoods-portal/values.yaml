@@ -140,6 +140,14 @@ backend:
       secretKeyRef:
         name: portal-secret
         key: mautic-api-token
+    NEOHOODS_PORTAL_MAUTIC_USERNAME:
+      secretKeyRef:
+        name: portal-secret
+        key: mautic-username
+    NEOHOODS_PORTAL_MAUTIC_PASSWORD:
+      secretKeyRef:
+        name: portal-secret
+        key: mautic-password
     NEOHOODS_PORTAL_MAUTIC_SYNC_DELAY_MS: "300000"
     NEOHOODS_PORTAL_MAILERSEND_WEBHOOK_SECRET:
       secretKeyRef:
