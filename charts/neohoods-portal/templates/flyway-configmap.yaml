@@ -42,4 +42,8 @@ data:
 {{ .Files.Get "sql-global/V1.14__matrix_room_tenant.sql" | indent 4 }}
   V1.15__demo_tenant_logo_seed.sql: |-
 {{ .Files.Get "sql-global/V1.15__demo_tenant_logo_seed.sql" | indent 4 }}
+  V1.16__user_journey_milestones.sql: |-
+{{ .Files.Get "sql-global/V1.16__user_journey_milestones.sql" | indent 4 }}
+  V1.17__demo_mautic_journey_personas.sql: |-
+{{ .Files.Get "sql-global/V1.17__demo_mautic_journey_personas.sql" | indent 4 }}
 {{- end }}
