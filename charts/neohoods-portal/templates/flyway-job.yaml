@@ -83,7 +83,7 @@ spec:
               echo "Flyway repair (global schema) before migrate..."
               flyway -connectRetries=60 repair -locations=filesystem:/flyway/sql-init,filesystem:/flyway/sql-global
               {{- end }}
-              exec flyway -connectRetries=60 migrate -locations=filesystem:/flyway/sql-init,filesystem:/flyway/sql-global
+              exec flyway -connectRetries=60 migrate -locations=filesystem:/flyway/sql-init,filesystem:/flyway/sql-global -outOfOrder=true
           resources:
             {{- if .Values.flyway.resources }}
             {{- toYaml .Values.flyway.resources | nindent 12 }}

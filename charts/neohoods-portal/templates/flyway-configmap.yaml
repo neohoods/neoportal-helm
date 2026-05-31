@@ -46,4 +46,6 @@ data:
 {{ .Files.Get "sql-global/V1.16__user_journey_milestones.sql" | indent 4 }}
   V1.17__demo_mautic_journey_personas.sql: |-
 {{ .Files.Get "sql-global/V1.17__demo_mautic_journey_personas.sql" | indent 4 }}
+  V1.18__demo_mautic_journey_personas.sql: |-
+{{ .Files.Get "sql-global/V1.18__demo_mautic_journey_personas.sql" | indent 4 }}
 {{- end }}
