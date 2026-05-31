@@ -53,6 +53,18 @@ postgresql:
       adminPasswordKey: postgresql-password
       userPasswordKey: postgresql-password
       replicationPasswordKey: postgresql-password
+# Copro wiki Git clone (neohoods/neohoods-copro-wiki) — deploy key secret applied from neohoods-cluster
+wikiGit:
+  enabled: true
+  remoteUrl: "git@github.com:neohoods/neohoods-copro-wiki.git"
+  branch: "prod"
+  localPath: "/data/wiki-repo"
+  sshKeyPath: "/secrets/wiki-git/deploy_key"
+  sshKnownHostsPath: "/secrets/wiki-git/known_hosts"
+  deployKeySecret:
+    name: wiki-git-deploy-key
+    privateKeyKey: deploy_key
+    knownHostsKey: known_hosts
 # Backend settings
 backend:
   enabled: true
@@ -179,6 +191,11 @@ backend:
     APP_BASE_URL: "https://portal.neohoods.com"
     NEOHOODS_PORTAL_ID: "neohoods-portal"
     NEOHOODS_TENANT_ROUTING_ENABLED: "true"
+    # Copro wiki Git (neohoods/neohoods-copro-wiki) — branch overridden per env in umbrella values
+    NEOHOODS_WIKI_GIT_REMOTE_URL: "git@github.com:neohoods/neohoods-copro-wiki.git"
+    NEOHOODS_WIKI_GIT_BRANCH: "prod"
+    NEOHOODS_WIKI_GIT_LOCAL_PATH: "/data/wiki-repo"
+    NEOHOODS_WIKI_GIT_SSH_KEY_PATH: "/secrets/wiki-git/deploy_key"
     # One-shot: "true" runs Flyway repair() before tenant migrate (fix checksum drift / removed V*.sql), then set back to "false"
     NEOHOODS_TENANT_FLYWAY_REPAIR_BEFORE_MIGRATE: "false"
     # SSO configuration (Auth0 tenant neohoods)

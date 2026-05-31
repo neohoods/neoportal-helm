@@ -534,6 +534,18 @@ spec:
               value: {{ .Values.backend.env.UNIFI_RETRY_MULTIPLIER | default "2" | quote }}
             - name: UNIFI_ADMIN_EMAIL
               value: {{ .Values.backend.env.UNIFI_ADMIN_EMAIL | default "admin@neohoods.com" | quote }}
+            {{- if .Values.wikiGit.enabled }}
+            - name: NEOHOODS_WIKI_GIT_ENABLED
+              value: "true"
+            - name: NEOHOODS_WIKI_GIT_REMOTE_URL
+              value: {{ .Values.backend.env.NEOHOODS_WIKI_GIT_REMOTE_URL | default .Values.wikiGit.remoteUrl | quote }}
+            - name: NEOHOODS_WIKI_GIT_BRANCH
+              value: {{ .Values.backend.env.NEOHOODS_WIKI_GIT_BRANCH | default .Values.wikiGit.branch | quote }}
+            - name: NEOHOODS_WIKI_GIT_LOCAL_PATH
+              value: {{ .Values.backend.env.NEOHOODS_WIKI_GIT_LOCAL_PATH | default .Values.wikiGit.localPath | quote }}
+            - name: NEOHOODS_WIKI_GIT_SSH_KEY_PATH
+              value: {{ .Values.backend.env.NEOHOODS_WIKI_GIT_SSH_KEY_PATH | default .Values.wikiGit.sshKeyPath | quote }}
+            {{- end }}
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}
@@ -567,6 +579,13 @@ spec:
               mountPath: /app/rag-custom-documentation.md
               subPath: rag-custom-documentation.md
             {{- end }}
+            {{- if .Values.wikiGit.enabled }}
+            - name: wiki-git-secrets
+              mountPath: /secrets/wiki-git
+              readOnly: true
+            - name: wiki-repo
+              mountPath: {{ .Values.wikiGit.localPath }}
+            {{- end }}
       volumes:
         {{- if and .Values.postgresql.enabled .Values.flyway.enabled (eq (.Values.flyway.globalMigration | default "initContainer") "initContainer") }}
         - name: flyway-sql-init
@@ -585,5 +604,18 @@ spec:
         - name: rag-documentation-config
           configMap:
             name: {{ if .Values.backend.ragDocumentation.existingConfigMap }}{{ .Values.backend.ragDocumentation.existingConfigMap }}{{ else }}{{ .Values.backend.ragDocumentation.configMapName | default (printf "%s-rag-documentation" .Release.Name) }}{{ end }}
+        {{- end }}
+        {{- if .Values.wikiGit.enabled }}
+        - name: wiki-git-secrets
+          secret:
+            secretName: {{ .Values.wikiGit.deployKeySecret.name }}
+            defaultMode: 0400
+            items:
+              - key: {{ .Values.wikiGit.deployKeySecret.privateKeyKey }}
+                path: deploy_key
+              - key: {{ .Values.wikiGit.deployKeySecret.knownHostsKey }}
+                path: known_hosts
+        - name: wiki-repo
+          emptyDir: {}
         {{- end }}
 {{- end }}
