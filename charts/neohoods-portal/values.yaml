@@ -61,6 +61,10 @@ wikiGit:
   localPath: "/data/wiki-repo"
   sshKeyPath: "/secrets/wiki-git/deploy_key"
   sshKnownHostsPath: "/secrets/wiki-git/known_hosts"
+  # JGit cannot read OpenSSH deploy keys reliably; clone with native git before backend starts.
+  initClone:
+    enabled: true
+    image: alpine/git:2.47.1
   deployKeySecret:
     name: wiki-git-deploy-key
     privateKeyKey: deploy_key

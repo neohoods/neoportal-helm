@@ -15,8 +15,11 @@ spec:
     spec:
       imagePullSecrets:
         - name: ghcr-secret
-      {{- if and .Values.postgresql.enabled .Values.flyway.enabled (eq (.Values.flyway.globalMigration | default "initContainer") "initContainer") }}
+      {{- $flywayInit := and .Values.postgresql.enabled .Values.flyway.enabled (eq (.Values.flyway.globalMigration | default "initContainer") "initContainer") }}
+      {{- $wikiInit := and .Values.wikiGit.enabled (.Values.wikiGit.initClone.enabled | default true) }}
+      {{- if or $flywayInit $wikiInit }}
       initContainers:
+      {{- if $flywayInit }}
         - name: wait-and-create-db
           image: postgres:18.1
           command:
@@ -116,6 +119,33 @@ spec:
               mountPath: /flyway/sql-init
             - name: flyway-sql-global
               mountPath: /flyway/sql-global
+      {{- end }}
+      {{- if $wikiInit }}
+        - name: wiki-git-clone
+          image: {{ .Values.wikiGit.initClone.image | default "alpine/git:2.47.1" | quote }}
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -eu
+              REPO="{{ .Values.wikiGit.localPath }}"
+              BRANCH="{{ .Values.backend.env.NEOHOODS_WIKI_GIT_BRANCH | default .Values.wikiGit.branch }}"
+              REMOTE="{{ .Values.backend.env.NEOHOODS_WIKI_GIT_REMOTE_URL | default .Values.wikiGit.remoteUrl }}"
+              export GIT_SSH_COMMAND="ssh -i {{ .Values.wikiGit.sshKeyPath }} -o StrictHostKeyChecking=yes -o UserKnownHostsFile={{ .Values.wikiGit.sshKnownHostsPath }} -o IdentitiesOnly=yes"
+              if test -d "${REPO}/.git"; then
+                echo "Wiki repo already cloned at ${REPO}"
+                exit 0
+              fi
+              mkdir -p "${REPO}"
+              git clone --depth 1 --branch "${BRANCH}" "${REMOTE}" "${REPO}"
+              echo "Wiki clone done: branch=${BRANCH} tenants=$(ls "${REPO}/tenants" 2>/dev/null | wc -l | tr -d ' ')"
+          volumeMounts:
+            - name: wiki-git-secrets
+              mountPath: /secrets/wiki-git
+              readOnly: true
+            - name: wiki-repo
+              mountPath: {{ .Values.wikiGit.localPath }}
+      {{- end }}
       {{- end }}
       containers:
         - name: portal-{{ .Release.Name }}-backend
