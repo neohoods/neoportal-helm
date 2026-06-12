@@ -69,6 +69,17 @@ wikiGit:
     name: wiki-git-deploy-key
     privateKeyKey: deploy_key
     knownHostsKey: known_hosts
+# Apple Push Notifications (iOS) — secret applied from neohoods-cluster (apns.*.secret.yml)
+apns:
+  enabled: false
+  keyPath: "/secrets/apns/AuthKey.p8"
+  useSandbox: false
+  secret:
+    name: apns-secret
+    keyFileKey: AuthKey.p8
+    keyIdKey: key-id
+    teamIdKey: team-id
+    bundleIdKey: bundle-id
 # Backend settings
 backend:
   enabled: true

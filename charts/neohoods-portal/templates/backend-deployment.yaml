@@ -576,6 +576,29 @@ spec:
             - name: NEOHOODS_WIKI_GIT_SSH_KEY_PATH
               value: {{ .Values.backend.env.NEOHOODS_WIKI_GIT_SSH_KEY_PATH | default .Values.wikiGit.sshKeyPath | quote }}
             {{- end }}
+            {{- if .Values.apns.enabled }}
+            - name: NEOHOODS_PORTAL_PUSH_APNS_ENABLED
+              value: "true"
+            - name: NEOHOODS_PORTAL_PUSH_APNS_KEY_PATH
+              value: {{ .Values.apns.keyPath | quote }}
+            - name: NEOHOODS_PORTAL_PUSH_APNS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.apns.secret.name }}
+                  key: {{ .Values.apns.secret.keyIdKey }}
+            - name: NEOHOODS_PORTAL_PUSH_APNS_TEAM_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.apns.secret.name }}
+                  key: {{ .Values.apns.secret.teamIdKey }}
+            - name: NEOHOODS_PORTAL_PUSH_APNS_BUNDLE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.apns.secret.name }}
+                  key: {{ .Values.apns.secret.bundleIdKey }}
+            - name: NEOHOODS_PORTAL_PUSH_APNS_USE_SANDBOX
+              value: {{ .Values.apns.useSandbox | quote }}
+            {{- end }}
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}
@@ -616,6 +639,11 @@ spec:
             - name: wiki-repo
               mountPath: {{ .Values.wikiGit.localPath }}
             {{- end }}
+            {{- if .Values.apns.enabled }}
+            - name: apns-secrets
+              mountPath: /secrets/apns
+              readOnly: true
+            {{- end }}
       volumes:
         {{- if and .Values.postgresql.enabled .Values.flyway.enabled (eq (.Values.flyway.globalMigration | default "initContainer") "initContainer") }}
         - name: flyway-sql-init
@@ -647,5 +675,14 @@ spec:
                 path: known_hosts
         - name: wiki-repo
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.apns.enabled }}
+        - name: apns-secrets
+          secret:
+            secretName: {{ .Values.apns.secret.name }}
+            defaultMode: 0400
+            items:
+              - key: {{ .Values.apns.secret.keyFileKey }}
+                path: AuthKey.p8
         {{- end }}
 {{- end }}
