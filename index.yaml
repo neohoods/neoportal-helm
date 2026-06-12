@@ -3,6 +3,16 @@ entries:
   neohoods-portal-chart:
   - apiVersion: v2
     appVersion: 2.0.0
+    created: "2026-06-12T17:24:32.858780684Z"
+    description: A Helm chart for deploying NeoHoods portal app
+    digest: 37e07ab8fb3e8c08ea565b581badfc6672cabb5cd133959fa43f3427046bc6d0
+    name: neohoods-portal-chart
+    type: application
+    urls:
+    - https://github.com/neohoods/neoportal-helm/releases/download/neohoods-portal-chart-0.2.267/neohoods-portal-chart-0.2.267.tgz
+    version: 0.2.267
+  - apiVersion: v2
+    appVersion: 2.0.0
     created: "2026-06-12T16:52:03.995085385Z"
     description: A Helm chart for deploying NeoHoods portal app
     digest: da6d43318c8de2a6301f428eb44823338bc8b43502e40f93a483906c81afec79
@@ -6233,4 +6243,4 @@ entries:
     urls:
     - https://github.com/neohoods/neoportal-helm/releases/download/neohoods-portal-chart-0.1.64/neohoods-portal-chart-0.1.64.tgz
     version: 0.1.64
-generated: "2026-06-12T16:52:03.996177361Z"
+generated: "2026-06-12T17:24:32.860815101Z"
