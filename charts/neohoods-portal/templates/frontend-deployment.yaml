@@ -49,6 +49,12 @@ spec:
             # Same as image tag by default; override via frontend.env.NEOHOODS_PORTAL_UI_VERSION (e.g. semver vs digest tag)
             - name: NEOHOODS_PORTAL_UI_VERSION
               value: {{ .Values.frontend.env.NEOHOODS_PORTAL_UI_VERSION | default .Values.frontend.image.tag | quote }}
+            - name: UMAMI_ENABLED
+              value: {{ .Values.frontend.env.UMAMI_ENABLED | default "false" | quote }}
+            - name: UMAMI_SCRIPT_URL
+              value: {{ .Values.frontend.env.UMAMI_SCRIPT_URL | default "" | quote }}
+            - name: UMAMI_WEBSITE_ID
+              value: {{ .Values.frontend.env.UMAMI_WEBSITE_ID | default "" | quote }}
           ports:
             - name: http-server
               containerPort: 80

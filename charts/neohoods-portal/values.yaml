@@ -416,6 +416,10 @@ frontend:
     # NEOHOODS_PORTAL_UI_VERSION: "0.0.400"
     # Feature flags
     INCIDENTS_ENABLED: "true"
+    # Umami audience analytics (pageviews; website ID is public — no k8s secret)
+    UMAMI_ENABLED: "false"
+    UMAMI_SCRIPT_URL: ""
+    UMAMI_WEBSITE_ID: ""
   # Hostname -> tenant slug : `/` et redirection post-login hub → `/tenants/<slug>/residents` (DOMAIN_TENANT_MAP_JSON).
   # Déprécié en doublon de tenants.ingress : les hosts déclarés sous tenants.ingress.<slug>.host sont fusionnés automatiquement ;
   # ce map sert à ajouter des hosts sans Ingress dédié ou à surcharger une entrée.
