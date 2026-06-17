@@ -341,6 +341,27 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.backend.env.STRIPE_WEBHOOK_SECRET.secretKeyRef.name }}
                   key: {{ .Values.backend.env.STRIPE_WEBHOOK_SECRET.secretKeyRef.key }}
+            {{- if .Values.backend.env.NEOHOODS_PORTAL_STRIPE_SANDBOX_SECRET_KEY }}
+            - name: NEOHOODS_PORTAL_STRIPE_SANDBOX_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_STRIPE_SANDBOX_SECRET_KEY.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_STRIPE_SANDBOX_SECRET_KEY.secretKeyRef.key }}
+            {{- end }}
+            {{- if .Values.backend.env.NEOHOODS_PORTAL_STRIPE_SANDBOX_PUBLISHABLE_KEY }}
+            - name: NEOHOODS_PORTAL_STRIPE_SANDBOX_PUBLISHABLE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_STRIPE_SANDBOX_PUBLISHABLE_KEY.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_STRIPE_SANDBOX_PUBLISHABLE_KEY.secretKeyRef.key }}
+            {{- end }}
+            {{- if .Values.backend.env.NEOHOODS_PORTAL_STRIPE_SANDBOX_WEBHOOK_SECRET }}
+            - name: NEOHOODS_PORTAL_STRIPE_SANDBOX_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_STRIPE_SANDBOX_WEBHOOK_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_STRIPE_SANDBOX_WEBHOOK_SECRET.secretKeyRef.key }}
+            {{- end }}
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
@@ -599,6 +620,12 @@ spec:
             - name: NEOHOODS_PORTAL_PUSH_APNS_USE_SANDBOX
               value: {{ .Values.apns.useSandbox | quote }}
             {{- end }}
+            {{- if .Values.fcm.enabled }}
+            - name: NEOHOODS_PORTAL_PUSH_FCM_ENABLED
+              value: "true"
+            - name: NEOHOODS_PORTAL_PUSH_FCM_CREDENTIALS
+              value: {{ .Values.fcm.credentialsPath | quote }}
+            {{- end }}
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}
@@ -644,6 +671,11 @@ spec:
               mountPath: /secrets/apns
               readOnly: true
             {{- end }}
+            {{- if .Values.fcm.enabled }}
+            - name: fcm-secrets
+              mountPath: /secrets/fcm
+              readOnly: true
+            {{- end }}
       volumes:
         {{- if and .Values.postgresql.enabled .Values.flyway.enabled (eq (.Values.flyway.globalMigration | default "initContainer") "initContainer") }}
         - name: flyway-sql-init
@@ -684,5 +716,14 @@ spec:
             items:
               - key: {{ .Values.apns.secret.keyFileKey }}
                 path: AuthKey.p8
+        {{- end }}
+        {{- if .Values.fcm.enabled }}
+        - name: fcm-secrets
+          secret:
+            secretName: {{ .Values.fcm.secret.name }}
+            defaultMode: 0400
+            items:
+              - key: {{ .Values.fcm.secret.credentialsFileKey }}
+                path: service-account.json
         {{- end }}
 {{- end }}

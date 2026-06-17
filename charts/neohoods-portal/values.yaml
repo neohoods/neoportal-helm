@@ -80,6 +80,13 @@ apns:
     keyIdKey: key-id
     teamIdKey: team-id
     bundleIdKey: bundle-id
+# Firebase Cloud Messaging (Android) — secret applied from neohoods-cluster (fcm.*.secret.yml)
+fcm:
+  enabled: false
+  credentialsPath: "/secrets/fcm/service-account.json"
+  secret:
+    name: fcm-secret
+    credentialsFileKey: service-account.json
 # Backend settings
 backend:
   enabled: true
@@ -140,10 +147,19 @@ backend:
         name: stripe-secret
         key: stripe-webhook-secret
     # Optional: keys copied into tenant_stripe_config when a copro is created (defaults to STRIPE_* via application.yml if unset).
+    # Prod overlay uses a dedicated sandbox secret — see neohoods-saas/neohoods-prod/values.yaml + stripe.sandbox-prod.secret.yml.
     # NEOHOODS_PORTAL_STRIPE_SANDBOX_SECRET_KEY:
     #   secretKeyRef:
-    #     name: stripe-secret
+    #     name: stripe-sandbox-secret
     #     key: stripe-secret-key
+    # NEOHOODS_PORTAL_STRIPE_SANDBOX_PUBLISHABLE_KEY:
+    #   secretKeyRef:
+    #     name: stripe-sandbox-secret
+    #     key: stripe-publishable-key
+    # NEOHOODS_PORTAL_STRIPE_SANDBOX_WEBHOOK_SECRET:
+    #   secretKeyRef:
+    #     name: stripe-sandbox-secret
+    #     key: stripe-webhook-secret
     JWT_SECRET:
       secretKeyRef:
         name: portal-secret
@@ -230,6 +246,7 @@ backend:
     MATRIX_BOT_ENABLED: "true"
     MATRIX_HOMESERVER_URL: "matrix.neohoods.com"
     MATRIX_SERVER_NAME: "chat.neohoods.com"
+    NEOHOODS_PORTAL_MATRIX_WEB_CHAT_URL: "https://chat.neohoods.com"
     MATRIX_INITIALIZATION_ENABLED: "true"
     # Scheduled Matrix sync (all copros) — off by default; use UI/API manual sync. Enable with "true"
     MATRIX_SYNC_SCHEDULED_ENABLED: "false"
