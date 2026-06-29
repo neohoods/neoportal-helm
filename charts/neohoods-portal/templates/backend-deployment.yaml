@@ -382,6 +382,10 @@ spec:
               value: "{{ .Values.backend.env.MATRIX_INITIALIZATION_ENABLED }}"
             - name: MATRIX_SYNC_SCHEDULED_ENABLED
               value: "{{ .Values.backend.env.MATRIX_SYNC_SCHEDULED_ENABLED }}"
+            - name: MATRIX_HEALTH_AUDIT_SCHEDULED_ENABLED
+              value: "{{ .Values.backend.env.MATRIX_HEALTH_AUDIT_SCHEDULED_ENABLED }}"
+            - name: MATRIX_HEALTH_AUDIT_CRON
+              value: {{ .Values.backend.env.MATRIX_HEALTH_AUDIT_CRON | default "0 0 4 * * 0" | quote }}
             - name: MATRIX_SYNC_CRON
               value: "{{ .Values.backend.env.MATRIX_SYNC_CRON }}"
             - name: MATRIX_SYNC_POSTGRES_POLLING_ADVISORY_LOCK

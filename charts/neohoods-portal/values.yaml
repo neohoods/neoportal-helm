@@ -250,6 +250,8 @@ backend:
     MATRIX_INITIALIZATION_ENABLED: "true"
     # Scheduled Matrix sync (all copros) — off by default; use UI/API manual sync. Enable with "true"
     MATRIX_SYNC_SCHEDULED_ENABLED: "false"
+    MATRIX_HEALTH_AUDIT_SCHEDULED_ENABLED: "false"
+    MATRIX_HEALTH_AUDIT_CRON: "0 0 4 * * 0"
     MATRIX_SYNC_CRON: "0 0 1 * * ?"
     # Live /sync polling: Postgres advisory lock so only one backend replica consumes the Matrix timeline (avoid duplicate Alfred replies).
     MATRIX_SYNC_POSTGRES_POLLING_ADVISORY_LOCK: "true"
