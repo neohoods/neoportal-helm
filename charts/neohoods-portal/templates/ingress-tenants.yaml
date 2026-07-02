@@ -23,6 +23,8 @@ metadata:
     cert-manager.io/cluster-issuer: {{ $cfg.certManagerClusterIssuer | default $defaultIssuer }}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: {{ $cfg.proxyBodySize | default (index $defaults "proxyBodySize") | default "25m" | quote }}
+    nginx.ingress.kubernetes.io/proxy-read-timeout: {{ $cfg.proxyReadTimeout | default (index $defaults "proxyReadTimeout") | default "120" | quote }}
+    nginx.ingress.kubernetes.io/proxy-send-timeout: {{ $cfg.proxySendTimeout | default (index $defaults "proxySendTimeout") | default "120" | quote }}
 spec:
   ingressClassName: {{ $cfg.ingressClassName | default $defaultClass }}
   rules:

@@ -6,6 +6,8 @@ metadata:
     cert-manager.io/cluster-issuer: {{ .Values.ingress.certManagerClusterIssuer }}
     nginx.ingress.kubernetes.io/ssl-redirect: "true" # Add SSL redirect annotation
     nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.proxyBodySize | default "25m" | quote }}
+    nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.proxyReadTimeout | default "120" | quote }}
+    nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.proxySendTimeout | default "120" | quote }}
 spec:
   ingressClassName: nginx
   rules:

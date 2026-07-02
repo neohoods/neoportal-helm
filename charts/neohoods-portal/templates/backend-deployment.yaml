@@ -500,9 +500,19 @@ spec:
               value: "{{ .Values.backend.env.ASSISTANT_CONCIERGE_V2_ENABLED }}"
             - name: ASSISTANT_CONCIERGE_V2_TENANTS
               value: {{ .Values.backend.env.ASSISTANT_CONCIERGE_V2_TENANTS | default "" | quote }}
+            - name: MISTRAL_THROTTLE_MIN_INTERVAL_MS
+              value: "{{ .Values.backend.env.MISTRAL_THROTTLE_MIN_INTERVAL_MS }}"
+            - name: MISTRAL_THROTTLE_MAX_RETRIES
+              value: "{{ .Values.backend.env.MISTRAL_THROTTLE_MAX_RETRIES }}"
+            - name: MISTRAL_THROTTLE_BASE_BACKOFF_MS
+              value: "{{ .Values.backend.env.MISTRAL_THROTTLE_BASE_BACKOFF_MS }}"
+            - name: MISTRAL_THROTTLE_MAX_BACKOFF_MS
+              value: "{{ .Values.backend.env.MISTRAL_THROTTLE_MAX_BACKOFF_MS }}"
             # Assistant LLM Judge configuration
             - name: ASSISTANT_LLM_JUDGE_ENABLED
               value: "{{ .Values.backend.env.ASSISTANT_LLM_JUDGE_ENABLED }}"
+            - name: LLM_JUDGE_REFINEMENT_ENABLED
+              value: "{{ .Values.backend.env.LLM_JUDGE_REFINEMENT_ENABLED }}"
             # Assistant Conversation configuration
             - name: ASSISTANT_CONVERSATION_TIMEOUT_HOURS
               value: "{{ .Values.backend.env.ASSISTANT_CONVERSATION_TIMEOUT_HOURS }}"

@@ -325,7 +325,13 @@ backend:
     # Concierge v2 (plan 23 phase B) — disabled by default; enable per env in umbrella values.
     ASSISTANT_CONCIERGE_V2_ENABLED: "false"
     ASSISTANT_CONCIERGE_V2_TENANTS: ""
+    # Mistral API throttle (global min gap + 429 retry)
+    MISTRAL_THROTTLE_MIN_INTERVAL_MS: "500"
+    MISTRAL_THROTTLE_MAX_RETRIES: "6"
+    MISTRAL_THROTTLE_BASE_BACKOFF_MS: "2500"
+    MISTRAL_THROTTLE_MAX_BACKOFF_MS: "60000"
     ASSISTANT_LLM_JUDGE_ENABLED: "true"
+    LLM_JUDGE_REFINEMENT_ENABLED: "true"
     # Assistant Conversation configuration
     ASSISTANT_CONVERSATION_TIMEOUT_HOURS: "1" # Timeout in hours to create a new conversation
     ASSISTANT_CONVERSATION_DATE_FORMAT_TIMEZONE: "UTC" # Timezone for date format
@@ -420,6 +426,9 @@ ingress:
   secretName: letsencrypt-platform
   # NGINX Ingress default is often 1m, which is too low for PDF/image uploads.
   proxyBodySize: 25m
+  # Read/send timeouts for long-running debug/chat requests through main ingress.
+  proxyReadTimeout: "120"
+  proxySendTimeout: "120"
 # Frontend settings
 frontend:
   enabled: true
@@ -557,4 +566,6 @@ tenants:
     certManagerClusterIssuer: letsencrypt-prod
     ingressClassName: nginx
     proxyBodySize: 25m
+    proxyReadTimeout: "120"
+    proxySendTimeout: "120"
   ingress: {}
