@@ -321,7 +321,10 @@ backend:
     ASSISTANT_AI_AGENT_SPACE_STEP_COMPLETE_RESERVATION_MODEL: "devstral-medium-latest"
     ASSISTANT_AI_AGENT_SPACE_STEP_PAYMENT_INSTRUCTIONS_MODEL: "devstral-medium-latest"
     ASSISTANT_AI_AGENT_HELP_MODEL: "devstral-medium-latest"
-    # Assistant LLM Judge configuration
+    ASSISTANT_AI_AGENT_CONCIERGE_MODEL: "mistral-medium-latest"
+    # Concierge v2 (plan 23 phase B) — disabled by default; enable per env in umbrella values.
+    ASSISTANT_CONCIERGE_V2_ENABLED: "false"
+    ASSISTANT_CONCIERGE_V2_TENANTS: ""
     ASSISTANT_LLM_JUDGE_ENABLED: "true"
     # Assistant Conversation configuration
     ASSISTANT_CONVERSATION_TIMEOUT_HOURS: "1" # Timeout in hours to create a new conversation

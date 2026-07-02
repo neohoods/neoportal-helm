@@ -494,6 +494,12 @@ spec:
               value: "{{ .Values.backend.env.ASSISTANT_AI_AGENT_SPACE_STEP_PAYMENT_INSTRUCTIONS_MODEL }}"
             - name: ASSISTANT_AI_AGENT_HELP_MODEL
               value: "{{ .Values.backend.env.ASSISTANT_AI_AGENT_HELP_MODEL }}"
+            - name: ASSISTANT_AI_AGENT_CONCIERGE_MODEL
+              value: "{{ .Values.backend.env.ASSISTANT_AI_AGENT_CONCIERGE_MODEL }}"
+            - name: ASSISTANT_CONCIERGE_V2_ENABLED
+              value: "{{ .Values.backend.env.ASSISTANT_CONCIERGE_V2_ENABLED }}"
+            - name: ASSISTANT_CONCIERGE_V2_TENANTS
+              value: {{ .Values.backend.env.ASSISTANT_CONCIERGE_V2_TENANTS | default "" | quote }}
             # Assistant LLM Judge configuration
             - name: ASSISTANT_LLM_JUDGE_ENABLED
               value: "{{ .Values.backend.env.ASSISTANT_LLM_JUDGE_ENABLED }}"
