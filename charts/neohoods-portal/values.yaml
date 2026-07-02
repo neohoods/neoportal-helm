@@ -331,7 +331,7 @@ backend:
     ASSISTANT_RAG_CUSTOM_DOC_FILE: "file:/app/rag-custom-documentation.md"
     # Assistant MCP configuration
     ASSISTANT_MCP_ENABLED: "true"
-    ASSISTANT_MCP_BASE_URL: "http://localhost:8080/mcp"
+    ASSISTANT_MCP_BASE_URL: "http://localhost:8486/api/mcp"
     # Assistant Reminders configuration
     ASSISTANT_REMINDERS_ENABLED: "false"
     ASSISTANT_REMINDERS_BEFORE_HOURS: "24"
