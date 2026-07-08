@@ -290,13 +290,11 @@ spec:
               value: "{{ .Values.backend.env.AUTH0_AUDIENCE }}"
             - name: AUTH0_CONNECTION
               value: "{{ .Values.backend.env.AUTH0_CONNECTION }}"
-            {{- if .Values.backend.env.AUTH0_LINK_SESSION_SECRET }}
             - name: AUTH0_LINK_SESSION_SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.backend.env.AUTH0_LINK_SESSION_SECRET.secretKeyRef.name }}
                   key: {{ .Values.backend.env.AUTH0_LINK_SESSION_SECRET.secretKeyRef.key }}
-            {{- end }}
             # SSO configuration
             - name: NEOHOODS_PORTAL_SSO_ENABLED
               value: "{{ .Values.backend.env.NEOHOODS_PORTAL_SSO_ENABLED }}"
