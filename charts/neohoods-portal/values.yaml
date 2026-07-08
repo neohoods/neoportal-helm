@@ -133,6 +133,10 @@ backend:
         key: auth0-client-secret
     AUTH0_AUDIENCE: https://neohoods.eu.auth0.com/api/v2/
     AUTH0_CONNECTION: Username-Password-Authentication
+    AUTH0_LINK_SESSION_SECRET:
+      secretKeyRef:
+        name: portal-secret
+        key: auth0-link-session-secret
     # Stripe properties (platform + fallback for new copros)
     STRIPE_SECRET_KEY:
       secretKeyRef:
