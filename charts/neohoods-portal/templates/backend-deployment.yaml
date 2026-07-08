@@ -649,6 +649,11 @@ spec:
             - name: NEOHOODS_PORTAL_PUSH_FCM_CREDENTIALS
               value: {{ .Values.fcm.credentialsPath | quote }}
             {{- end }}
+            - name: AUTH0_LINK_SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.apns.secret.name }}
+                  key: {{ .Values.apns.secret.keyIdKey }}
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}
