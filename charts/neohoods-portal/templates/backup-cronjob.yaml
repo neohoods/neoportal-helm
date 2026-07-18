@@ -122,8 +122,8 @@ spec:
                     echo "No cleanup needed in local PVC, only $local_backup_count backups found (keeping $KEEP_BACKUPS)"
                   fi
                   
-                  # Send success notification
-                  {{- if .Values.backup.matrix.enabled }}
+                  # Success Matrix notifications are handled by neohoods-saas/monitoring (morning digest).
+                  {{- if and .Values.backup.matrix.enabled .Values.backup.matrix.notifyOnSuccess }}
                   txn_id=$(date +%s%N | sha256sum | cut -d' ' -f1 | cut -c1-32)
                   ROOM_ENC=$(echo "$MATRIX_ROOM_ID" | sed 's/!/%21/g; s/:/%3A/g')
                   echo "Sending Matrix notification (success): curl -X PUT \"${MATRIX_HOMESERVER}/_matrix/client/v3/rooms/${ROOM_ENC}/send/m.room.message/$txn_id\""

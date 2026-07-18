@@ -534,6 +534,8 @@ backup:
   # Notifications via Synapse Client API. homeserver defaults to https://<backend.env.MATRIX_HOMESERVER_URL>; roomId must live on that server (override per env).
   matrix:
     enabled: true
+    # Per-backup success spam is off; neohoods-saas/monitoring posts a morning digest. Failures still notify.
+    notifyOnSuccess: false
     # homeserver: "https://matrix.chat.dev.neohoods.com"  # optional; omit to use backend Matrix URL
     roomId: "!BwHndjfcBjyYLOWDwU:chat.neohoods.com"
     secretName: "matrix-secret"
