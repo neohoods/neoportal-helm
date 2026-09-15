@@ -67,7 +67,7 @@ spec:
                 - |
                   set -e
                   apk add --no-cache curl coreutils
-                  wget -q https://dl.min.io/client/mc/release/linux-amd64/mc && chmod +x mc && mv mc /usr/local/bin/
+                  curl -fsSL -o /usr/local/bin/mc https://github.com/minio/mc/releases/download/RELEASE.2025-08-13T08-35-41Z/mc.linux-amd64.RELEASE.2025-08-13T08-35-41Z && chmod +x /usr/local/bin/mc
                   mc alias set myscw https://$SCW_ENDPOINT $SCW_ACCESS_KEY $SCW_SECRET_KEY
                   
                   # Create backup
