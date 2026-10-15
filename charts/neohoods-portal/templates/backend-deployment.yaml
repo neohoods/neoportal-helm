@@ -243,6 +243,8 @@ spec:
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_TV_JWT_EXPIRATION_HOURS | default "0" | quote }}
             - name: NEOHOODS_PORTAL_TV_MAX_SLIDES
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_TV_MAX_SLIDES | default "10" | quote }}
+            - name: NEOHOODS_PORTAL_SIGNUP_ALLOW_EMAIL_ALIASES
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_SIGNUP_ALLOW_EMAIL_ALIASES | default "false" | quote }}
             - name: NEOHOODS_PORTAL_ERROR_NOTIFICATION_ENABLED
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_ERROR_NOTIFICATION_ENABLED | default "false" | quote }}
             - name: NEOHOODS_PORTAL_ERROR_NOTIFICATION_ADMIN_EMAIL
