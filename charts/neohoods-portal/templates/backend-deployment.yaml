@@ -205,6 +205,16 @@ spec:
                   key: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_PASSWORD.secretKeyRef.key }}
             - name: NEOHOODS_PORTAL_MAUTIC_SYNC_DELAY_MS
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_MAUTIC_SYNC_DELAY_MS | default "300000" | quote }}
+            # Lifecycle campaigns (plan 25). The scheduler only runs passes; nothing is enrolled or sent until the
+            # master switch is turned on in /system/campagnes (off by default in DB).
+            - name: NEOHOODS_PORTAL_LIFECYCLE_ENABLED
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_LIFECYCLE_ENABLED | default "true" | quote }}
+            - name: NEOHOODS_PORTAL_LIFECYCLE_UNSUBSCRIBE_KEY_K1
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_LIFECYCLE_UNSUBSCRIBE_KEY_K1.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_LIFECYCLE_UNSUBSCRIBE_KEY_K1.secretKeyRef.key }}
+                  optional: true
             - name: NEOHOODS_PORTAL_MAILERSEND_WEBHOOK_SECRET
               valueFrom:
                 secretKeyRef:

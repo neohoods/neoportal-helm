@@ -200,6 +200,13 @@ backend:
         name: portal-secret
         key: mautic-password
     NEOHOODS_PORTAL_MAUTIC_SYNC_DELAY_MS: "300000"
+    # Lifecycle campaigns scheduler: shadow passes only while the DB master switch is off (/system/campagnes).
+    NEOHOODS_PORTAL_LIFECYCLE_ENABLED: "true"
+    # HMAC key of unsubscribe links; optional so pods start without it, but no lifecycle mail leaves until it is set.
+    NEOHOODS_PORTAL_LIFECYCLE_UNSUBSCRIBE_KEY_K1:
+      secretKeyRef:
+        name: portal-secret
+        key: lifecycle-unsubscribe-key-k1
     NEOHOODS_PORTAL_MAILERSEND_WEBHOOK_SECRET:
       secretKeyRef:
         name: portal-secret
