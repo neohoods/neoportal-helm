@@ -674,6 +674,38 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.backend.env.NEOHOODS_PORTAL_SIGNUP_OTP_PEPPER.secretKeyRef.name }}
                   key: {{ .Values.backend.env.NEOHOODS_PORTAL_SIGNUP_OTP_PEPPER.secretKeyRef.key }}
+            - name: NEOHOODS_PORTAL_LINK_SECRETS_REQUIRED
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_LINK_SECRETS_REQUIRED | default "false" | quote }}
+            - name: NEOHOODS_PORTAL_EMAIL_AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_EMAIL_AUTH_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_EMAIL_AUTH_SECRET.secretKeyRef.key }}
+                  optional: true
+            - name: NEOHOODS_PORTAL_SIGNUP_SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_SIGNUP_SESSION_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_SIGNUP_SESSION_SECRET.secretKeyRef.key }}
+                  optional: true
+            - name: NEOHOODS_PORTAL_TENANT_JOIN_EMAIL_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_TENANT_JOIN_EMAIL_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_TENANT_JOIN_EMAIL_SECRET.secretKeyRef.key }}
+                  optional: true
+            - name: NEOHOODS_PORTAL_UNIT_JOIN_EMAIL_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_UNIT_JOIN_EMAIL_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_UNIT_JOIN_EMAIL_SECRET.secretKeyRef.key }}
+                  optional: true
+            - name: NEOHOODS_PORTAL_INCIDENT_EMAIL_ACTION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.backend.env.NEOHOODS_PORTAL_INCIDENT_EMAIL_ACTION_SECRET.secretKeyRef.name }}
+                  key: {{ .Values.backend.env.NEOHOODS_PORTAL_INCIDENT_EMAIL_ACTION_SECRET.secretKeyRef.key }}
+                  optional: true
           ports:
             - name: http-server
               containerPort: {{ .Values.backend.env.SERVER_PORT }}

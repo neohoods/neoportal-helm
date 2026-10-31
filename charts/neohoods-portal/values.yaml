@@ -141,6 +141,30 @@ backend:
       secretKeyRef:
         name: portal-secret
         key: signup-otp-pepper
+    # HMAC keys of links sent by email (login, signup, join requests, incident actions). Optional so pods start
+    # before the keys exist in portal-secret; once they do, set NEOHOODS_PORTAL_LINK_SECRETS_REQUIRED to "true" so
+    # the backend refuses to start with the placeholder defaults.
+    NEOHOODS_PORTAL_LINK_SECRETS_REQUIRED: "false"
+    NEOHOODS_PORTAL_EMAIL_AUTH_SECRET:
+      secretKeyRef:
+        name: portal-secret
+        key: email-auth-secret
+    NEOHOODS_PORTAL_SIGNUP_SESSION_SECRET:
+      secretKeyRef:
+        name: portal-secret
+        key: signup-session-secret
+    NEOHOODS_PORTAL_TENANT_JOIN_EMAIL_SECRET:
+      secretKeyRef:
+        name: portal-secret
+        key: tenant-join-email-secret
+    NEOHOODS_PORTAL_UNIT_JOIN_EMAIL_SECRET:
+      secretKeyRef:
+        name: portal-secret
+        key: unit-join-email-secret
+    NEOHOODS_PORTAL_INCIDENT_EMAIL_ACTION_SECRET:
+      secretKeyRef:
+        name: portal-secret
+        key: incident-email-action-secret
     # Stripe properties (platform + fallback for new copros)
     STRIPE_SECRET_KEY:
       secretKeyRef:
