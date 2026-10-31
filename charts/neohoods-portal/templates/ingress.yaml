@@ -31,6 +31,15 @@ spec:
             name: portal-{{ .Release.Name }}-backend
             port:
               number: 80
+      # OAuth metadata of the MCP endpoints (RFC 9728), served by the backend. Only this prefix:
+      # the frontend serves other /.well-known files (apple-app-site-association).
+      - path: /.well-known/oauth-protected-resource
+        pathType: Prefix
+        backend:
+          service:
+            name: portal-{{ .Release.Name }}-backend
+            port:
+              number: 80
       {{- end }}
 
   tls:
