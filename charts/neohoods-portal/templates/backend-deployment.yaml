@@ -540,6 +540,9 @@ spec:
               value: "{{ .Values.backend.env.ASSISTANT_MCP_ENABLED }}"
             - name: ASSISTANT_MCP_BASE_URL
               value: "{{ .Values.backend.env.ASSISTANT_MCP_BASE_URL }}"
+            # OAuth for third-party MCP clients (claude.ai), Auth0 as authorization server (plan alfred/33)
+            - name: ASSISTANT_MCP_OAUTH_ENABLED
+              value: {{ .Values.backend.env.ASSISTANT_MCP_OAUTH_ENABLED | default "false" | quote }}
             # Assistant Reminders configuration
             - name: ASSISTANT_REMINDERS_ENABLED
               value: "{{ .Values.backend.env.ASSISTANT_REMINDERS_ENABLED }}"
