@@ -59,24 +59,5 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Deploy updated dependency
-        uses: qcastel/github-actions-update-helm@master
-        with:
-          branch-name: main
-
-          git-release-bot-name: "bot-theopenshelf"
-          git-release-bot-email: "bot@theopenshelf.dev"
-
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-          repository: git@github.com:neohoods/neohoods-saas.git
-          file-path: neohoods-dev/Chart.yaml
-
-          yaml-paths: "dependencies[0].version"
-
-          # Use bumped version directly
-          tag: ${{ steps.bump_version.outputs.bumped_version }}
-
-          gpg-enabled: true
-          gpg-key-id: ${{ secrets.GPG_KEY_ID }}
-          gpg-key: ${{ secrets.GPG_KEY }}
+      # Le déploiement n'est plus fait ici : Kargo (https://kargo.neohoods.com, projet neoportal)
+      # détecte la nouvelle version du chart et la promeut sur neohoods-dev, puis prod à la main.
