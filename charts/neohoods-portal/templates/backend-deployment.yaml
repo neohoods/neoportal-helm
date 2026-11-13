@@ -224,6 +224,8 @@ spec:
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_INCIDENTS_EMAIL_FROM | default "support@ms.mail.neohoods.com" | quote }}
             - name: NEOHOODS_PORTAL_INCIDENTS_EMAIL_FROM_NAME
               value: {{ .Values.backend.env.NEOHOODS_PORTAL_INCIDENTS_EMAIL_FROM_NAME | default "NeoHoods Support" | quote }}
+            - name: NEOHOODS_PORTAL_MAILERSEND_INBOUND_FORWARD_URL
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_MAILERSEND_INBOUND_FORWARD_URL | default "" | quote }}
             - name: NEOHOODS_PORTAL_GDPR_EMAIL_HASH_SECRET
               valueFrom:
                 secretKeyRef:

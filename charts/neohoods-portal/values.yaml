@@ -141,10 +141,9 @@ backend:
       secretKeyRef:
         name: portal-secret
         key: signup-otp-pepper
-    # HMAC keys of links sent by email (login, signup, join requests, incident actions). Optional so pods start
-    # before the keys exist in portal-secret; once they do, set NEOHOODS_PORTAL_LINK_SECRETS_REQUIRED to "true" so
-    # the backend refuses to start with the placeholder defaults.
-    NEOHOODS_PORTAL_LINK_SECRETS_REQUIRED: "false"
+    # HMAC keys of links sent by email (login, signup, join requests, incident actions). Keys live in portal-secret;
+    # "true" refuses to start on the placeholder defaults (set once the keys exist on each env).
+    NEOHOODS_PORTAL_LINK_SECRETS_REQUIRED: "true"
     NEOHOODS_PORTAL_EMAIL_AUTH_SECRET:
       secretKeyRef:
         name: portal-secret
@@ -237,6 +236,9 @@ backend:
         key: mailersend-webhook-secret
     NEOHOODS_PORTAL_INCIDENTS_EMAIL_FROM: "support@ms.mail.neohoods.com"
     NEOHOODS_PORTAL_INCIDENTS_EMAIL_FROM_NAME: "NeoHoods Support"
+    # Empty by default. On the env that receives the single MailerSend catch-all (dev today), set to the peer
+    # inbound URL so replies to the other env's From are forwarded (one route, two From addresses).
+    NEOHOODS_PORTAL_MAILERSEND_INBOUND_FORWARD_URL: ""
     NEOHOODS_PORTAL_EMAIL_TEMPLATE_LEAFS_URL: "" # Optional; derived from frontend-url if empty
     NEOHOODS_PORTAL_EMAIL_TEMPLATE_LEAFS_ACCENT_URL: ""
     NEOHOODS_PORTAL_EMAIL_TEMPLATE_NOTIFICATIONS_URL: ""
