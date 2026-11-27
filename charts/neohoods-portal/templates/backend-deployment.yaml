@@ -553,6 +553,14 @@ spec:
             # OAuth for third-party MCP clients (claude.ai), Auth0 as authorization server (plan alfred/33)
             - name: ASSISTANT_MCP_OAUTH_ENABLED
               value: {{ .Values.backend.env.ASSISTANT_MCP_OAUTH_ENABLED | default "false" | quote }}
+            {{- if .Values.backend.env.ASSISTANT_MCP_OAUTH_ISSUER }}
+            # Auth0 tenant issuing MCP tokens when it differs from AUTH0_DOMAIN (dev: the prod MCP tenant)
+            - name: ASSISTANT_MCP_OAUTH_ISSUER
+              value: {{ .Values.backend.env.ASSISTANT_MCP_OAUTH_ISSUER | quote }}
+            {{- end }}
+            # Dev sandbox admin_dev_* MCP tools (test copros, personas): dev only, the backend refuses to start with it in prod
+            - name: ASSISTANT_MCP_DEV_TOOLS_ENABLED
+              value: {{ .Values.backend.env.ASSISTANT_MCP_DEV_TOOLS_ENABLED | default "false" | quote }}
             # Assistant Reminders configuration
             - name: ASSISTANT_REMINDERS_ENABLED
               value: "{{ .Values.backend.env.ASSISTANT_REMINDERS_ENABLED }}"
