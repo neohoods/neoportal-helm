@@ -385,6 +385,14 @@ spec:
               value: "{{ .Values.backend.env.NEOHOODS_PORTAL_MAIL_SILENT_MODE }}"
             - name: NEOHOODS_PORTAL_MAIL_WHITELIST
               value: "{{ .Values.backend.env.NEOHOODS_PORTAL_MAIL_WHITELIST }}"
+            # Ops env label (local|dev|prod). Distinct from SPRING_PROFILES_ACTIVE=production used everywhere in K8s.
+            - name: NEOHOODS_PORTAL_DEPLOYMENT_ENV
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_DEPLOYMENT_ENV | default "prod" | quote }}
+            # Outbound subject prefix (e.g. "[DEV] " on portal.dev). Empty in prod.
+            {{- if .Values.backend.env.NEOHOODS_PORTAL_MAIL_SUBJECT_PREFIX }}
+            - name: NEOHOODS_PORTAL_MAIL_SUBJECT_PREFIX
+              value: {{ .Values.backend.env.NEOHOODS_PORTAL_MAIL_SUBJECT_PREFIX | quote }}
+            {{- end }}
             # Matrix configuration
             - name: MATRIX_BOT_ENABLED
               value: "{{ .Values.backend.env.MATRIX_BOT_ENABLED }}"

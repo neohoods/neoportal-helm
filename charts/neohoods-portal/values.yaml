@@ -197,6 +197,11 @@ backend:
         key: jwt-secret
     NEOHOODS_PORTAL_MAIL_SILENT_MODE: "false"
     NEOHOODS_PORTAL_MAIL_WHITELIST: "quentin.castel.neohoods@gmail.com,quentincastel86@gmail.com,geoffroy.surault@gmail.com,geoffroy.surault@neohoods.com"
+    # Ops label for error mails / subject prefix. Overlay to "dev" on portal.dev (see neohoods-saas).
+    NEOHOODS_PORTAL_DEPLOYMENT_ENV: "prod"
+    # Optional subject prefix (set "[DEV] " in neohoods-dev overlay). Omit or leave empty in prod.
+    # NEOHOODS_PORTAL_MAIL_SUBJECT_PREFIX: ""
+
     # Defaults for tenant notification_settings (backfill, new users). Prod overlays often set both to "true".
     NEOHOODS_NOTIFICATION_DEFAULT_ENABLE: "false"
     NEOHOODS_NOTIFICATION_NEWSLETTER_DEFAULT: "false"
